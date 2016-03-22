@@ -10,7 +10,6 @@ Client to access Condition Prediction APIs
 
 import json
 import base64
-import string
 import requests
 from ..helper import utils as Utils
 from cStringIO import StringIO

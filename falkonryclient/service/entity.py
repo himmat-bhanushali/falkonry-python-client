@@ -8,7 +8,7 @@ Client to access Condition Prediction APIs
 
 """
 
-from falkonry.helper.schema import Models
+from falkonryclient.helper.schema import Models
 
 """
 EntityService class :

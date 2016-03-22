@@ -79,7 +79,7 @@ if __name__ == '__main__':
                 )
             )
         )
-        from falkonry import schemas as Schemas
+        from falkonryclient import schemas as Schemas
     else:
-        from ..falkonry import schemas as Schemas
+        from ..falkonryclient import schemas as Schemas
     unittest.main()

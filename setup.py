@@ -18,7 +18,7 @@ setup(
     author_email='info@falkonry.com',
     url='https://github.com/Falkonry/falkonry-python-client',
     description='Falkonry Python Client to access Condition Prediction APIs',
-    packages=['falkonry'],
+    packages=['falkonryclient'],
     install_requires=install_requires,
     tests_require=tests_require,
     setup_requires=setup_requires,
