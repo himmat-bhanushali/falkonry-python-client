@@ -120,8 +120,8 @@ with open("/tmp/pipelineOutput.json", 'w') as outputFile:
   To run the test suite, first install the dependencies, then run `Test.sh`:
   
 ```bash
-$ pip install requirements.txt
-$ ./Test.sh
+$ pip install -r requirements.txt
+$ python test/*.py
 ```
 
 ## License
