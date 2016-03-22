@@ -1,8 +1,8 @@
 import io
 import unittest
 
-host  = ''
-token = ''
+host  = ''  # host url
+token = ''  # auth token
 
 
 class TestAddDataStream(unittest.TestCase):

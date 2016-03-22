@@ -106,7 +106,7 @@ stream       = open('/tmp/sample.json', 'r');
 startTime    = '1457018017'; //seconds since unix epoch 
 endTime      = '1457028017'; //seconds since unix epoch
 outputStream = falkonry.getOutput('pipeline_id', startTime, endTime);
-with open("/tmp/pipelineOutput.json", 'w', buffering=20*(1024**2)) as outputFile:
+with open("/tmp/pipelineOutput.json", 'w') as outputFile:
     for line in outputStream:
         outputFile.write(line + '\n')
 ```
