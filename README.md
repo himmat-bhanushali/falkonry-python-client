@@ -28,16 +28,16 @@ from falkonryclient import Schemas
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 
 assessment = Schemas.Assessment();
-                .setName('Health')
-                .addSignals(['current', 'vibration'])
+                .set_name('Health')
+                .set_input_signals(['current', 'vibration'])
                         
 pipeline   = Schemas.Pipeline()
-                .setName('Motor Health')
-                .setThingName('Motor')
-                .setTimeIdentifier('time')
-                .setTimeFormat('YYYY-MM-DD HH:MM:SS')
-                .setInputSignals({'current' : 'Numeric', 'vibration' : 'Numeric'})
-                .addAssessment(assessment)
+                .set_name('Motor Health')
+                .set_thing_name('Motor')
+                .set_time_identifier('time')
+                .set_time_format('YYYY-MM-DD HH:MM:SS')
+                .set_input_signals({'current' : 'Numeric', 'vibration' : 'Numeric'})
+                .set_assessment(assessment)
         
 createdPipeline = falkonry.createPipeline(pipeline)
 ```
