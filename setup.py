@@ -1,10 +1,7 @@
 from setuptools import setup, find_packages
 
 install_requires = [
-    'json',
     'requests',
-    'base64',
-    'StringIO',
     'jsonpickle'
 ]
 dependency_links = []
