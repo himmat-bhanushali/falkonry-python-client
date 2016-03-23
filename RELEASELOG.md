@@ -1,6 +1,6 @@
 # Release Log
 
-### 0.1.1
+### 0.1.2
 
 * Support to create Pipeline
 * Support to get list of Pipelines
