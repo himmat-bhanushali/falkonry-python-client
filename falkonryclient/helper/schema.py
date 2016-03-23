@@ -8,7 +8,7 @@ Client to access Condition Prediction APIs
 
 """
 
-from models import *
+from falkonryclient.helper.models import *
 
 Models = {
  "Assessment": Assessment,

@@ -9,8 +9,8 @@ Client to access Condition Prediction APIs
 """
 
 import jsonpickle
-from .Assessment import Assessment
-from .Signal import Signal
+from falkonryclient.helper.models.Assessment import Assessment
+from falkonryclient.helper.models.Signal import Signal
 
 
 class Pipeline:

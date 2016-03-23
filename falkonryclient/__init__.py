@@ -14,8 +14,8 @@ Client to access Condition Prediction APIs
 :license: MIT, see LICENSE for more details.
 
 """
-from .helper import schema as schemas
-from .service import falkonry
+from falkonryclient.helper import schema as schemas
+from falkonryclient.service import falkonry
 
 
 client = falkonry.FalkonryService

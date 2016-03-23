@@ -8,9 +8,8 @@ Client to access Condition Prediction APIs
 
 """
 
-import json
-from ..helper import schema as Schemas
-from ..service.http import HttpService
+from falkonryclient.helper import schema as Schemas
+from falkonryclient.service.http import HttpService
 
 """
 FalkonryService
@@ -36,9 +35,8 @@ class FalkonryService:
         """
         pipelines = []
         response  = self.http.get('/Pipeline')
-        raw_pipelines = json.loads(response.content)
-        for pipeline in raw_pipelines:
-            pipelines.append(Schemas.Pipeline(pipeline))
+        for pipeline in response:
+            pipelines.append(Schemas.Pipeline(pipeline=pipeline))
         return pipelines
 
     def create_pipeline(self, pipeline):
