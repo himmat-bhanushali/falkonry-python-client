@@ -15,7 +15,7 @@ $ pip install falkonryclient
     * Create Pipeline
     * Retrieve Pipelines
     * Add data to Pipeline (json, stream)
-    * Retrieve output of Pipeline (json, stream)
+    * Retrieve output of Pipeline
     
 ## Quick Start
 
