@@ -16,7 +16,9 @@ setup(
     version='0.1.1',
     author='Falkonry Inc',
     author_email='info@falkonry.com',
+    license='MIT',
     url='https://github.com/Falkonry/falkonry-python-client',
+    download_url = 'https://github.com/Falkonry/falkonry-python-client/tarball/0.1.1',
     description='Falkonry Python Client to access Condition Prediction APIs',
     packages=['falkonryclient'],
     install_requires=install_requires,
@@ -28,5 +30,6 @@ setup(
     },
     dependency_links=dependency_links,
     zip_safe=False,
-    include_package_data=True
+    include_package_data=True,
+    keywords='falkonry falkonryclient conditionprediction'
 )

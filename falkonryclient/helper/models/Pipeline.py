@@ -29,6 +29,8 @@ class Pipeline:
                 'type': 'EVENTBUFFER',
                 'streaming': True
             }
+        if 'dataFormat' not in self.raw:
+            self.raw['dataFormat'] = 'application/json'
 
         if 'timeIdentifier' not in self.raw:
             self.raw['timeIdentifier'] = 'time'
