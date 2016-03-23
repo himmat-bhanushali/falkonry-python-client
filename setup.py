@@ -10,12 +10,12 @@ tests_require = ['unittest', 'io']
 
 setup(
     name='falkonryclient',
-    version='0.1.1',
+    version='0.1.2',
     author='Falkonry Inc',
     author_email='info@falkonry.com',
     license='MIT',
     url='https://github.com/Falkonry/falkonry-python-client',
-    download_url = 'https://github.com/Falkonry/falkonry-python-client/tarball/0.1.1',
+    download_url = 'https://github.com/Falkonry/falkonry-python-client/tarball/0.1.2',
     description='Falkonry Python Client to access Condition Prediction APIs',
     long_description='Falkonry Python client to access Condition Prediction APIs',
     packages=['falkonryclient'],
