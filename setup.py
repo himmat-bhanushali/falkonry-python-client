@@ -17,6 +17,7 @@ setup(
     url='https://github.com/Falkonry/falkonry-python-client',
     download_url = 'https://github.com/Falkonry/falkonry-python-client/tarball/0.1.1',
     description='Falkonry Python Client to access Condition Prediction APIs',
+    long_description='Falkonry Python client to access Condition Prediction APIs',
     packages=['falkonryclient'],
     install_requires=install_requires,
     tests_require=tests_require,
