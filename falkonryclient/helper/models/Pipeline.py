@@ -9,6 +9,7 @@ Client to access Condition Prediction APIs
 """
 
 import jsonpickle
+from falkonryclient.helper.models.Publication import Publication
 from falkonryclient.helper.models.Assessment import Assessment
 from falkonryclient.helper.models.Signal import Signal
 
@@ -20,23 +21,7 @@ class Pipeline:
         if 'pipeline' in kwargs:
             self.raw = kwargs.get('pipeline')
         else:
-            self.raw = {
-                'dataFormat': 'application/json'
-            }
-
-        if 'inputConf' not in self.raw:
-            self.raw['inputConf'] = {
-                'type': 'EVENTBUFFER',
-                'streaming': True
-            }
-        if 'dataFormat' not in self.raw:
-            self.raw['dataFormat'] = 'application/json'
-
-        if 'timeIdentifier' not in self.raw:
-            self.raw['timeIdentifier'] = 'time'
-
-        if 'timeFormat' not in self.raw:
-            self.raw['timeFormat'] = 'iso_8601'
+            self.raw = {}
 
         if 'inputList' in self.raw:
             if isinstance(self.raw['inputList'], list):
@@ -51,6 +36,13 @@ class Pipeline:
                 for assessment in self.raw['assessmentList']:
                     assessments.append(Assessment(assessment=assessment))
                 self.raw['assessmentList'] = assessments
+
+        if 'publicationList' in self.raw:
+            if isinstance(self.raw['publicationList'], list):
+                publications = []
+                for publication in self.raw['publicationList']:
+                    publications.append(Publication(publication=publication))
+                self.raw['publicationList'] = publications
 
     def get_id(self):
         return self.raw['id']
@@ -84,12 +76,12 @@ class Pipeline:
     def get_updated_by(self):
         return self.raw['updatedBy']
 
-    def set_input_conf(self, input_conf):
-        self.raw['inputConf'] = input_conf
+    def set_eventbuffer(self, eventbuffer):
+        self.raw['input'] = eventbuffer
         return self
 
-    def get_input_conf(self):
-        return self.raw['inputConf']
+    def get_eventbuffer(self):
+        return self.raw['input']
 
     def set_thing_identifier(self, identifier):
         self.raw['thingIdentifier'] = identifier
@@ -97,20 +89,6 @@ class Pipeline:
 
     def get_thing_identifier(self):
         return self.raw['thingIdentifier']
-
-    def set_time_identifier(self, identifier):
-        self.raw['timeIdentifier'] = identifier
-        return self
-
-    def get_time_identifier(self):
-        return self.raw['timeIdentifier']
-
-    def set_time_format(self, time_format):
-        self.raw['timeFormat'] = time_format
-        return self
-
-    def get_time_format(self):
-        return self.raw['timeFormat']
 
     def set_thing_name(self, name):
         self.raw['singleThingID'] = name
@@ -171,6 +149,18 @@ class Pipeline:
     def get_assessments(self):
         return self.raw['assessmentList']
 
+    def set_publications(self, publications):
+        publication_list = self.raw['publicationList'] if 'publicationList' in self.raw else []
+        for publication in publications:
+            if isinstance(publication, Publication):
+                publication_list.append(publication)
+
+        self.raw['publicationList'] = publication_list
+        return self
+
+    def get_publications(self):
+        return self.raw['publicationList']
+
     def get_status(self):
         return self.raw['status']
 
@@ -200,16 +190,27 @@ class Pipeline:
     def get_data_format(self):
         return self.raw['dataFormat']
 
+    def get_model_revisions(self):
+        return self.raw['modelRevisionList']
+
+    def get_outflow_history(self):
+        return self.raw['outflowHistory']
+
     def to_json(self):
         inputs = []
         assessments = []
+        publications = []
         for inputSignal in self.raw['inputList']:
             inputs.append(jsonpickle.unpickler.decode(inputSignal.to_json()))
 
         for assessment in self.raw['assessmentList']:
             assessments.append(jsonpickle.unpickler.decode(assessment.to_json()))
 
+        for publication in self.raw['publicationList']:
+            publications.append(jsonpickle.unpickler.decode(publication.to_json()))
+
         pipeline = self.raw
         pipeline['inputList'] = inputs
         pipeline['assessmentList'] = assessments
+        pipeline['publicationList'] = publications
         return jsonpickle.pickler.encode(pipeline)
