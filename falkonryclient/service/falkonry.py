@@ -37,17 +37,35 @@ class FalkonryService:
         To get list of Eventbuffers
         """
         eventbuffers = []
-        response  = self.http.get('/Eventbuffer')
+        response = self.http.get('/Eventbuffer')
         for eventbuffer in response:
-            eventbuffers.append(Schemas.Pipeline(eventbuffer=eventbuffer))
+            eventbuffers.append(Schemas.Eventbuffer(eventbuffer=eventbuffer))
         return eventbuffers
 
-    def create_eventbuffer(self, eventbuffer):
+    def create_eventbuffer(self, eventbuffer, options):
         """
         To create Eventbuffer
         :param eventbuffer: Eventbuffer
+        :param options: dict
         """
-        raw_eventbuffer = self.http.post('/Eventbuffer', eventbuffer)
+        form_data = {
+            'data': {
+                'name'           : eventbuffer.getName(),
+                'timeIdentifier' : options['timeIdentifier'] if 'timeIdentifier' in options else 'time',
+                'timeFormat'     : options['timeFormat'] if 'timeFormat' in options else 'iso_8601'
+            }
+        }
+        if 'data' in options:
+            data_type = 'json' if ('data_type' in options and options['data_type'] is 'json') else 'csv'
+            form_data['files'] = {
+                'data': (
+                    Utils.random_string(10)+('.json' if data_type is 'json' else '.csv'),
+                    StringIO(json.dumps(options['data'])),
+                    'text/plain;charset=UTF-8',
+                    {'Expires': '0'}
+                )
+            }
+        raw_eventbuffer = self.http.fpost('/Eventbuffer', form_data)
         return Schemas.Eventbuffer(eventbuffer=raw_eventbuffer)
 
     def delete_eventbuffer(self, eventbuffer):
@@ -63,7 +81,7 @@ class FalkonryService:
         To get list of Pipelines
         """
         pipelines = []
-        response  = self.http.get('/Pipeline')
+        response = self.http.get('/Pipeline')
         for pipeline in response:
             pipelines.append(Schemas.Pipeline(pipeline=pipeline))
         return pipelines
