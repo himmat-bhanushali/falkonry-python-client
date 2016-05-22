@@ -48,16 +48,16 @@ class HttpService:
         else:
             raise Exception(response.content)
 
-    def post(self, url, pipeline):
+    def post(self, url, entity):
         """
         To make a POST request to Falkonry API server
         :param url: string
-        :param pipeline: Pipeline
+        :param entity: Instantiated class object
         """
 
         response = requests.post(
             self.host + url,
-            pipeline.to_json(),
+            entity.to_json(),
             headers={
                 "Content-Type": "application/json",
                 'Authorization': 'Token ' + self.token
@@ -68,22 +68,36 @@ class HttpService:
         else:
             raise Exception(response.content)
 
-    def fpost(self, url, data):
+    def put(self, url, entity):
+        """
+        To make a PUT request to Falkonry API server
+        :param url: string
+        :param entity: Instantiated class object
+        """
+
+        response = requests.put(
+            self.host + url,
+            entity.to_json(),
+            headers={
+                "Content-Type": "application/json",
+                'Authorization': 'Token ' + self.token
+            }
+        )
+        if response.status_code is 200:
+            return json.loads(response.content)
+        else:
+            raise Exception(response.content)
+
+    def fpost(self, url, form_data):
         """
         To make a form-data POST request to Falkonry API server
         :param url: string
-        :param data: json
+        :param form_data: form-data
         """
         response = requests.post(
             self.host + url,
-            files={
-                'data': (
-                    Utils.random_string(10)+'.json',
-                    StringIO(json.dumps(data)),
-                    'application/json;charset=UTF-8',
-                    {'Expires': '0'}
-                )
-            },
+            (form_data['data'] if 'data' in form_data else {}),
+            files=form_data['files'] if 'files' in form_data else {},
             headers={
                 'Authorization': 'Token ' + self.token
             }
@@ -109,17 +123,15 @@ class HttpService:
         else:
             raise Exception(response.content)
 
-    def upstream(self, url, stream):
+    def upstream(self, url, form_data):
         """
         To make a form-data POST request to Falkonry API server using stream
         :param url: string
-        :param stream: Stream
+        :param form_data: form-data
         """
         response = requests.post(
             self.host + url,
-            files={
-                'data': ('data.json', stream, 'application/json;charset=UTF-8', {'Expires': '0'})
-            },
+            files=form_data['files'] if 'files' in form_data else {},
             headers={
                 'Authorization': 'Token ' + self.token
             }
