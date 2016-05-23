@@ -87,12 +87,12 @@ class TestPipelineSchema(unittest.TestCase):
             .set_signals_tag_field('tag') \
             .set_signals_location('prefix')
 
-        self.assertEqual(subscription.getType(), 'MQTT', 'Invalid Subscription object')
-        self.assertEqual(subscription.getTopic(), 'falkonry-eb-1-test', 'Invalid Subscription object')
-        self.assertEqual(subscription.getPath(), 'mqtt://test.mosquito.com', 'Invalid Subscription object')
-        self.assertEqual(subscription.getUsername(), 'test-user', 'Invalid Subscription object')
-        self.assertEqual(subscription.getTimeIdentifier(), 'time', 'Invalid Subscription object')
-        self.assertEqual(subscription.getTimeFormat(), 'YYYY-MM-DD HH:mm:ss', 'Invalid Subscription object')
+        self.assertEqual(subscription.get_type(), 'MQTT', 'Invalid Subscription object')
+        self.assertEqual(subscription.get_topic(), 'falkonry-eb-1-test', 'Invalid Subscription object')
+        self.assertEqual(subscription.get_path(), 'mqtt://test.mosquito.com', 'Invalid Subscription object')
+        self.assertEqual(subscription.get_username(), 'test-user', 'Invalid Subscription object')
+        self.assertEqual(subscription.get_time_identifier(), 'time', 'Invalid Subscription object')
+        self.assertEqual(subscription.get_time_format(), 'YYYY-MM-DD HH:mm:ss', 'Invalid Subscription object')
         self.assertEqual(subscription.get_value_column(), 'value', 'Invalid Subscription object')
         self.assertEqual(subscription.get_signals_delimiter(), '_', 'Invalid Subscription object')
         self.assertEqual(subscription.get_signals_tag_field(), 'tag', 'Invalid Subscription object')
@@ -107,10 +107,10 @@ class TestPipelineSchema(unittest.TestCase):
             .set_password('test') \
             .set_content_type('application/json')
 
-        self.assertEqual(publication.getType(), 'MQTT', 'Invalid publication object')
-        self.assertEqual(publication.getTopic(), 'falkonry-eb-1-test', 'Invalid publication object')
-        self.assertEqual(publication.getPath(), 'mqtt://test.mosquito.com', 'Invalid publication object')
-        self.assertEqual(publication.getUsername(), 'test-user', 'Invalid publication object')
+        self.assertEqual(publication.get_type(), 'MQTT', 'Invalid publication object')
+        self.assertEqual(publication.get_topic(), 'falkonry-eb-1-test', 'Invalid publication object')
+        self.assertEqual(publication.get_path(), 'mqtt://test.mosquito.com', 'Invalid publication object')
+        self.assertEqual(publication.get_username(), 'test-user', 'Invalid publication object')
         self.assertEqual(publication.get_content_type(), 'application/json', 'Invalid publication object')
 
 if __name__ == '__main__':
