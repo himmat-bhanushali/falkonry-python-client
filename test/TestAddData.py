@@ -11,77 +11,52 @@ class TestAddData(unittest.TestCase):
 
     def test_add_data_single_thing(self):
         fclient = FClient(host=host, token=token)
-        pipeline = Schemas.Pipeline()
-        signals  = {
-            'current': 'Numeric',
-            'vibration': 'Numeric',
-            'state': 'Categorical'
+        eventbuffer = Schemas.Eventbuffer()
+        options = {
+            'timeIdentifier' : 'time',
+            'timeFormat'     : 'iso_8601'
         }
-        assessment = Schemas.Assessment()
-        assessment.set_name('Health') \
-            .set_input_signals(['current', 'vibration', 'state'])
-        pipeline.set_name('Motor Health 1') \
-            .set_input_signals(signals) \
-            .set_thing_name('Motor') \
-            .set_assessment(assessment)
-
-        data = [
-            {'time': '2016-03-01 01:01:01', 'current': 12.4, 'vibration': 3.4, 'state': 'On'},
-            {'time': '2016-03-01 01:01:02', 'current': 11.3, 'vibration': 2.2, 'state': 'On'},
-            {'time': '2016-03-01 01:01:03', 'current': 10.5, 'vibration': 3.8, 'state': 'On'}
-        ]
-
+        eventbuffer.set_name('Motor Health')
         try:
-            created_pipeline = fclient.create_pipeline(pipeline)
-            response = fclient.add_input_data(created_pipeline.get_id(), data)
+            eventbuffer = fclient.create_eventbuffer(eventbuffer, options)
+            pipeline = Schemas.Pipeline()
+            signals  = {
+                'current': 'Numeric',
+                'vibration': 'Numeric',
+                'state': 'Categorical'
+            }
+            assessment = Schemas.Assessment()
+            assessment.set_name('Health') \
+                .set_input_signals(['current', 'vibration', 'state'])
+            pipeline.set_name('Motor Health 1') \
+                .set_eventbuffer(eventbuffer.get_id()) \
+                .set_input_signals(signals) \
+                .set_thing_name('Motor') \
+                .set_assessment(assessment)
 
-            self.assertNotEqual(response['__$id'], None, 'Cannot add input data to Pipeline')
-
-            # tear down
             try:
-                fclient.delete_pipeline(created_pipeline.get_id())
+                created_pipeline = fclient.create_pipeline(pipeline)
+                try:
+                    data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
+                    response = fclient.add_input_data(eventbuffer.get_id(), 'json', {}, data)
+
+                    self.assertNotEqual(response['__$id'], None, 'Cannot add input data to eventbuffer')
+
+                    # tear down
+                    try:
+                        fclient.delete_pipeline(created_pipeline.get_id())
+                        fclient.delete_eventbuffer(eventbuffer.get_id())
+                    except Exception as e:
+                        pass
+                except Exception as e:
+                    print(e.message)
+                    self.assertEqual(0, 1, 'Cannot add input data to eventbuffer')
             except Exception as e:
-                pass
+                print(e.message)
+                self.assertEqual(0, 1, 'Cannot create pipeline')
         except Exception as e:
             print(e.message)
-            self.assertEqual(0, 1, 'Cannot add input data to Pipeline')
-
-    def test_add_data_multiple_thing(self):
-        fclient = FClient(host=host, token=token)
-        pipeline = Schemas.Pipeline()
-        signals  = {
-            'current': 'Numeric',
-            'vibration': 'Numeric',
-            'state': 'Categorical'
-        }
-        assessment = Schemas.Assessment()
-        assessment.set_name('Health') \
-            .set_input_signals(['current', 'vibration', 'state'])
-        pipeline.set_name('Motor Health 2') \
-            .set_input_signals(signals) \
-            .set_thing_identifier('motors') \
-            .set_assessment(assessment)
-
-        data = [
-            {'time': '2016-03-01 01:01:01', 'current': 12.4, 'vibration': 3.4, 'state': 'On', 'motors': 'Motor.1'},
-            {'time': '2016-03-01 01:01:02', 'current': 11.3, 'vibration': 2.2, 'state': 'On', 'motors': 'Motor.1'},
-            {'time': '2016-03-01 01:01:03', 'current': 10.5, 'vibration': 3.8, 'state': 'On', 'motors': 'Motor.2'}
-        ]
-
-        try:
-            created_pipeline = fclient.create_pipeline(pipeline)
-            response = fclient.add_input_data(created_pipeline.get_id(), data)
-
-            self.assertNotEqual(response['__$id'], None, 'Cannot add input data to Pipeline')
-
-            # tear down
-            try:
-                fclient.delete_pipeline(created_pipeline.get_id())
-            except Exception as e:
-                pass
-        except Exception as e:
-            print(e.message)
-            self.assertEqual(0, 1, 'Cannot add input data to Pipeline')
+            self.assertEqual(0, 1, 'Cannot create eventbuffer')
 
 if __name__ == '__main__':
     if __package__ is None:
