@@ -166,50 +166,56 @@ class FalkonryService:
         stream = self.http.downstream(url)
         return stream
 
-    def create_subscription(self, subscription):
+    def create_subscription(self, eventbuffer, subscription):
         """
         To create Subscription
+        :param eventbuffer: string
         :param subscription: Subscription
         """
-        raw_subscription = self.http.post('/Subscription', subscription)
+        raw_subscription = self.http.post('/Eventbuffer/' + eventbuffer + '/Subscription', subscription)
         return Schemas.Subscription(subscription=raw_subscription)
 
-    def update_subscription(self, subscription):
+    def update_subscription(self, eventbuffer, subscription):
         """
         To update Subscription
+        :param eventbuffer: string
         :param subscription: Subscription
         """
-        raw_subscription = self.http.put('/Subscription', subscription)
+        raw_subscription = self.http.put('/Eventbuffer/' + eventbuffer + '/Subscription/' + subscription.get_key(), subscription)
         return Schemas.Subscription(subscription=raw_subscription)
 
-    def delete_subscription(self, subscription):
+    def delete_subscription(self, eventbuffer, subscription):
         """
         To delete Subscription
+        :param eventbuffer: string
         :param subscription: Subscription
         """
-        response = self.http.delete('/Subscription/' + subscription)
+        response = self.http.delete('/Eventbuffer/' + eventbuffer + '/Subscription/' + subscription)
         return response
 
-    def create_publication(self, publication):
+    def create_publication(self, pipeline, publication):
         """
         To create Publication
+        :param pipeline: string
         :param publication: Publication
         """
-        raw_publication = self.http.post('/Publication', publication)
+        raw_publication = self.http.post('/Pipeline/' + pipeline + '/Publication', publication)
         return Schemas.Publication(publication=raw_publication)
 
-    def update_publication(self, publication):
+    def update_publication(self, pipeline, publication):
         """
         To update Publication
+        :param pipeline: string
         :param publication: Publication
         """
-        raw_publication = self.http.put('/Publication', publication)
+        raw_publication = self.http.put('/Pipeline/' + pipeline + '/Publication/' + publication.get_key(), publication)
         return Schemas.Publication(publication=raw_publication)
 
-    def delete_publication(self, publication):
+    def delete_publication(self, pipeline, publication):
         """
         To delete Publication
+        :param pipeline: string
         :param publication: Publication
         """
-        response = self.http.delete('/Publication/' + publication)
+        response = self.http.delete('/Pipeline/' + pipeline + '/Publication' + publication)
         return response
