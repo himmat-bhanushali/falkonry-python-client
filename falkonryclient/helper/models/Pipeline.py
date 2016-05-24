@@ -21,7 +21,11 @@ class Pipeline:
         if 'pipeline' in kwargs:
             self.raw = kwargs.get('pipeline')
         else:
-            self.raw = {}
+            self.raw = {
+                'interval': {
+                    'duration': 'PT1S'
+                }
+            }
 
         if 'inputList' in self.raw:
             if isinstance(self.raw['inputList'], list):
@@ -45,57 +49,57 @@ class Pipeline:
                 self.raw['publicationList'] = publications
 
     def get_id(self):
-        return self.raw['id']
+        return self.raw['id'] if 'id' in self.raw else None
 
     def set_source_id(self, source_id):
         self.raw['sourceId'] = source_id
         return self
 
     def get_source_id(self):
-        return self.raw['sourceId']
+        return self.raw['sourceId'] if 'sourceId' in self.raw else None
 
     def set_name(self, name):
         self.raw['name'] = name
         return self
 
     def get_name(self):
-        return self.raw['name']
+        return self.raw['name'] if 'name' in self.raw else None
 
     def get_account(self):
-        return self.raw['tenant']
+        return self.raw['tenant'] if 'tenant' in self.raw else None
 
     def get_create_time(self):
-        return self.raw['createTime']
+        return self.raw['createTime'] if 'createTime' in self.raw else None
 
     def get_created_by(self):
-        return self.raw['createdBy']
+        return self.raw['createdBy'] if 'createdBy' in self.raw else None
 
     def get_update_time(self):
-        return self.raw['updateTime']
+        return self.raw['updateTime'] if 'updateTime' in self.raw else None
 
     def get_updated_by(self):
-        return self.raw['updatedBy']
+        return self.raw['updatedBy'] if 'updatedBy' in self.raw else None
 
     def set_eventbuffer(self, eventbuffer):
         self.raw['input'] = eventbuffer
         return self
 
     def get_eventbuffer(self):
-        return self.raw['input']
+        return self.raw['input'] if 'input' in self.raw else None
 
     def set_thing_identifier(self, identifier):
         self.raw['thingIdentifier'] = identifier
         return self
 
     def get_thing_identifier(self):
-        return self.raw['thingIdentifier']
+        return self.raw['thingIdentifier'] if 'thingIdentifier' in self.raw else None
 
     def set_thing_name(self, name):
         self.raw['singleThingID'] = name
         return self
 
     def get_thing_name(self):
-        return self.raw['singleThingID']
+        return self.raw['singleThingID'] if 'singleThingID' in self.raw else None
 
     def set_input_signal(self, signal, stype):
         if stype is not 'Numeric' and stype is not 'Categorical':
@@ -126,7 +130,7 @@ class Pipeline:
         return self
 
     def get_input_signals(self):
-        return self.raw['inputList']
+        return self.raw['inputList'] if 'inputList' in self.raw else []
 
     def set_assessment(self, assessment):
         if not isinstance(assessment, Assessment):
@@ -147,7 +151,7 @@ class Pipeline:
         return self
 
     def get_assessments(self):
-        return self.raw['assessmentList']
+        return self.raw['assessmentList'] if 'assessmentList' in self.raw else []
 
     def set_publications(self, publications):
         publication_list = self.raw['publicationList'] if 'publicationList' in self.raw else []
@@ -159,13 +163,13 @@ class Pipeline:
         return self
 
     def get_publications(self):
-        return self.raw['publicationList']
+        return self.raw['publicationList'] if 'publicationList' in self.raw else []
 
     def get_status(self):
-        return self.raw['status']
+        return self.raw['status'] if 'status' in self.raw else None
 
     def get_outflow_status(self):
-        return self.raw['outflowStatus']
+        return self.raw['outflowStatus'] if 'outflowStatus' in self.raw else None
 
     def set_interval(self, signal=None, duration=None):
         self.raw['interval'] = {
@@ -175,38 +179,31 @@ class Pipeline:
         return self
 
     def get_interval(self):
-        return self.raw['interval']
+        return self.raw['interval'] if 'interval' in self.raw else {}
 
     def get_earliest_data_time(self):
-        return self.raw['earliestDataPoint']
+        return self.raw['earliestDataPoint'] if 'earliestDataPoint' in self.raw else None
 
     def get_latest_data_time(self):
-        return self.raw['latestDataPoint']
-
-    def set_data_format(self, dformat):
-        self.raw['dataFormat'] = dformat
-        return self
-
-    def get_data_format(self):
-        return self.raw['dataFormat']
+        return self.raw['latestDataPoint'] if 'latestDataPoint' in self.raw else None
 
     def get_model_revisions(self):
-        return self.raw['modelRevisionList']
+        return self.raw['modelRevisionList'] if 'modelRevisionList' in self.raw else None
 
     def get_outflow_history(self):
-        return self.raw['outflowHistory']
+        return self.raw['outflowHistory'] if 'outflowHistory' in self.raw else None
 
     def to_json(self):
         inputs = []
         assessments = []
         publications = []
-        for inputSignal in self.raw['inputList']:
+        for inputSignal in self.get_input_signals():
             inputs.append(jsonpickle.unpickler.decode(inputSignal.to_json()))
 
-        for assessment in self.raw['assessmentList']:
+        for assessment in self.get_assessments():
             assessments.append(jsonpickle.unpickler.decode(assessment.to_json()))
 
-        for publication in self.raw['publicationList']:
+        for publication in self.get_publications():
             publications.append(jsonpickle.unpickler.decode(publication.to_json()))
 
         pipeline = self.raw

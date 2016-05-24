@@ -94,15 +94,27 @@ class HttpService:
         :param url: string
         :param form_data: form-data
         """
-        response = requests.post(
-            self.host + url,
-            (form_data['data'] if 'data' in form_data else {}),
-            files=form_data['files'] if 'files' in form_data else {},
-            headers={
-                'Authorization': 'Token ' + self.token
-            }
-        )
-        if response.status_code is 202:
+        response = None
+
+        if 'files' in form_data:
+            response = requests.post(
+                self.host + url,
+                data=form_data['data'] if 'data' in form_data else {},
+                files=form_data['files'] if 'files' in form_data else {},
+                headers={
+                    'Authorization': 'Token ' + self.token
+                }
+            )
+        else:
+            response = requests.post(
+                self.host + url,
+                data=json.dumps(form_data['data'] if 'data' in form_data else {}),
+                headers={
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Token ' + self.token
+                }
+            )
+        if response.status_code is 201 or response.status_code is 202:
             return json.loads(response.content)
         else:
             raise Exception(response.content)

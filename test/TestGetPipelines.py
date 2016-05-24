@@ -1,7 +1,7 @@
 import unittest
 
-host  = ''  # host url
-token = ''  # auth token
+host  = 'http://localhost:8080'  # host url
+token = 'g7p1bj362pk8s9qlrna7kgpzt467nxcq'  # auth token
 
 
 class TestGetPipelines(unittest.TestCase):
@@ -11,33 +11,46 @@ class TestGetPipelines(unittest.TestCase):
 
     def test_get_pipelines(self):
         fclient = FClient(host=host, token=token)
-        pipeline = Schemas.Pipeline()
-        signals  = {
-            'current': 'Numeric',
-            'vibration': 'Numeric',
-            'state': 'Categorical'
+        eventbuffer = Schemas.Eventbuffer()
+        options = {
+            'timeIdentifier' : 'time',
+            'timeFormat'     : 'iso_8601'
         }
-        assessment = Schemas.Assessment()
-        assessment.set_name('Health') \
-            .set_input_signals(['current', 'vibration', 'state'])
-        pipeline.set_name('Motor Health 1') \
-            .set_input_signals(signals) \
-            .set_thing_name('Motor') \
-            .set_assessment(assessment)
-
+        eventbuffer.set_name('Motor Health')
         try:
-            response  = fclient.create_pipeline(pipeline)
-            pipelines = fclient.get_pipelines()
-            self.assertGreater(len(pipelines), 0, 'Cannot fetch Pipelines')
+            eventbuffer = fclient.create_eventbuffer(eventbuffer, options)
+            pipeline = Schemas.Pipeline()
+            signals  = {
+                'current': 'Numeric',
+                'vibration': 'Numeric',
+                'state': 'Categorical'
+            }
+            assessment = Schemas.Assessment()
+            assessment.set_name('Health') \
+                .set_input_signals(['current', 'vibration', 'state'])
+            pipeline.set_name('Motor Health 1') \
+                .set_eventbuffer(eventbuffer.get_id()) \
+                .set_input_signals(signals) \
+                .set_thing_name('Motor') \
+                .set_assessment(assessment)
 
-            # tear down
             try:
-                fclient.delete_pipeline(response.get_id())
+                response  = fclient.create_pipeline(pipeline)
+                pipelines = fclient.get_pipelines()
+                self.assertGreater(len(pipelines), 0, 'Cannot fetch Pipelines')
+
+                # tear down
+                try:
+                    fclient.delete_pipeline(response.get_id())
+                    fclient.delete_eventbuffer(eventbuffer.get_id())
+                except Exception as e:
+                    pass
             except Exception as e:
-                pass
+                print(e.message)
+                self.assertEqual(0, 1, 'Cannot fetch Pipelines')
         except Exception as e:
             print(e.message)
-            self.assertEqual(0, 1, 'Cannot fetch Pipelines')
+            self.assertEqual(0, 1, 'Cannot create eventbuffer')
 
 if __name__ == '__main__':
     if __package__ is None:

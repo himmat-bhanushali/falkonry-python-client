@@ -1,7 +1,7 @@
 import unittest
 
-host  = ''  # host url
-token = ''  # auth token
+host  = 'http://localhost:8080'  # host url
+token = 'g7p1bj362pk8s9qlrna7kgpzt467nxcq'  # auth token
 
 
 class TestCreateEventbuffer(unittest.TestCase):
@@ -41,8 +41,8 @@ class TestCreateEventbuffer(unittest.TestCase):
         options = {
             'timeIdentifier' : 'time',
             'timeFormat'     : 'YYYY-MM-DD HH:mm:ss',
-            'dataType'       : 'json',
-            'data'           : {'time':'2016-03-01 01:01:01', 'current': 12.4, 'vibration': 3.4, 'state': 'On'}
+            'dataType'      : 'json',
+            'data'           : '{"time":"2016-03-01 01:01:01", "current": 12.4, "vibration": 3.4, "state": "On"}'
         }
         eventbuffer.set_name('Motor Health')
 
@@ -70,8 +70,7 @@ class TestCreateEventbuffer(unittest.TestCase):
             'timeIdentifier' : 'time',
             'timeFormat'     : 'YYYY-MM-DD HH:mm:ss',
             'dataType'       : 'csv',
-            'data'           : 'time, current, vibration, state\n'+
-                               '2016-03-01 01:01:01, 12.4, 3.4, On'
+            'data'           : 'time, current, vibration, state\n' + '2016-03-01 01:01:01, 12.4, 3.4, On'
         }
         eventbuffer.set_name('Motor Health')
 
@@ -99,7 +98,7 @@ class TestCreateEventbuffer(unittest.TestCase):
             'timeIdentifier' : 'time',
             'timeFormat'     : 'YYYY-MM-DD HH:mm:ss',
             'dataType'       : 'json',
-            'data'           : {'time':'2016-03-01 01:01:01', 'current': 12.4, 'vibration': 3.4, 'state': 'On'}
+            'data'           : '{"time":"2016-03-01 01:01:01", "current": 12.4, "vibration": 3.4, "state": "On"}'
         }
         eventbuffer.set_name('Motor Health')
 
@@ -113,23 +112,23 @@ class TestCreateEventbuffer(unittest.TestCase):
             .set_time_identifier('time')
 
         try:
-            response = fclient.create_eventbuffer(eventbuffer, options)
+            eventbuffer = fclient.create_eventbuffer(eventbuffer, options)
             try:
-                response = fclient.create_subscription(response.get_id(), subscription)
-                self.assertEqual(type(response.getKey()), 'string', 'Invalid Subscription object after creation')
-                self.assertEqual(response.getType(), 'MQTT', 'Invalid Subscription object after creation')
-                self.assertEqual(response.getTopic(), subscription.getTopic(), 'Invalid Subscription object after creation')
-                self.assertEqual(response.getPath(), subscription.getPath(), 'Invalid Subscription object after creation')
-                self.assertEqual(response.getUsername(), subscription.getUsername(), 'Invalid Subscription object after creation')
-                self.assertEqual(response.getTimeIdentifier(), subscription.getTimeIdentifier(), 'Invalid Subscription object after creation')
-                self.assertEqual(response.getTimeFormat(), subscription.getTimeFormat(), 'Invalid Subscription object after creation')
+                response = fclient.create_subscription(eventbuffer.get_id(), subscription)
+                self.assertNotEqual(response.get_key(), None, 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_type(), 'MQTT', 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_topic(), subscription.get_topic(), 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_path(), subscription.get_path(), 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_username(), subscription.get_username(), 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_time_identifier(), subscription.get_time_identifier(), 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_time_format(), subscription.get_time_format(), 'Invalid Subscription object after creation')
             except Exception as e:
                 print(e.message)
             self.assertEqual(0, 1, 'Cannot create Subscription')
 
             # tear down
             try:
-                fclient.delete_eventbuffer(response.get_id())
+                fclient.delete_eventbuffer(eventbuffer.get_id())
             except Exception as e:
                 pass
         except Exception as e:
@@ -143,7 +142,7 @@ class TestCreateEventbuffer(unittest.TestCase):
             'timeIdentifier' : 'time',
             'timeFormat'     : 'YYYY-MM-DD HH:mm:ss',
             'dataType'       : 'json',
-            'data'           : {'time':'2016-03-01 01:01:01', 'current': 12.4, 'vibration': 3.4, 'state': 'On'}
+            'data'           : '{"time":"2016-03-01 01:01:01", "current": 12.4, "vibration": 3.4, "state": "On"}'
         }
         eventbuffer.set_name('Motor Health')
 
@@ -152,19 +151,19 @@ class TestCreateEventbuffer(unittest.TestCase):
             .set_path('urn:falkonry:pipeline:qaerscdtxh7rc3')
 
         try:
-            response = fclient.create_eventbuffer(eventbuffer, options)
+            eventbuffer = fclient.create_eventbuffer(eventbuffer, options)
             try:
-                response = fclient.create_subscription(response.get_id(), subscription)
-                self.assertEqual(type(response.getKey()), 'string', 'Invalid Subscription object after creation')
-                self.assertEqual(response.getType(), 'PIPELINEOUTFLOW', 'Invalid Subscription object after creation')
-                self.assertEqual(response.getPath(), subscription.getPath(), 'Invalid Subscription object after creation')
+                response = fclient.create_subscription(eventbuffer.get_id(), subscription)
+                self.assertNotEqual(response.get_key(), None, 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_type(), 'PIPELINEOUTFLOW', 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_path(), subscription.get_path(), 'Invalid Subscription object after creation')
             except Exception as e:
                 print(e.message)
-            self.assertEqual(0, 1, 'Cannot create Subscription')
+                self.assertEqual(0, 1, 'Cannot create Subscription')
 
             # tear down
             try:
-                fclient.delete_eventbuffer(response.get_id())
+                fclient.delete_eventbuffer(eventbuffer.get_id())
             except Exception as e:
                 pass
         except Exception as e:
@@ -178,7 +177,7 @@ class TestCreateEventbuffer(unittest.TestCase):
             'timeIdentifier' : 'time',
             'timeFormat'     : 'YYYY-MM-DD HH:mm:ss',
             'dataType'       : 'json',
-            'data'           : {'time':'2016-03-01 01:01:01', 'current': 12.4, 'vibration': 3.4, 'state': 'On'}
+            'data'           : '{"time":"2016-03-01 01:01:01", "current": 12.4, "vibration": 3.4, "state": "On"}'
         }
         eventbuffer.set_name('Motor Health')
 
@@ -200,20 +199,20 @@ class TestCreateEventbuffer(unittest.TestCase):
             response = fclient.create_eventbuffer(eventbuffer, options)
             try:
                 response = fclient.create_subscription(response.get_id(), subscription)
-                self.assertEqual(type(response.getKey()), 'string', 'Invalid Subscription object after creation')
-                self.assertEqual(response.getType(), 'MQTT', 'Invalid Subscription object after creation')
-                self.assertEqual(response.getTopic(), subscription.getTopic(), 'Invalid Subscription object after creation')
-                self.assertEqual(response.getPath(), subscription.getPath(), 'Invalid Subscription object after creation')
-                self.assertEqual(response.getUsername(), subscription.getUsername(), 'Invalid Subscription object after creation')
-                self.assertEqual(response.getTimeIdentifier(), subscription.getTimeIdentifier(), 'Invalid Subscription object after creation')
-                self.assertEqual(response.getTimeFormat(), subscription.getTimeFormat(), 'Invalid Subscription object after creation')
+                self.assertNotEqual(response.get_key(), None, 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_type(), 'MQTT', 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_topic(), subscription.get_topic(), 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_path(), subscription.get_path(), 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_username(), subscription.get_username(), 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_time_identifier(), subscription.get_time_identifier(), 'Invalid Subscription object after creation')
+                self.assertEqual(response.get_time_format(), subscription.get_time_format(), 'Invalid Subscription object after creation')
                 self.assertEqual(response.get_value_column(), subscription.get_value_column(), 'Invalid Subscription object after creation')
                 self.assertEqual(response.get_signals_delimiter(), subscription.get_signals_delimiter(), 'Invalid Subscription object after creation')
                 self.assertEqual(response.get_signals_tag_field(), subscription.get_signals_tag_field(), 'Invalid Subscription object after creation')
                 self.assertEqual(response.get_signals_location(), subscription.get_signals_location(), 'Invalid Subscription object after creation')
             except Exception as e:
                 print(e.message)
-            self.assertEqual(0, 1, 'Cannot create Subscription')
+                self.assertEqual(0, 1, 'Cannot create Subscription')
 
             # tear down
             try:

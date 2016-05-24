@@ -1,7 +1,7 @@
 import unittest
 
-host  = ''  # host url
-token = ''  # auth token
+host  = 'http://localhost:8080'  # host url
+token = 'g7p1bj362pk8s9qlrna7kgpzt467nxcq'  # auth token
 
 
 class TestCreatePublication(unittest.TestCase):
@@ -38,12 +38,12 @@ class TestCreatePublication(unittest.TestCase):
                 pipeline = fclient.create_pipeline(pipeline)
                 try:
                     publication = Schemas.Publication() \
-                        .setType('MQTT') \
-                        .setTopic('falkonry-test-pipeline') \
-                        .setPath('mqtt://test.mosquito.com') \
-                        .setUsername('test-user') \
-                        .setPassword('test-password') \
-                        .setContentType('application/json')
+                        .set_type('MQTT') \
+                        .set_topic('falkonry-test-pipeline') \
+                        .set_path('mqtt://test.mosquito.com') \
+                        .set_username('test-user') \
+                        .set_password('test-password') \
+                        .set_content_type('application/json')
                     response = fclient.create_publication(pipeline.get_id(), publication)
 
                     self.assertEqual(isinstance(response, Schemas.Publication), True, 'Invalid Publication object after creation')

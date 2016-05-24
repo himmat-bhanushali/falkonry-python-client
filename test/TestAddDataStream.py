@@ -1,8 +1,8 @@
 import io
 import unittest
 
-host  = ''  # host url
-token = ''  # auth token
+host  = 'http://localhost:8080'  # host url
+token = 'g7p1bj362pk8s9qlrna7kgpzt467nxcq'  # auth token
 
 
 class TestAddDataStream(unittest.TestCase):
@@ -39,7 +39,7 @@ class TestAddDataStream(unittest.TestCase):
                 created_pipeline = fclient.create_pipeline(pipeline)
                 try:
                     data = io.open('./data.json')
-                    response = fclient.add_input_stream(created_pipeline.get_id(), 'json', {}, data)
+                    response = fclient.add_input_stream(eventbuffer.get_id(), 'json', {}, data)
 
                     self.assertNotEqual(response['__$id'], None, 'Cannot add input data to eventbuffer')
 
@@ -88,7 +88,7 @@ class TestAddDataStream(unittest.TestCase):
                 created_pipeline = fclient.create_pipeline(pipeline)
                 try:
                     data = io.open('./data.csv')
-                    response = fclient.add_input_stream(created_pipeline.get_id(), 'csv', {}, data)
+                    response = fclient.add_input_stream(eventbuffer.get_id(), 'csv', {}, data)
 
                     self.assertNotEqual(response['__$id'], None, 'Cannot add input data to eventbuffer')
 

@@ -8,7 +8,6 @@ Client to access Condition Prediction APIs
 
 """
 
-import json
 from falkonryclient.helper import schema as Schemas
 from falkonryclient.service.http import HttpService
 from falkonryclient.helper import utils as Utils
@@ -50,19 +49,17 @@ class FalkonryService:
         """
         form_data = {
             'data': {
-                'name'           : eventbuffer.getName(),
+                'name'           : eventbuffer.get_name(),
                 'timeIdentifier' : options['timeIdentifier'] if 'timeIdentifier' in options else 'time',
                 'timeFormat'     : options['timeFormat'] if 'timeFormat' in options else 'iso_8601'
             }
         }
         if 'data' in options:
-            data_type = 'json' if ('data_type' in options and options['data_type'] is 'json') else 'csv'
+            data_type = 'json' if ('dataType' in options and options['dataType'] is 'json') else 'csv'
             form_data['files'] = {
                 'data': (
                     Utils.random_string(10)+('.json' if data_type is 'json' else '.csv'),
-                    StringIO(json.dumps(options['data'])),
-                    'text/plain;charset=UTF-8',
-                    {'Expires': '0'}
+                    StringIO(options['data'])
                 )
             }
         raw_eventbuffer = self.http.fpost('/Eventbuffer', form_data)
@@ -116,7 +113,7 @@ class FalkonryService:
             'files': {
                 'data': (
                     Utils.random_string(10)+('.json' if data_type is 'json' else '.csv'),
-                    StringIO(json.dumps(data)),
+                    StringIO(data),
                     'text/plain;charset=UTF-8',
                     {'Expires': '0'}
                 )

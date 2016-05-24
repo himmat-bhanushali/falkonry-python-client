@@ -18,39 +18,39 @@ class Eventbuffer:
         self.raw = kwargs.get('eventbuffer') if 'eventbuffer' in kwargs else {}
 
     def get_id(self):
-        return self.raw['id']
+        return self.raw['id'] if 'id' in self.raw else None
 
     def set_name(self, name):
         self.raw['name'] = name
         return self
 
     def get_name(self):
-        return self.raw['name']
+        return self.raw['name'] if 'name' in self.raw else None
 
     def set_source_id(self, source_id):
         self.raw['sourceId'] = source_id
         return self
 
     def get_source_id(self):
-        return self.raw['sourceId']
+        return self.raw['sourceId'] if 'sourceId' in self.raw else None
 
     def get_account(self):
-        return self.raw['tenant']
+        return self.raw['tenant'] if 'tenant' in self.raw else None
 
     def get_create_time(self):
-        return self.raw['createTime']
+        return self.raw['createTime'] if 'createTime' in self.raw else None
 
     def get_created_by(self):
-        return self.raw['createdBy']
+        return self.raw['createdBy'] if 'createdBy' in self.raw else None
 
     def get_update_time(self):
-        return self.raw['updateTime']
+        return self.raw['updateTime'] if 'updateTime' in self.raw else None
 
     def get_updated_by(self):
-        return self.raw['updatedBy']
+        return self.raw['updatedBy'] if 'updatedBy' in self.raw else None
 
     def get_schema(self):
-        return self.raw['getSchemaList']
+        return self.raw['schemaList'] if 'schemaList' in self.raw else []
 
     def set_subscriptions(self, subscriptions):
         subscription_list = self.raw['subscriptionList'] if 'subscriptionList' in self.raw else []
@@ -62,11 +62,11 @@ class Eventbuffer:
         return self
 
     def get_subscriptions(self):
-        return self.raw['subscriptionList']
+        return self.raw['subscriptionList'] if 'subscriptionList' in self.raw else []
 
     def to_json(self):
         subscriptions = []
-        for subscription in self.raw['subscriptionList']:
+        for subscription in self.get_subscriptions():
             subscriptions.append(jsonpickle.unpickler.decode(subscription.to_json()))
 
         eventbuffer = self.raw

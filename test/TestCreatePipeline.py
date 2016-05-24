@@ -1,7 +1,7 @@
 import unittest
 
-host  = ''  # host url
-token = ''  # auth token
+host  = 'http://localhost:8080'  # host url
+token = 'g7p1bj362pk8s9qlrna7kgpzt467nxcq'  # auth token
 
 
 class TestCreatePipeline(unittest.TestCase):
@@ -52,6 +52,10 @@ class TestCreatePipeline(unittest.TestCase):
                     pass
             except Exception as e:
                 print(e.message)
+                try:
+                    fclient.delete_eventbuffer(eventbuffer.get_id())
+                except Exception as e:
+                    pass
                 self.assertEqual(0, 1, 'Cannot create pipeline')
         except Exception as e:
             print(e.message)
