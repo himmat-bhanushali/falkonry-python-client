@@ -26,8 +26,8 @@ $ pip install falkonryclient
     * To create Eventbuffer
     
 ```python
-from falkonryclient import Falkonry
-from falkonryclient import Schemas
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
 
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 
@@ -44,8 +44,8 @@ createdEventbuffer = falkonry.create_eventbuffer(eventbuffer, options)
     * To get all Eventbuffers
     
 ```python
-from falkonryclient import Falkonry
-from falkonryclient import Schemas
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
 
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
         
@@ -56,8 +56,8 @@ eventbuffers = falkonry.get_eventbuffers()
     * To create Pipeline
     
 ```python
-from falkonryclient import Falkonry
-from falkonryclient import Schemas
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
 
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 
@@ -87,8 +87,8 @@ createdPipeline = falkonry.createPipeline(pipeline)
     * To get all Pipelines
     
 ```python
-from falkonryclient import Falkonry
-from falkonryclient import Schemas
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
 
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 pipelines  = falkonry.getPipelines()
@@ -97,8 +97,8 @@ pipelines  = falkonry.getPipelines()
     * To add data
     
 ```python
-from falkonryclient import Falkonry
-from falkonryclient import Schemas
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
 
 falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
 data          = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
@@ -109,8 +109,8 @@ inputResponse = falkonry.add_input_data('eventbuffer_id', 'json', {}, data)
     
 ```python
 import os, sys
-from falkonryclient import Falkonry
-from falkonryclient import Schemas
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
 
 falkonry = Falkonry('https://service.falkonry.io', 'auth-token')
 stream   = io.open('./data.json')
@@ -122,8 +122,8 @@ response = falkonry.add_input_stream('eventbuffer_id', 'json', {}, stream)
     
 ```python
 import os, sys
-from falkonryclient import Falkonry
-from falkonryclient import Schemas
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
 
 falkonry     = Falkonry('https://service.falkonry.io', 'auth-token')
 stream       = open('/tmp/sample.json', 'r')
@@ -138,8 +138,8 @@ with open("/tmp/pipelineOutput.json", 'w') as outputFile:
     * To create eventbuffer subscription
     
 ```python
-from falkonryclient import Falkonry
-from falkonryclient import Schemas
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
 
 falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
 subscription  = Schemas.Subscription()
@@ -156,8 +156,8 @@ subscription  = falkonry.create_subscription('eventbuffer_id', subscription)
     * To create pipeline publication
     
 ```python
-from falkonryclient import Falkonry
-from falkonryclient import Schemas
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
 
 falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
 publication   = Schemas.Publication() \
