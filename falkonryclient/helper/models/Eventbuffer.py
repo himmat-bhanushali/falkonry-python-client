@@ -17,6 +17,13 @@ class Eventbuffer:
     def __init__(self, **kwargs):
         self.raw = kwargs.get('eventbuffer') if 'eventbuffer' in kwargs else {}
 
+        if 'subscriptionList' in self.raw:
+            if isinstance(self.raw['subscriptionList'], list):
+                subscriptions = []
+                for subscription in self.raw['subscriptionList']:
+                    subscriptions.append(Subscription(subscription=subscription))
+                self.raw['subscriptionList'] = subscriptions
+
     def get_id(self):
         return self.raw['id'] if 'id' in self.raw else None
 
