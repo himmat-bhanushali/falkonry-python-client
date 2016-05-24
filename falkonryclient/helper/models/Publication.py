@@ -25,7 +25,7 @@ class Publication:
         return self
 
     def get_type(self):
-        return self.raw['type'] if 'key' in self.raw else None
+        return self.raw['type'] if 'type' in self.raw else None
 
     def set_topic(self, topic):
         self.raw['topic'] = topic
