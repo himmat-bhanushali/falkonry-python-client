@@ -23,6 +23,36 @@ $ pip install falkonryclient
     
 ## Quick Start
 
+    * To create Eventbuffer
+    
+```python
+from falkonryclient import Falkonry
+from falkonryclient import Schemas
+
+falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
+
+eventbuffer = Schemas.Eventbuffer() \
+                .set_name('Health')
+options = {
+    'timeIdentifier' : 'time',
+    'timeFormat'     : 'iso_8601'
+}
+        
+createdEventbuffer = falkonry.create_eventbuffer(eventbuffer, options)
+```
+
+    * To get all Eventbuffers
+    
+```python
+from falkonryclient import Falkonry
+from falkonryclient import Schemas
+
+falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
+        
+eventbuffers = falkonry.get_eventbuffers()
+```
+
+
     * To create Pipeline
     
 ```python
@@ -31,15 +61,23 @@ from falkonryclient import Schemas
 
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 
-assessment = Schemas.Assessment();
+eventbuffer = Schemas.Eventbuffer() \
+                .set_name('Health')
+options = {
+    'timeIdentifier' : 'time',
+    'timeFormat'     : 'iso_8601'
+}
+        
+createdEventbuffer = falkonry.create_eventbuffer(eventbuffer, options)
+
+assessment = Schemas.Assessment()
                 .set_name('Health')
                 .set_input_signals(['current', 'vibration'])
                         
 pipeline   = Schemas.Pipeline()
                 .set_name('Motor Health')
                 .set_thing_name('Motor')
-                .set_time_identifier('time')
-                .set_time_format('YYYY-MM-DD HH:MM:SS')
+                .set_eventbuffer(createdEventbuffer.get_id())
                 .set_input_signals({'current' : 'Numeric', 'vibration' : 'Numeric'})
                 .set_assessment(assessment)
         
@@ -62,27 +100,9 @@ pipelines  = falkonry.getPipelines()
 from falkonryclient import Falkonry
 from falkonryclient import Schemas
 
-var data = [
-    {
-        'time'      : 1456528122024,
-        'current'   : 3.86,
-        'vibration' : 4.2
-    },
-    {
-        'time'      : 1456528132024,
-        'current'   : 4.456,
-        'vibration' : 6.8
-    },
-    {
-        'time'      : 1456528142024,
-        'current'   : 2.4690,
-        'vibration' : 9.3
-    }
-]
-
 falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
-
-inputResponse = falkonry.addInput('pipeline_id', data)
+data          = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
+inputResponse = falkonry.add_input_data('eventbuffer_id', 'json', {}, data)
 ```
 
     * To add data from a stream
@@ -93,9 +113,9 @@ from falkonryclient import Falkonry
 from falkonryclient import Schemas
 
 falkonry = Falkonry('https://service.falkonry.io', 'auth-token')
-stream   = open('/tmp/sample.json', 'r')
+stream   = io.open('./data.json')
 
-response = falkonry.addInputFromStream('pipeline_id', stream)
+response = falkonry.add_input_stream('eventbuffer_id', 'json', {}, stream)
 ```
 
     * To get output of a Pipeline
@@ -106,13 +126,47 @@ from falkonryclient import Falkonry
 from falkonryclient import Schemas
 
 falkonry     = Falkonry('https://service.falkonry.io', 'auth-token')
-stream       = open('/tmp/sample.json', 'r');
-startTime    = '1457018017'; //seconds since unix epoch 
-endTime      = '1457028017'; //seconds since unix epoch
-outputStream = falkonry.getOutput('pipeline_id', startTime, endTime);
+stream       = open('/tmp/sample.json', 'r')
+startTime    = '1457018017' #seconds since unix epoch 
+endTime      = '1457028017' #seconds since unix epoch
+outputStream = falkonry.getOutput('pipeline_id', startTime, endTime)
 with open("/tmp/pipelineOutput.json", 'w') as outputFile:
     for line in outputStream:
         outputFile.write(line + '\n')
+```
+
+    * To create eventbuffer subscription
+    
+```python
+from falkonryclient import Falkonry
+from falkonryclient import Schemas
+
+falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
+subscription  = Schemas.Subscription()
+subscription.set_type('MQTT') \
+            .set_path('mqtt://test.mosquito.com') \
+            .set_topic('falkonry-eb-1-test') \
+            .set_username('test-user') \
+            .set_password('test') \
+            .set_time_format('YYYY-MM-DD HH:mm:ss') \
+            .set_time_identifier('time')
+subscription  = falkonry.create_subscription('eventbuffer_id', subscription)
+```
+
+    * To create pipeline publication
+    
+```python
+from falkonryclient import Falkonry
+from falkonryclient import Schemas
+
+falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
+publication   = Schemas.Publication() \
+                .set_type('WEBHOOK') \
+                .set_path('https://test.example.com/getFalkonryData') \
+                .set_headers({
+                    'Authorization': 'Token 1234567890'
+                })
+publication   = falkonry.create_publication('pipeline_id', publication)
 ```
 
 ## Docs
