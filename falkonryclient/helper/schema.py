@@ -11,9 +11,12 @@ Client to access Condition Prediction APIs
 from falkonryclient.helper.models import *
 
 Models = {
- "Assessment": Assessment,
- "Pipeline": Pipeline,
- "Signal": Signal
+    "Assessment": Assessment,
+    "Pipeline": Pipeline,
+    "Signal": Signal,
+    "Eventbuffer": Eventbuffer,
+    "Subscription": Subscription,
+    "Publication": Publication
 }
 
 __all__ = [

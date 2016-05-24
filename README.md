@@ -12,10 +12,14 @@ $ pip install falkonryclient
 
 ## Features
 
+    * Create Eventbuffer
+    * Retrieve Eventbuffers
     * Create Pipeline
     * Retrieve Pipelines
-    * Add data to Pipeline (json, stream)
+    * Add data to Eventbuffer (csv/json, stream)
     * Retrieve output of Pipeline
+    * Create subscription for Eventbuffer
+    * Create publication for Pipeline
     
 ## Quick Start
 
