@@ -139,7 +139,7 @@ from falkonryclient import schemas as Schemas
 falkonry = Falkonry('https://service.falkonry.io', 'auth-token')
 stream   = io.open('./data.json')
 
-response = falkonry.add_input_stream('pipeline_id', 'json', {}, stream)
+response = falkonry.add_verification_stream('pipeline_id', 'json', {}, stream)
 
 ```
 
