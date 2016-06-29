@@ -118,6 +118,31 @@ stream   = io.open('./data.json')
 response = falkonry.add_input_stream('eventbuffer_id', 'json', {}, stream)
 ```
 
+    * To add verification data
+    
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
+data          = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
+inputResponse = falkonry.add_verification('pipeline_id', 'json', {}, data)
+```
+
+    * To add verification data from a stream
+    
+```python
+import os, sys
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+falkonry = Falkonry('https://service.falkonry.io', 'auth-token')
+stream   = io.open('./data.json')
+
+response = falkonry.add_input_stream('pipeline_id', 'json', {}, stream)
+
+```
+
     * To get output of a Pipeline
     
 ```python
