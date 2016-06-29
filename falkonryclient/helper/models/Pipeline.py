@@ -101,33 +101,56 @@ class Pipeline:
     def get_thing_name(self):
         return self.raw['singleThingID'] if 'singleThingID' in self.raw else None
 
-    def set_input_signal(self, signal, stype):
+    def set_input_signal(self, signal, stype,etype):
         if stype is not 'Numeric' and stype is not 'Categorical':
             return self
 
         signals = self.raw['inputList'] if self.raw['inputList'] is not None else []
-        new_signal = Signal(signal={
+        signal = {
           'name': signal,
           'valueType': {
             'type': stype
           }
-        })
+        };
+        if eType == 'Occurrences' or eType == 'Samples':
+            new_signal['eventType'] = {
+                'type' : eType
+            };
+        else:
+            signal['eventType'] = {
+                'type' : 'Samples'
+            };
+        new_signal = Signal(signal=signal)
         signals.append(new_signal)
         self.raw['inputList'] = signals
         return self
 
     def set_input_signals(self, input_list):
         inputs = []
-        for signal in input_list:
-            new_signal = Signal(signal={
-              'name': signal,
-              'valueType': {
-                'type': input_list[signal]
-              }
-            })
+        for key,val in input_list.iteritems():
+            if isinstance(val,list) :
+                new_signal = Signal(signal={
+                    'name' : key,
+                    'valueType' : {
+                        'type' : val[0]
+                    },
+                    'eventType' : {
+                        'type' : val[1]
+                    }
+                    })
+            else:
+                new_signal = Signal(signal={
+                    'name' : key,
+                    'valueType' : {
+                        'type' : val
+                    },
+                    'eventType' : {
+                        'type' : 'Samples'
+                    }
+                    })   
             inputs.append(new_signal)
         self.raw['inputList'] = inputs
-        return self
+        return self 
 
     def get_input_signals(self):
         return self.raw['inputList'] if 'inputList' in self.raw else []

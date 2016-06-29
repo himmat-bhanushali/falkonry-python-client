@@ -1,7 +1,8 @@
 import unittest
+import random
 
 host  = 'http://localhost:8080'  # host url
-token = 'g7p1bj362pk8s9qlrna7kgpzt467nxcq'  # auth token
+token = 'b7f4sc9dcaklj6vhcy50otx41p044s6l'  # auth token
 
 
 class TestCreatePipeline(unittest.TestCase):
@@ -16,7 +17,7 @@ class TestCreatePipeline(unittest.TestCase):
             'timeIdentifier' : 'time',
             'timeFormat'     : 'iso_8601'
         }
-        eventbuffer.set_name('Motor Health')
+        eventbuffer.set_name('Motor Health' + str(random.random()))
         try:
             eventbuffer = fclient.create_eventbuffer(eventbuffer, options)
             pipeline = Schemas.Pipeline()
@@ -61,6 +62,58 @@ class TestCreatePipeline(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create eventbuffer')
 
+    def test_create_pipeline_for_single_thing_with_eventType(self):
+        fclient = FClient(host=host, token=token)
+        eventbuffer = Schemas.Eventbuffer()
+        options = {
+            'timeIdentifier' : 'time',
+            'timeFormat'     : 'iso_8601'
+        }
+        eventbuffer.set_name('Motor Health' + str(random.random()))
+        try:
+            eventbuffer = fclient.create_eventbuffer(eventbuffer, options)
+            pipeline = Schemas.Pipeline()
+            signals  = {
+                'current': ['Numeric','Occurrences'],
+                'vibration': ['Numeric','Samples'],
+                'state': 'Categorical'
+            }
+            assessment = Schemas.Assessment()
+            assessment.set_name('Health') \
+                .set_input_signals(['current', 'vibration', 'state'])
+            pipeline.set_name('Motor Health 1') \
+                .set_eventbuffer(eventbuffer.get_id()) \
+                .set_input_signals(signals) \
+                .set_thing_name('Motor') \
+                .set_assessment(assessment)
+
+            try:
+                response = fclient.create_pipeline(pipeline)
+                self.assertEqual(isinstance(response, Schemas.Pipeline), True, 'Invalid Pipeline object after creation')
+                self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid Pipeline object after creation')
+                self.assertEqual(response.get_name(), pipeline.get_name(), 'Invalid Pipeline object after creation')
+                self.assertNotEqual(response.get_thing_name(), None, 'Invalid Pipeline object after creation')
+                self.assertEqual(len(response.get_input_signals()), 3, 'Invalid Pipeline object after creation')
+                self.assertEqual(len(response.get_assessments()), 1, 'Invalid Pipeline object after creation')
+                self.assertEqual(response.get_eventbuffer(), eventbuffer.get_id(), 'Invalid Pipeline object after creation')
+
+                # tear down
+                try:
+                    fclient.delete_pipeline(response.get_id())
+                    fclient.delete_eventbuffer(eventbuffer.get_id())
+                except Exception as e:
+                    pass            except Exception as e:
+                print(e.message)
+                try:
+                    fclient.delete_eventbuffer(eventbuffer.get_id())
+                except Exception as e:
+                    pass
+                self.assertEqual(0, 1, 'Cannot create pipeline')
+        except Exception as e:
+            print(e.message)
+            self.assertEqual(0, 1, 'Cannot create eventbuffer')
+
+
     def test_create_pipeline_for_multiple_thing(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
@@ -68,7 +121,7 @@ class TestCreatePipeline(unittest.TestCase):
             'timeIdentifier' : 'time',
             'timeFormat'     : 'iso_8601'
         }
-        eventbuffer.set_name('Motor Health')
+        eventbuffer.set_name('Motor Health' + str(random.random()))
         try:
             eventbuffer = fclient.create_eventbuffer(eventbuffer, options)
             pipeline = Schemas.Pipeline()
@@ -117,7 +170,7 @@ class TestCreatePipeline(unittest.TestCase):
             'timeIdentifier' : 'time',
             'timeFormat'     : 'iso_8601'
         }
-        eventbuffer.set_name('Motor Health')
+        eventbuffer.set_name('Motor Health' + str(random.random()))
         try:
             eventbuffer = fclient.create_eventbuffer(eventbuffer, options)
             pipeline = Schemas.Pipeline()

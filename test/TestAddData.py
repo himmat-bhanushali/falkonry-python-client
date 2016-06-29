@@ -1,7 +1,7 @@
 import unittest
 
 host  = 'http://localhost:8080'  # host url
-token = 'g7p1bj362pk8s9qlrna7kgpzt467nxcq'  # auth token
+token = 'b7f4sc9dcaklj6vhcy50otx41p044s6l'  # auth token
 
 
 class TestAddData(unittest.TestCase):

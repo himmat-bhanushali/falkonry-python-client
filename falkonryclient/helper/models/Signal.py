@@ -36,5 +36,14 @@ class Signal:
     def get_value_type(self):
         return self.raw['valueType'] if 'valueType' in self.raw else None
 
+    def set_event_type(self, stype):
+        self.raw['eventType'] = {
+            'type': stype
+        }
+        return self
+
+    def get_event_type(self):
+        return self.raw['eventType'] if 'eventType' in self.raw else None        
+
     def to_json(self):
         return json.dumps(self.raw)

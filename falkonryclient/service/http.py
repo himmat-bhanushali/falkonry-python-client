@@ -68,6 +68,26 @@ class HttpService:
         else:
             raise Exception(response.content)
 
+    def postData(self, url, data):
+        """
+        To make a POST request to Falkonry API server
+        :param url: string
+        :param entity: Instantiated class object
+        """
+
+        response = requests.post(
+            self.host + url,
+            data,
+            headers={
+                "Content-Type": "text/plain",
+                'Authorization': 'Token ' + self.token
+            }
+        )
+        if response.status_code is 202 or response.status_code is 200:
+            return json.loads(response.content)
+        else:
+            raise Exception(response.content)            
+
     def put(self, url, entity):
         """
         To make a PUT request to Falkonry API server
@@ -148,7 +168,7 @@ class HttpService:
                 'Authorization': 'Token ' + self.token
             }
         )
-        if response.status_code is 202:
+        if response.status_code is 202 or response.status_code is 200:
             return json.loads(response.content)
         else:
             raise Exception(response.content)

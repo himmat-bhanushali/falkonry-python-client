@@ -1,7 +1,7 @@
 import unittest
 
 host  = 'http://localhost:8080'  # host url
-token = 'g7p1bj362pk8s9qlrna7kgpzt467nxcq'  # auth token
+token = 'b7f4sc9dcaklj6vhcy50otx41p044s6l'  # auth token
 
 
 class TestCreateEventbuffer(unittest.TestCase):
@@ -124,7 +124,7 @@ class TestCreateEventbuffer(unittest.TestCase):
                 self.assertEqual(response.get_time_format(), subscription.get_time_format(), 'Invalid Subscription object after creation')
             except Exception as e:
                 print(e.message)
-            self.assertEqual(0, 1, 'Cannot create Subscription')
+                self.assertEqual(0, 1, 'Cannot create Subscription')
 
             # tear down
             try:

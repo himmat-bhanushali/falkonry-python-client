@@ -122,6 +122,22 @@ class FalkonryService:
         response = self.http.fpost(url, form_data)
         return response
 
+    def add_verification(self, pipeline, data_type, options, data):
+        """
+        To add verification data to a Pipeline
+        :param pipeline: string
+        :param data_type: string
+        :param options: dict
+        :param data: string
+        """
+        url = '/pipeline/' + pipeline + '/verification'
+        try:
+            response = self.http.postData(url, data)
+        except Exception as e:
+            print e.message
+        return response
+
+
     def add_input_stream(self, eventbuffer, data_type, options, data):
         """
         To add data stream to a Eventbuffer
@@ -143,6 +159,28 @@ class FalkonryService:
             }
         }
         response = self.http.upstream(url, form_data)
+        return response
+
+    def add_verification_stream(self, pipeline, data_type, options, data):
+        """
+        To add  verification data stream to a Pipeline
+        :param eventbuffer: string
+        :param data_type: string
+        :param options: dict
+        :param data: Stream
+        """
+        url = '/pipeline/' + pipeline + '/verification'
+        form_data = {
+            'files': {
+                'data': (
+                    Utils.random_string(10)+('.json' if data_type is 'json' else '.csv'),
+                    data,
+                    'text/plain;charset=UTF-8',
+                    {'Expires': '0'}
+                )
+            }
+        }
+        response = self.http.upstream(url,form_data)
         return response
 
     def get_output(self, pipeline, start=None, end=None):
