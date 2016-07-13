@@ -25,12 +25,10 @@ class TestPipelineSchema(unittest.TestCase):
         pipeline.set_name('Motor Health') \
             .set_eventbuffer('eventbuffer-id') \
             .set_input_signals(signals) \
-            .set_thing_name('Motor') \
             .set_assessment(assessment)
 
         self.assertEqual(pipeline.get_name(), 'Motor Health', 'Invalid name')
         self.assertEqual(pipeline.get_eventbuffer(), 'eventbuffer-id', 'Invalid eventbuffer')
-        self.assertEqual(pipeline.get_thing_name(), 'Motor', 'Invalid thing name')
         self.assertEqual(len(pipeline.get_input_signals()), 3, 'Invalid input signals')
         self.assertEqual(len(pipeline.get_assessments()), 1, 'Invalid assessment signals')
 
@@ -47,12 +45,10 @@ class TestPipelineSchema(unittest.TestCase):
         pipeline.set_name('Motor Health') \
             .set_eventbuffer('eventbuffer-id') \
             .set_input_signals(signals) \
-            .set_thing_name('Motor') \
             .set_assessment(assessment)
 
         self.assertEqual(pipeline.get_name(), 'Motor Health', 'Invalid name')
         self.assertEqual(pipeline.get_eventbuffer(), 'eventbuffer-id', 'Invalid eventbuffer')
-        self.assertEqual(pipeline.get_thing_name(), 'Motor', 'Invalid thing name')
         self.assertEqual(len(pipeline.get_input_signals()), 3, 'Invalid input signals')
         self.assertEqual(len(pipeline.get_assessments()), 1, 'Invalid assessment signals')
 
@@ -82,10 +78,6 @@ class TestPipelineSchema(unittest.TestCase):
             .set_time_format('YYYY-MM-DD HH:mm:ss') \
             .set_time_identifier('time') \
             .set_historian(True) \
-            .set_value_column('value') \
-            .set_signals_delimiter('_') \
-            .set_signals_tag_field('tag') \
-            .set_signals_location('prefix')
 
         self.assertEqual(subscription.get_type(), 'MQTT', 'Invalid Subscription object')
         self.assertEqual(subscription.get_topic(), 'falkonry-eb-1-test', 'Invalid Subscription object')
@@ -93,10 +85,6 @@ class TestPipelineSchema(unittest.TestCase):
         self.assertEqual(subscription.get_username(), 'test-user', 'Invalid Subscription object')
         self.assertEqual(subscription.get_time_identifier(), 'time', 'Invalid Subscription object')
         self.assertEqual(subscription.get_time_format(), 'YYYY-MM-DD HH:mm:ss', 'Invalid Subscription object')
-        self.assertEqual(subscription.get_value_column(), 'value', 'Invalid Subscription object')
-        self.assertEqual(subscription.get_signals_delimiter(), '_', 'Invalid Subscription object')
-        self.assertEqual(subscription.get_signals_tag_field(), 'tag', 'Invalid Subscription object')
-        self.assertEqual(subscription.get_signals_location(), 'prefix', 'Invalid Subscription object')
 
     def test_publication_model(self):
         publication = Schemas.Publication()

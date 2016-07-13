@@ -87,16 +87,8 @@ class Pipeline:
     def get_eventbuffer(self):
         return self.raw['input'] if 'input' in self.raw else None
 
-    def set_thing_identifier(self, identifier):
-        self.raw['thingIdentifier'] = identifier
-        return self
-
     def get_thing_identifier(self):
         return self.raw['thingIdentifier'] if 'thingIdentifier' in self.raw else None
-
-    def set_thing_name(self, name):
-        self.raw['singleThingID'] = name
-        return self
 
     def get_thing_name(self):
         return self.raw['singleThingID'] if 'singleThingID' in self.raw else None

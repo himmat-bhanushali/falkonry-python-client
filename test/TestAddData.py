@@ -12,13 +12,11 @@ class TestAddData(unittest.TestCase):
     def test_add_data_single_thing(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
-        options = {
-            'timeIdentifier' : 'time',
-            'timeFormat'     : 'iso_8601'
-        }
         eventbuffer.set_name('Motor Health')
+        eventbuffer.set_time_identifier('time')
+        eventbuffer.set_time_format('iso_8601')
         try:
-            eventbuffer = fclient.create_eventbuffer(eventbuffer, options)
+            eventbuffer = fclient.create_eventbuffer(eventbuffer)
             pipeline = Schemas.Pipeline()
             signals  = {
                 'current': 'Numeric',

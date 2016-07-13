@@ -54,7 +54,6 @@ class HttpService:
         :param url: string
         :param entity: Instantiated class object
         """
-
         response = requests.post(
             self.host + url,
             entity.to_json(),
@@ -86,7 +85,7 @@ class HttpService:
         if response.status_code is 202 or response.status_code is 200:
             return json.loads(response.content)
         else:
-            raise Exception(response.content)            
+            raise Exception(response.content)           
 
     def put(self, url, entity):
         """
