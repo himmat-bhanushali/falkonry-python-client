@@ -1,7 +1,7 @@
 import unittest
 
 host  = 'http://localhost:8080'  # host url
-token = 'b7f4sc9dcaklj6vhcy50otx41p044s6l'  # auth token
+token = 'gryw3nodrijv449p67uw2hxtwezr19sm'  # auth token
 
 
 class TestAddData(unittest.TestCase):
@@ -17,41 +17,20 @@ class TestAddData(unittest.TestCase):
         eventbuffer.set_time_format('iso_8601')
         try:
             eventbuffer = fclient.create_eventbuffer(eventbuffer)
-            pipeline = Schemas.Pipeline()
-            signals  = {
-                'current': 'Numeric',
-                'vibration': 'Numeric',
-                'state': 'Categorical'
-            }
-            assessment = Schemas.Assessment()
-            assessment.set_name('Health') \
-                .set_input_signals(['current', 'vibration', 'state'])
-            pipeline.set_name('Motor Health 1') \
-                .set_eventbuffer(eventbuffer.get_id()) \
-                .set_input_signals(signals) \
-                .set_thing_name('Motor') \
-                .set_assessment(assessment)
-
             try:
-                created_pipeline = fclient.create_pipeline(pipeline)
+                data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
+                response = fclient.add_input_data(eventbuffer.get_id(), 'json', {}, data)
+                self.assertNotEqual(response['__$id'], None, 'Cannot add input data to eventbuffer')
+
+                # tear down
                 try:
-                    data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
-                    response = fclient.add_input_data(eventbuffer.get_id(), 'json', {}, data)
-
-                    self.assertNotEqual(response['__$id'], None, 'Cannot add input data to eventbuffer')
-
-                    # tear down
-                    try:
-                        fclient.delete_pipeline(created_pipeline.get_id())
-                        fclient.delete_eventbuffer(eventbuffer.get_id())
-                    except Exception as e:
-                        pass
+                    fclient.delete_pipeline(created_pipeline.get_id())
+                    fclient.delete_eventbuffer(eventbuffer.get_id())
                 except Exception as e:
-                    print(e.message)
-                    self.assertEqual(0, 1, 'Cannot add input data to eventbuffer')
+                    pass
             except Exception as e:
                 print(e.message)
-                self.assertEqual(0, 1, 'Cannot create pipeline')
+                self.assertEqual(0, 1, 'Cannot add input data to eventbuffer')
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create eventbuffer')

@@ -3,7 +3,7 @@ import random
 import io
 
 host  = 'http://localhost:8080'  # host url
-token = 'b7f4sc9dcaklj6vhcy50otx41p044s6l'  # auth token
+token = 'gryw3nodrijv449p67uw2hxtwezr19sm'  # auth token
 
 
 class TestAddVerificationStream(unittest.TestCase):
@@ -19,38 +19,44 @@ class TestAddVerificationStream(unittest.TestCase):
         eventbuffer.set_time_format('iso_8601')
         try:
             eventbuffer = fclient.create_eventbuffer(eventbuffer)
-            pipeline = Schemas.Pipeline()
-            signals  = {
-                'current': 'Numeric',
-                'vibration': 'Numeric',
-                'state': 'Categorical'
-            }
-            assessment = Schemas.Assessment()
-            assessment.set_name('Health') \
-                .set_input_signals(['current', 'vibration', 'state'])
-            pipeline.set_name('Motor Health 1') \
-                .set_eventbuffer(eventbuffer.get_id()) \
-                .set_input_signals(signals) \
-                .set_thing_name('Motor') \
-                .set_assessment(assessment)
-
             try:
-                resp_pipeline = fclient.create_pipeline(pipeline)
-                data = io.open('./verificationData.json')
-                response = fclient.add_verification_stream(resp_pipeline.get_id(), 'json', {}, data)
-                # tear down
+                data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
+                response = fclient.add_input_data(eventbuffer.get_id(), 'json', {}, data)
+                pipeline = Schemas.Pipeline()
+                signals  = {
+                    'current': 'Numeric',
+                    'vibration': 'Numeric',
+                    'state': 'Categorical'
+                }
+                assessment = Schemas.Assessment()
+                assessment.set_name('Health') \
+                    .set_input_signals(['current', 'vibration', 'state'])
+                pipeline.set_name('Motor Health 1') \
+                    .set_eventbuffer(eventbuffer.get_id()) \
+                    .set_input_signals(signals) \
+                    .set_assessment(assessment)
+
                 try:
-                    fclient.delete_pipeline(resp_pipeline.get_id())
-                    fclient.delete_eventbuffer(eventbuffer.get_id())
+                    resp_pipeline = fclient.create_pipeline(pipeline)
+                    data = io.open('./verificationData.json')
+
+                    response = fclient.add_verification(resp_pipeline.get_id(), 'json', {}, data)
+                    # tear down
+                    try:
+                        fclient.delete_pipeline(resp_pipeline.get_id())
+                        fclient.delete_eventbuffer(eventbuffer.get_id())
+                    except Exception as e:
+                        pass
                 except Exception as e:
-                    pass
+                    print(e.message)
+                    try:
+                        fclient.delete_eventbuffer(eventbuffer.get_id())
+                    except Exception as e:
+                        pass
+                    self.assertEqual(0, 1, 'Cannot create pipeline')
             except Exception as e:
                 print(e.message)
-                try:
-                    fclient.delete_eventbuffer(eventbuffer.get_id())
-                except Exception as e:
-                    pass
-                self.assertEqual(0, 1, 'Cannot create pipeline')
+                self.assertEqual(0,1,"Cannot add data")        
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create eventbuffer')
@@ -61,41 +67,45 @@ class TestAddVerificationStream(unittest.TestCase):
         eventbuffer.set_name('Motor Health' + str(random.random()))
         eventbuffer.set_time_identifier('time')
         eventbuffer.set_time_format('iso_8601')
-
         try:
             eventbuffer = fclient.create_eventbuffer(eventbuffer)
-            pipeline = Schemas.Pipeline()
-            signals  = {
-                'current': 'Numeric',
-                'vibration': 'Numeric',
-                'state': 'Categorical'
-            }
-            assessment = Schemas.Assessment()
-            assessment.set_name('Health') \
-                .set_input_signals(['current', 'vibration', 'state'])
-            pipeline.set_name('Motor Health 1') \
-                .set_eventbuffer(eventbuffer.get_id()) \
-                .set_input_signals(signals) \
-                .set_thing_name('Motor') \
-                .set_assessment(assessment)
-
             try:
-                resp_pipeline = fclient.create_pipeline(pipeline)
-                data = io.open('./verificationData.csv')
-                response = fclient.add_verification(resp_pipeline.get_id(), 'csv', {}, data)
-                # tear down
+                data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
+                response = fclient.add_input_data(eventbuffer.get_id(), 'json', {}, data)
+                pipeline = Schemas.Pipeline()
+                signals  = {
+                    'current': 'Numeric',
+                    'vibration': 'Numeric',
+                    'state': 'Categorical'
+                }
+                assessment = Schemas.Assessment()
+                assessment.set_name('Health') \
+                    .set_input_signals(['current', 'vibration', 'state'])
+                pipeline.set_name('Motor Health 1') \
+                    .set_eventbuffer(eventbuffer.get_id()) \
+                    .set_input_signals(signals) \
+                    .set_assessment(assessment)
+
                 try:
-                    fclient.delete_pipeline(resp_pipeline.get_id())
-                    fclient.delete_eventbuffer(eventbuffer.get_id())
+                    resp_pipeline = fclient.create_pipeline(pipeline)
+                    data = io.open('./verificationData.csv')
+                    response = fclient.add_verification(resp_pipeline.get_id(), 'csv', {}, data)
+                    # tear down
+                    try:
+                        fclient.delete_pipeline(resp_pipeline.get_id())
+                        fclient.delete_eventbuffer(eventbuffer.get_id())
+                    except Exception as e:
+                        pass
                 except Exception as e:
-                    pass
+                    print(e.message)
+                    try:
+                        fclient.delete_eventbuffer(eventbuffer.get_id())
+                    except Exception as e:
+                        pass
+                    self.assertEqual(0, 1, 'Cannot create pipeline')
             except Exception as e:
                 print(e.message)
-                try:
-                    fclient.delete_eventbuffer(eventbuffer.get_id())
-                except Exception as e:
-                    pass
-                self.assertEqual(0, 1, 'Cannot create pipeline')
+                self.assertEqual(0,1,"Cannot add data")        
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create eventbuffer')            
