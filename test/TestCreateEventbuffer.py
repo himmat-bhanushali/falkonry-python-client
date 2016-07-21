@@ -59,7 +59,7 @@ class TestCreateEventbufferSingleThing(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create Eventbuffer')
 
-    def test_create_eventbuffer_for_historian_data(self):
+    def test_create_eventbuffer_for_narrow_format_data(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
         eventbuffer.set_name('Motor Health' + str(random.random()))
@@ -159,7 +159,7 @@ class TestCreateEventbufferSingleThing(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create Eventbuffer')
 
-    def test_create_eventbuffer_with_mqtt_subscription_for_historian_data(self):
+    def test_create_eventbuffer_with_mqtt_subscription_for_narrow_format_data(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
         eventbuffer.set_name('Motor Health'+ str(random.random()))
@@ -175,8 +175,7 @@ class TestCreateEventbufferSingleThing(unittest.TestCase):
             .set_path('mqtt://test.mosquito.com') \
             .set_topic('falkonry-eb-1-test') \
             .set_username('test-user') \
-            .set_password('test') \
-            .set_historian(True)
+            .set_password('test')
 
         try:
             response = fclient.create_eventbuffer(eventbuffer)
