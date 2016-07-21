@@ -73,13 +73,6 @@ class Subscription:
     def get_streaming(self):
         return self.raw['streaming'] if 'streaming' in self.raw else True
 
-    def set_historian(self, historian):
-        self.raw['isHistorian'] = historian
-        return self
-
-    def get_historian(self):
-        return self.raw['isHistorian'] if 'isHistorian' in self.raw else False
-
     def get_signals_tag_field(self):
         return self.raw['signalsTagField'] if 'signalsTagField' in self.raw else None
 

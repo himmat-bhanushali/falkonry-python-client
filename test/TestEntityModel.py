@@ -77,7 +77,6 @@ class TestPipelineSchema(unittest.TestCase):
             .set_password('test') \
             .set_time_format('YYYY-MM-DD HH:mm:ss') \
             .set_time_identifier('time') \
-            .set_historian(True) \
 
         self.assertEqual(subscription.get_type(), 'MQTT', 'Invalid Subscription object')
         self.assertEqual(subscription.get_topic(), 'falkonry-eb-1-test', 'Invalid Subscription object')

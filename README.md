@@ -56,7 +56,7 @@ eventbuffer.set_thing_identifier("motor")
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 ```
 
-    * To create Eventbuffer for historian data
+    * To create Eventbuffer for narrow format data
     
 ```python
 from falkonryclient import client as Falkonry
