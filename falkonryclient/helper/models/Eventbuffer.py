@@ -71,6 +71,55 @@ class Eventbuffer:
     def get_subscriptions(self):
         return self.raw['subscriptionList'] if 'subscriptionList' in self.raw else []
 
+    def set_signals_tag_field(self, signals_tag_field):
+        self.raw['signalsTagField'] = signals_tag_field
+        return self
+
+    def get_signals_tag_field(self):
+        return self.raw['signalsTagField'] if 'signalsTagField' in self.raw else None
+
+    def set_signals_delimiter(self, signals_delimiter):
+        self.raw['signalsDelimiter'] = signals_delimiter
+        return self
+
+    def get_signals_delimiter(self):
+        return self.raw['signalsDelimiter'] if 'signalsDelimiter' in self.raw else None
+
+    def set_signals_location(self, signals_location):
+        self.raw['signalsLocation'] = signals_location
+        return self
+
+    def get_signals_location(self):
+        return self.raw['signalsLocation'] if 'signalsLocation' in self.raw else None
+
+    def set_value_column(self, value_column):
+        self.raw['valueColumn'] = value_column
+        return self
+
+    def get_value_column(self):
+        return self.raw['valueColumn'] if 'valueColumn' in self.raw else None    
+
+    def set_thing_identifier(self, identifier):
+        self.raw['thingIdentifier'] = identifier
+        return self
+
+    def get_thing_identifier(self):
+        return self.raw['thingIdentifier'] if 'thingIdentifier' in self.raw else None
+
+    def set_time_identifier(self, identifier):
+        self.raw['timeIdentifier'] = identifier
+        return self
+
+    def get_time_identifier(self):
+        return self.raw['timeIdentifier'] if 'timeIdentifier' in self.raw else None
+
+    def set_time_format(self, time_format):
+        self.raw['timeFormat'] = time_format
+        return self
+
+    def get_time_format(self):
+        return self.raw['timeFormat'] if 'timeFormat' in self.raw else None    
+
     def to_json(self):
         subscriptions = []
         for subscription in self.get_subscriptions():

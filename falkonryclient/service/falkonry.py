@@ -41,28 +41,13 @@ class FalkonryService:
             eventbuffers.append(Schemas.Eventbuffer(eventbuffer=eventbuffer))
         return eventbuffers
 
-    def create_eventbuffer(self, eventbuffer, options):
+    def create_eventbuffer(self, eventbuffer):
         """
         To create Eventbuffer
         :param eventbuffer: Eventbuffer
         :param options: dict
         """
-        form_data = {
-            'data': {
-                'name'           : eventbuffer.get_name(),
-                'timeIdentifier' : options['timeIdentifier'] if 'timeIdentifier' in options else 'time',
-                'timeFormat'     : options['timeFormat'] if 'timeFormat' in options else 'iso_8601'
-            }
-        }
-        if 'data' in options:
-            data_type = 'json' if ('dataType' in options and options['dataType'] is 'json') else 'csv'
-            form_data['files'] = {
-                'data': (
-                    Utils.random_string(10)+('.json' if data_type is 'json' else '.csv'),
-                    StringIO(options['data'])
-                )
-            }
-        raw_eventbuffer = self.http.fpost('/Eventbuffer', form_data)
+        raw_eventbuffer = self.http.post('/Eventbuffer', eventbuffer)
         return Schemas.Eventbuffer(eventbuffer=raw_eventbuffer)
 
     def delete_eventbuffer(self, eventbuffer):

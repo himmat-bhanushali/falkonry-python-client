@@ -23,7 +23,7 @@ $ pip install falkonryclient
     
 ## Quick Start
 
-    * To create Eventbuffer
+    * To create Eventbuffer for single thing
     
 ```python
 from falkonryclient import client as Falkonry
@@ -31,14 +31,49 @@ from falkonryclient import schemas as Schemas
 
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 
-eventbuffer = Schemas.Eventbuffer() \
-                .set_name('Health')
-options = {
-    'timeIdentifier' : 'time',
-    'timeFormat'     : 'iso_8601'
-}
+eventbuffer = Schemas.Eventbuffer()
+eventbuffer.set_name('Motor Health')
+eventbuffer.set_time_identifier('time')
+eventbuffer.set_time_format('iso_8601')
         
-createdEventbuffer = falkonry.create_eventbuffer(eventbuffer, options)
+createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
+```
+
+    * To create Eventbuffer with multiple things
+    
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
+
+eventbuffer = Schemas.Eventbuffer()
+eventbuffer.set_name('Motor Health')
+eventbuffer.set_time_identifier('time')
+eventbuffer.set_time_format('iso_8601')
+eventbuffer.set_thing_identifier("motor")
+        
+createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
+```
+
+    * To create Eventbuffer for historian data
+    
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
+
+eventbuffer = Schemas.Eventbuffer()
+eventbuffer.set_name('Motor Health' + str(random.random()))
+eventbuffer.set_time_identifier('time')
+eventbuffer.set_time_format('iso_8601')
+eventbuffer.set_signals_tag_field("tag")
+eventbuffer.set_signals_delimiter("_")
+eventbuffer.set_signals_location("prefix")
+eventbuffer.set_value_column("value")
+        
+createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 ```
 
     * To get all Eventbuffers

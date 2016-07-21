@@ -80,30 +80,14 @@ class Subscription:
     def get_historian(self):
         return self.raw['isHistorian'] if 'isHistorian' in self.raw else False
 
-    def set_signals_tag_field(self, signals_tag_field):
-        self.raw['signalsTagField'] = signals_tag_field
-        return self
-
     def get_signals_tag_field(self):
         return self.raw['signalsTagField'] if 'signalsTagField' in self.raw else None
-
-    def set_signals_delimiter(self, signals_delimiter):
-        self.raw['signalsDelimiter'] = signals_delimiter
-        return self
 
     def get_signals_delimiter(self):
         return self.raw['signalsDelimiter'] if 'signalsDelimiter' in self.raw else None
 
-    def set_signals_location(self, signals_location):
-        self.raw['signalsLocation'] = signals_location
-        return self
-
     def get_signals_location(self):
         return self.raw['signalsLocation'] if 'signalsLocation' in self.raw else None
-
-    def set_value_column(self, value_column):
-        self.raw['valueColumn'] = value_column
-        return self
 
     def get_value_column(self):
         return self.raw['valueColumn'] if 'valueColumn' in self.raw else None

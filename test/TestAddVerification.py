@@ -2,7 +2,7 @@ import unittest
 import random
 
 host  = 'http://localhost:8080'  # host url
-token = 'b7f4sc9dcaklj6vhcy50otx41p044s6l'  # auth token
+token = 'gryw3nodrijv449p67uw2hxtwezr19sm'  # auth token
 
 
 class TestAddVerification(unittest.TestCase):
@@ -13,45 +13,49 @@ class TestAddVerification(unittest.TestCase):
     def test_add_json_verification(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
-        options = {
-            'timeIdentifier' : 'time',
-            'timeFormat'     : 'iso_8601'
-        }
         eventbuffer.set_name('Motor Health' + str(random.random()))
+        eventbuffer.set_time_identifier('time')
+        eventbuffer.set_time_format('iso_8601')
         try:
-            eventbuffer = fclient.create_eventbuffer(eventbuffer, options)
-            pipeline = Schemas.Pipeline()
-            signals  = {
-                'current': 'Numeric',
-                'vibration': 'Numeric',
-                'state': 'Categorical'
-            }
-            assessment = Schemas.Assessment()
-            assessment.set_name('Health') \
-                .set_input_signals(['current', 'vibration', 'state'])
-            pipeline.set_name('Motor Health 1') \
-                .set_eventbuffer(eventbuffer.get_id()) \
-                .set_input_signals(signals) \
-                .set_thing_name('Motor') \
-                .set_assessment(assessment)
-
+            eventbuffer = fclient.create_eventbuffer(eventbuffer)
             try:
-                resp_pipeline = fclient.create_pipeline(pipeline)
-                data = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
-                response = fclient.add_verification(resp_pipeline.get_id(), 'json', {}, data)
-                # tear down
+                data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
+                response = fclient.add_input_data(eventbuffer.get_id(), 'json', {}, data)
+                pipeline = Schemas.Pipeline()
+                signals  = {
+                    'current': 'Numeric',
+                    'vibration': 'Numeric',
+                    'state': 'Categorical'
+                }
+                assessment = Schemas.Assessment()
+                assessment.set_name('Health') \
+                    .set_input_signals(['current', 'vibration', 'state'])
+                pipeline.set_name('Motor Health 1') \
+                    .set_eventbuffer(eventbuffer.get_id()) \
+                    .set_input_signals(signals) \
+                    .set_assessment(assessment)
+
                 try:
-                    fclient.delete_pipeline(resp_pipeline.get_id())
-                    fclient.delete_eventbuffer(eventbuffer.get_id())
+                    resp_pipeline = fclient.create_pipeline(pipeline)
+                    data = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
+
+                    response = fclient.add_verification(resp_pipeline.get_id(), 'json', {}, data)
+                    # tear down
+                    try:
+                        fclient.delete_pipeline(resp_pipeline.get_id())
+                        fclient.delete_eventbuffer(eventbuffer.get_id())
+                    except Exception as e:
+                        pass
                 except Exception as e:
-                    pass
+                    print(e.message)
+                    try:
+                        fclient.delete_eventbuffer(eventbuffer.get_id())
+                    except Exception as e:
+                        pass
+                    self.assertEqual(0, 1, 'Cannot create pipeline')
             except Exception as e:
                 print(e.message)
-                try:
-                    fclient.delete_eventbuffer(eventbuffer.get_id())
-                except Exception as e:
-                    pass
-                self.assertEqual(0, 1, 'Cannot create pipeline')
+                self.assertEqual(0,1,"Cannot add data")        
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create eventbuffer')
@@ -59,45 +63,48 @@ class TestAddVerification(unittest.TestCase):
     def test_add_csv_verification(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
-        options = {
-            'timeIdentifier' : 'time',
-            'timeFormat'     : 'iso_8601'
-        }
         eventbuffer.set_name('Motor Health' + str(random.random()))
+        eventbuffer.set_time_identifier('time')
+        eventbuffer.set_time_format('iso_8601')
         try:
-            eventbuffer = fclient.create_eventbuffer(eventbuffer, options)
-            pipeline = Schemas.Pipeline()
-            signals  = {
-                'current': 'Numeric',
-                'vibration': 'Numeric',
-                'state': 'Categorical'
-            }
-            assessment = Schemas.Assessment()
-            assessment.set_name('Health') \
-                .set_input_signals(['current', 'vibration', 'state'])
-            pipeline.set_name('Motor Health 1') \
-                .set_eventbuffer(eventbuffer.get_id()) \
-                .set_input_signals(signals) \
-                .set_thing_name('Motor') \
-                .set_assessment(assessment)
-
+            eventbuffer = fclient.create_eventbuffer(eventbuffer)
             try:
-                resp_pipeline = fclient.create_pipeline(pipeline)
-                data = "time,end,car,Health\n2011-03-31T00:00:00Z,2011-04-01T00:00:00Z,IL9753,Normal\n2011-03-31T00:00:00Z,2011-04-01T00:00:00Z,HI3821,Normal"
-                response = fclient.add_verification(resp_pipeline.get_id(), 'csv', {}, data)
-                # tear down
+                data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
+                response = fclient.add_input_data(eventbuffer.get_id(), 'json', {}, data)
+                pipeline = Schemas.Pipeline()
+                signals  = {
+                    'current': 'Numeric',
+                    'vibration': 'Numeric',
+                    'state': 'Categorical'
+                }
+                assessment = Schemas.Assessment()
+                assessment.set_name('Health') \
+                    .set_input_signals(['current', 'vibration', 'state'])
+                pipeline.set_name('Motor Health 1') \
+                    .set_eventbuffer(eventbuffer.get_id()) \
+                    .set_input_signals(signals) \
+                    .set_assessment(assessment)
+
                 try:
-                    fclient.delete_pipeline(resp_pipeline.get_id())
-                    fclient.delete_eventbuffer(eventbuffer.get_id())
+                    resp_pipeline = fclient.create_pipeline(pipeline)
+                    data = "time,end,car,Health\n2011-03-31T00:00:00Z,2011-04-01T00:00:00Z,IL9753,Normal\n2011-03-31T00:00:00Z,2011-04-01T00:00:00Z,HI3821,Normal"
+                    response = fclient.add_verification(resp_pipeline.get_id(), 'csv', {}, data)
+                    # tear down
+                    try:
+                        fclient.delete_pipeline(resp_pipeline.get_id())
+                        fclient.delete_eventbuffer(eventbuffer.get_id())
+                    except Exception as e:
+                        pass
                 except Exception as e:
-                    pass
+                    print(e.message)
+                    try:
+                        fclient.delete_eventbuffer(eventbuffer.get_id())
+                    except Exception as e:
+                        pass
+                    self.assertEqual(0, 1, 'Cannot create pipeline')
             except Exception as e:
                 print(e.message)
-                try:
-                    fclient.delete_eventbuffer(eventbuffer.get_id())
-                except Exception as e:
-                    pass
-                self.assertEqual(0, 1, 'Cannot create pipeline')
+                self.assertEqual(0,1,"Cannot add data")        
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create eventbuffer')            
