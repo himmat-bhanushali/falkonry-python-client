@@ -53,7 +53,7 @@ eventbuffer = Schemas.Eventbuffer()
 eventbuffer.set_name('Motor Health')
 eventbuffer.set_time_identifier('time')
 eventbuffer.set_time_format('iso_8601')
-eventbuffer.set_thing_identifier("motor")
+eventbuffer.set_thing_identifier('motor')
         
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 ```
@@ -70,10 +70,10 @@ eventbuffer = Schemas.Eventbuffer()
 eventbuffer.set_name('Motor Health' + str(random.random()))
 eventbuffer.set_time_identifier('time')
 eventbuffer.set_time_format('iso_8601')
-eventbuffer.set_signals_tag_field("tag")
-eventbuffer.set_signals_delimiter("_")
-eventbuffer.set_signals_location("prefix")
-eventbuffer.set_value_column("value")
+eventbuffer.set_signals_tag_field('tag')
+eventbuffer.set_signals_delimiter('_')
+eventbuffer.set_signals_location('prefix')
+eventbuffer.set_value_column('value')
         
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 ```
@@ -101,7 +101,7 @@ falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 eventbuffer.set_name('Motor Health')
 eventbuffer.set_time_identifier('time')
 eventbuffer.set_time_format('iso_8601')
-eventbuffer.set_thing_identifier("motor")
+eventbuffer.set_thing_identifier('motor')
         
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 
@@ -189,7 +189,7 @@ stream       = open('/tmp/sample.json', 'r')
 startTime    = '1457018017' #seconds since unix epoch 
 endTime      = '1457028017' #seconds since unix epoch
 outputStream = falkonry.getOutput('pipeline_id', startTime, endTime)
-with open("/tmp/pipelineOutput.json", 'w') as outputFile:
+with open('/tmp/pipelineOutput.json', 'w') as outputFile:
     for line in outputStream:
         outputFile.write(line + '\n')
 ```
