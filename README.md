@@ -4,6 +4,8 @@
 
 Falkonry Python Client to access [Falkonry Condition Prediction](falkonry.com) APIs
 
+[Releases](https://github.com/Falkonry/falkonry-python-client/releases)
+
 ## Installation
 
 ```bash
@@ -96,14 +98,12 @@ from falkonryclient import schemas as Schemas
 
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 
-eventbuffer = Schemas.Eventbuffer() \
-                .set_name('Health')
-options = {
-    'timeIdentifier' : 'time',
-    'timeFormat'     : 'iso_8601'
-}
+eventbuffer.set_name('Motor Health')
+eventbuffer.set_time_identifier('time')
+eventbuffer.set_time_format('iso_8601')
+eventbuffer.set_thing_identifier("motor")
         
-createdEventbuffer = falkonry.create_eventbuffer(eventbuffer, options)
+createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 
 assessment = Schemas.Assessment()
                 .set_name('Health')
@@ -111,7 +111,6 @@ assessment = Schemas.Assessment()
                         
 pipeline   = Schemas.Pipeline()
                 .set_name('Motor Health')
-                .set_thing_name('Motor')
                 .set_eventbuffer(createdEventbuffer.get_id())
                 .set_input_signals({'current' : 'Numeric', 'vibration' : 'Numeric'})
                 .set_assessment(assessment)
