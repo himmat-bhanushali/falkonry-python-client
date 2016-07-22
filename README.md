@@ -230,7 +230,7 @@ publication   = falkonry.create_publication('pipeline_id', publication)
 
 ## Docs
 
-    * [Falkonry APIs](https://service.falkonry.io/api)
+   [Falkonry APIs](https://service.falkonry.io/api)
      
 ## Tests
 
