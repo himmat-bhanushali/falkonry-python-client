@@ -295,9 +295,9 @@ from falkonryclient import schemas as Schemas
 falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
 
 publication   = Schemas.Publication() \                 
-                .set_type('WEBHOOK') \                  //set Publication type
+                .set_type('WEBHOOK') \                  #set Publication type
                 .set_path('https://test.example.com/getFalkonryData') \
-                .set_headers({                          //set headers to send 
+                .set_headers({                          #set headers to send 
                     'Authorization': 'Token 1234567890'
                 })
 #create Publication
