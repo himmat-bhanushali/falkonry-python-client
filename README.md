@@ -24,20 +24,81 @@ $ pip install falkonryclient
     * Create publication for Pipeline
     
 ## Quick Start
+```
+    * Get auth token from Falkonry Service UI
+    * Read the examples provided for integratioin with various data formats
+```
 
-    * To create Eventbuffer for single thing
+## Examples 
+
+    * To create an Eventbuffer using narrow/historian format data
+    
+Data :
+
+```
+time,current,vibration,state
+2016-03-01 01:01:01,12.4,3.4,On
+2016-03-01 01:01:02,11.3,2.2,On
+
+or 
+
+{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}
+{"time" :"2016-03-01 01:01:02", "current" : 11.3, "vibration" : 2.2, "state" : "On"}
+
+```
+
+Usage :
     
 ```python
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
+#instantiate Falkonry
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 
 eventbuffer = Schemas.Eventbuffer()
-eventbuffer.set_name('Motor Health')
-eventbuffer.set_time_identifier('time')
-eventbuffer.set_time_format('iso_8601')
+eventbuffer.set_name('Motor Health' + str(random.random())) #set name of the Eventbuffer    
+eventbuffer.set_time_identifier('time')                     #set property to identify time in the data
+eventbuffer.set_time_format('iso_8601')                     #set format of the time in the data
+eventbuffer.set_signals_tag_field('tag')                    #property that identifies signal tag in the data
+eventbuffer.set_signals_delimiter('_')                      #delimiter used to concat thing id and signal name to create signal tag
+eventbuffer.set_signals_location('prefix')                  #part of the tag that identifies the signal name
+eventbuffer.set_value_column('value')                       #property that identifies value of the signal in the data
         
+#create Eventbuffer
+createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
+```
+
+    * To create an Eventbuffer for wide format data
+    
+Data :
+
+```
+{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}
+{"time" :"2016-04-01 07:01:01", "current" : 0.4, "vibration" : 4.9, "state" : "Off"}
+
+or
+
+time,current,vibration,state
+2016-03-01 01:01:01,12.4,3.4,On
+2016-03-01 01:01:02,11.3,2.2,On
+```
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as 
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
+
+eventbuffer = Schemas.Eventbuffer()
+eventbuffer.set_name('Motor Health')                    #set name of the Eventbuffer
+eventbuffer.set_time_identifier('time')                 #set property to identify time in the data
+eventbuffer.set_time_format('iso_8601')                 #set format of the time in the data
+        
+#create Eventbuffer
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 ```
 
@@ -47,34 +108,16 @@ createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
+#instantiate Falkonry
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 
 eventbuffer = Schemas.Eventbuffer()
-eventbuffer.set_name('Motor Health')
-eventbuffer.set_time_identifier('time')
-eventbuffer.set_time_format('iso_8601')
-eventbuffer.set_thing_identifier('motor')
-        
-createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
-```
-
-    * To create Eventbuffer for narrow format data
-    
-```python
-from falkonryclient import client as Falkonry
-from falkonryclient import schemas as Schemas
-
-falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
-
-eventbuffer = Schemas.Eventbuffer()
-eventbuffer.set_name('Motor Health' + str(random.random()))
-eventbuffer.set_time_identifier('time')
-eventbuffer.set_time_format('iso_8601')
-eventbuffer.set_signals_tag_field('tag')
-eventbuffer.set_signals_delimiter('_')
-eventbuffer.set_signals_location('prefix')
-eventbuffer.set_value_column('value')
-        
+eventbuffer.set_name('Motor Health')                    #set name of the Eventbuffer
+eventbuffer.set_time_identifier('time')                 #set property to identify time in the data
+eventbuffer.set_time_format('iso_8601')                 #set format of the time in the data
+eventbuffer.set_thing_identifier('motor')               #set property to identify things in the data
+       
+#create Eventbuffer
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 ```
 
@@ -84,8 +127,10 @@ createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
+#instantiate Falkonry
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
         
+#return list of Eventbuffers
 eventbuffers = falkonry.get_eventbuffers()
 ```
 
@@ -96,6 +141,7 @@ eventbuffers = falkonry.get_eventbuffers()
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
+#instantiate Falkonry
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 
 eventbuffer.set_name('Motor Health')
@@ -106,15 +152,16 @@ eventbuffer.set_thing_identifier('motor')
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 
 assessment = Schemas.Assessment()
-                .set_name('Health')
-                .set_input_signals(['current', 'vibration'])
+                .set_name('Health')                                                     #set name for the Assessment
+                .set_input_signals(['current', 'vibration'])                            #add signal data
                         
 pipeline   = Schemas.Pipeline()
-                .set_name('Motor Health')
-                .set_eventbuffer(createdEventbuffer.get_id())
-                .set_input_signals({'current' : 'Numeric', 'vibration' : 'Numeric'})
-                .set_assessment(assessment)
+                .set_name('Motor Health')                                               #set name for the Pipeline
+                .set_eventbuffer(createdEventbuffer.get_id())                           #set Eventbuffer for the Pipeline
+                .set_input_signals({'current' : 'Numeric', 'vibration' : 'Numeric'})    #signals present in the Eventbuffer
+                .set_assessment(assessment)                                             #add an Assessment to the Pipeline
         
+#create Pipeline
 createdPipeline = falkonry.createPipeline(pipeline)
 ```
 
@@ -124,17 +171,22 @@ createdPipeline = falkonry.createPipeline(pipeline)
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
+#instantiate Falkonry
 falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
+
+#return list of Pipelines
 pipelines  = falkonry.getPipelines()
 ```
 
-    * To add data
+    * To add json data to a pipeline
     
 ```python
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
+#instantiate Falkonry
 falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
+
 data          = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
 inputResponse = falkonry.add_input_data('eventbuffer_id', 'json', {}, data)
 ```
@@ -146,23 +198,43 @@ import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
+#instantiate Falkonry
 falkonry = Falkonry('https://service.falkonry.io', 'auth-token')
-stream   = io.open('./data.json')
+
+stream   = io.open('./data.json')                   #use *.csv for csv format 
 
 response = falkonry.add_input_stream('eventbuffer_id', 'json', {}, stream)
 ```
 
-    * To add verification data
+    * To add json verification data
     
 ```python
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
+#instantiate Falkonry
 falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
+
 data          = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
 inputResponse = falkonry.add_verification('pipeline_id', 'json', {}, data)
 ```
 
+    * To add csv verification data
+    
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
+
+data          = 'time,car,end,Health' + "\n"
+                 + '2011-03-26T12:00:00Z,HI3821,2012-06-01T00:00:00Z,Normal' + "\n"
+                 + '2014-02-10T23:00:00Z,HI3821,2014-03-20T12:00:00Z,Spalling';
+
+inputResponse = falkonry.add_verification('pipeline_id', 'json', {}, data)
+```
+    
     * To add verification data from a stream
     
 ```python
@@ -186,8 +258,8 @@ from falkonryclient import schemas as Schemas
 
 falkonry     = Falkonry('https://service.falkonry.io', 'auth-token')
 stream       = open('/tmp/sample.json', 'r')
-startTime    = '1457018017' #seconds since unix epoch 
-endTime      = '1457028017' #seconds since unix epoch
+startTime    = '1457018017'                     #seconds since unix epoch 
+endTime      = '1457028017'                     #seconds since unix epoch
 outputStream = falkonry.getOutput('pipeline_id', startTime, endTime)
 with open('/tmp/pipelineOutput.json', 'w') as outputFile:
     for line in outputStream:
@@ -200,15 +272,16 @@ with open('/tmp/pipelineOutput.json', 'w') as outputFile:
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
+#instantiate Falkonry
 falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
+
 subscription  = Schemas.Subscription()
-subscription.set_type('MQTT') \
-            .set_path('mqtt://test.mosquito.com') \
-            .set_topic('falkonry-eb-1-test') \
-            .set_username('test-user') \
-            .set_password('test') \
-            .set_time_format('YYYY-MM-DD HH:mm:ss') \
-            .set_time_identifier('time')
+subscription.set_type('MQTT') \                         #set Subscription type
+            .set_path('mqtt://test.mosquito.com') \     #set Mosquitto broker host url
+            .set_topic('falkonry-eb-1-test') \          #set topic for the Subscription
+            .set_username('test-user') \                #optional parameter
+            .set_password('test') \                     #optional parameter
+#create subscription
 subscription  = falkonry.create_subscription('eventbuffer_id', subscription)
 ```
 
@@ -218,13 +291,16 @@ subscription  = falkonry.create_subscription('eventbuffer_id', subscription)
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
+#instantiate Falkonry
 falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
-publication   = Schemas.Publication() \
-                .set_type('WEBHOOK') \
+
+publication   = Schemas.Publication() \                 
+                .set_type('WEBHOOK') \                  #set Publication type
                 .set_path('https://test.example.com/getFalkonryData') \
-                .set_headers({
+                .set_headers({                          #set headers to send 
                     'Authorization': 'Token 1234567890'
                 })
+#create Publication
 publication   = falkonry.create_publication('pipeline_id', publication)
 ```
 
