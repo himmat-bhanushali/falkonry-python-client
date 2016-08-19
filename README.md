@@ -61,8 +61,6 @@ eventbuffer.set_name('Motor Health' + str(random.random())) #set name of the Eve
 eventbuffer.set_time_identifier('time')                     #set property to identify time in the data
 eventbuffer.set_time_format('iso_8601')                     #set format of the time in the data
 eventbuffer.set_signals_tag_field('tag')                    #property that identifies signal tag in the data
-eventbuffer.set_signals_delimiter('_')                      #delimiter used to concat thing id and signal name to create signal tag
-eventbuffer.set_signals_location('prefix')                  #part of the tag that identifies the signal name
 eventbuffer.set_value_column('value')                       #property that identifies value of the signal in the data
         
 #create Eventbuffer
@@ -107,10 +105,10 @@ eventbuffer.set_name('Motor Health')                    #set name of the Eventbu
 eventbuffer.set_time_identifier('time')                 #set property to identify time in the data
 eventbuffer.set_time_format('iso_8601')                 #set format of the time in the data
 eventbuffer.set_thing_identifier('motor')               #set property to identify things in the data
-eventbuffer.set_signals_tag_field("tag")
-eventbuffer.set_signals_delimiter("_")
-eventbuffer.set_signals_location("prefix")
-eventbuffer.set_value_column("value")
+eventbuffer.set_signals_tag_field("tag")                #property that identifies signal tag in the data
+eventbuffer.set_signals_delimiter('_')                  #delimiter used to concat thing id and signal name to create signal tag
+eventbuffer.set_signals_location('prefix')              #part of the tag that identifies the signal name
+eventbuffer.set_value_column("value")                   #property that identifies value of the signal in the data
        
 #create Eventbuffer
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
@@ -190,7 +188,7 @@ eventbuffer = Schemas.Eventbuffer()
 eventbuffer.set_name('Motor Health')                    #set name of the Eventbuffer
 eventbuffer.set_time_identifier('time')                 #set property to identify time in the data
 eventbuffer.set_time_format('iso_8601')                 #set format of the time in the data
-eventbuffer.set_thing_identifier('motor')               #set property to identify things in the data
+eventbuffer.set_thing_identifier('thing1')               #set property to identify things in the data
        
 #create Eventbuffer
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
@@ -240,9 +238,9 @@ from falkonryclient import schemas as Schemas
 #instantiate Falkonry
 falkonry = Falkonry('https://service.falkonry.io', 'auth-token')
 
-stream   = io.open('./data.json')                   #use *.csv for csv format 
+stream   = io.open('./data.csv')                    
 
-response = falkonry.add_input_stream('eventbuffer_id', 'json', {}, stream)
+response = falkonry.add_input_stream('eventbuffer_id', 'csv', {}, stream)
 ```
 
 #### Setup Pipeline from Eventbuffer
@@ -257,7 +255,6 @@ falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 eventbuffer.set_name('Motor Health')
 eventbuffer.set_time_identifier('time')
 eventbuffer.set_time_format('iso_8601')
-eventbuffer.set_thing_identifier('motor')
         
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 
