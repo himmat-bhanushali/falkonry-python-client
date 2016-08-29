@@ -1,7 +1,7 @@
 import unittest
 
-host  = 'http://localhost:8080'  # host url
-token = 'gryw3nodrijv449p67uw2hxtwezr19sm'  # auth token
+host  = 'https://dev.falkonry.io'  # host url
+token = 'avfgjmmrhhzsau5ohh1uzeri6mqvv7re'  # auth token
 
 
 class TestAddData(unittest.TestCase):
@@ -24,7 +24,6 @@ class TestAddData(unittest.TestCase):
 
                 # tear down
                 try:
-                    fclient.delete_pipeline(created_pipeline.get_id())
                     fclient.delete_eventbuffer(eventbuffer.get_id())
                 except Exception as e:
                     pass
