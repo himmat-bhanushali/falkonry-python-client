@@ -9,7 +9,7 @@ class TestAddData(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_add_data_single_thing(self):
+    def test_add_data_single_entity(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
         eventbuffer.set_name('Motor Health')

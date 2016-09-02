@@ -6,12 +6,12 @@ host  = 'http://localhost:8080'  # host url
 token = 'gryw3nodrijv449p67uw2hxtwezr19sm'  # auth token
 
 
-class TestAddVerificationStream(unittest.TestCase):
+class TestAddFactsStream(unittest.TestCase):
 
     def setUp(self):
         pass
 
-    def test_add_json_verification(self):
+    def test_add_json_facts(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
         eventbuffer.set_name('Motor Health' + str(random.random()))
@@ -38,9 +38,9 @@ class TestAddVerificationStream(unittest.TestCase):
 
                 try:
                     resp_pipeline = fclient.create_pipeline(pipeline)
-                    data = io.open('./verificationData.json')
+                    data = io.open('./factsData.json')
 
-                    response = fclient.add_verification(resp_pipeline.get_id(), 'json', {}, data)
+                    response = fclient.add_facts(resp_pipeline.get_id(), 'json', {}, data)
                     # tear down
                     try:
                         fclient.delete_pipeline(resp_pipeline.get_id())
@@ -61,7 +61,7 @@ class TestAddVerificationStream(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create eventbuffer')
 
-    def test_add_csv_verification(self):
+    def test_add_csv_facts(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
         eventbuffer.set_name('Motor Health' + str(random.random()))
@@ -88,8 +88,8 @@ class TestAddVerificationStream(unittest.TestCase):
 
                 try:
                     resp_pipeline = fclient.create_pipeline(pipeline)
-                    data = io.open('./verificationData.csv')
-                    response = fclient.add_verification(resp_pipeline.get_id(), 'csv', {}, data)
+                    data = io.open('./factsData.csv')
+                    response = fclient.add_facts(resp_pipeline.get_id(), 'csv', {}, data)
                     # tear down
                     try:
                         fclient.delete_pipeline(resp_pipeline.get_id())

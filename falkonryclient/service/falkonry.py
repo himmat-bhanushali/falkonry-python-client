@@ -107,15 +107,15 @@ class FalkonryService:
         response = self.http.fpost(url, form_data)
         return response
 
-    def add_verification(self, pipeline, data_type, options, data):
+    def add_facts(self, pipeline, data_type, options, data):
         """
-        To add verification data to a Pipeline
+        To add facts data to a Pipeline
         :param pipeline: string
         :param data_type: string
         :param options: dict
         :param data: string
         """
-        url = '/pipeline/' + pipeline + '/verification'
+        url = '/pipeline/' + pipeline + '/facts'
         try:
             response = self.http.postData(url, data)
         except Exception as e:
@@ -146,15 +146,15 @@ class FalkonryService:
         response = self.http.upstream(url, form_data)
         return response
 
-    def add_verification_stream(self, pipeline, data_type, options, data):
+    def add_facts_stream(self, pipeline, data_type, options, data):
         """
-        To add  verification data stream to a Pipeline
+        To add  facts data stream to a Pipeline
         :param eventbuffer: string
         :param data_type: string
         :param options: dict
         :param data: Stream
         """
-        url = '/pipeline/' + pipeline + '/verification'
+        url = '/pipeline/' + pipeline + '/facts'
         form_data = {
             'files': {
                 'data': (

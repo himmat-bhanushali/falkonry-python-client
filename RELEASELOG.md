@@ -8,7 +8,7 @@
 
 ### 0.2.2
 * Support to add eventType for signal
-* Support to add verification data
+* Support to add facts data
 
 ### 0.2.1
 * Bug fixes and readme update

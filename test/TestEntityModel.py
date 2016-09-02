@@ -12,7 +12,7 @@ class TestPipelineSchema(unittest.TestCase):
 
         self.assertEqual(eventbuffer.get_name(), 'Motors', 'Invalid name')
 
-    def test_pipeline_model_with_single_thing_with_defaults(self):
+    def test_pipeline_model_with_single_entity_with_defaults(self):
         pipeline = Schemas.Pipeline()
         signals  = {
             'current': 'Numeric',
@@ -32,7 +32,7 @@ class TestPipelineSchema(unittest.TestCase):
         self.assertEqual(len(pipeline.get_input_signals()), 3, 'Invalid input signals')
         self.assertEqual(len(pipeline.get_assessments()), 1, 'Invalid assessment signals')
 
-    def test_pipeline_model_with_multiple_thing_with_overrides(self):
+    def test_pipeline_model_with_multiple_entity_with_overrides(self):
         pipeline = Schemas.Pipeline()
         signals  = {
             'current': 'Numeric',

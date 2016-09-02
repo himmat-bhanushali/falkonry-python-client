@@ -30,7 +30,7 @@ class TestCreatePublication(unittest.TestCase):
             pipeline.set_name('Motor Health 1') \
                 .set_eventbuffer(eventbuffer.get_id()) \
                 .set_input_signals(signals) \
-                .set_thing_name('Motor') \
+                .set_entity_name('Motor') \
                 .set_assessment(assessment)
 
             try:
@@ -88,7 +88,7 @@ class TestCreatePublication(unittest.TestCase):
             pipeline.set_name('Motor Health 1') \
                 .set_eventbuffer(eventbuffer.get_id()) \
                 .set_input_signals(signals) \
-                .set_thing_name('Motor') \
+                .set_entity_name('Motor') \
                 .set_assessment(assessment)
 
             try:
@@ -145,7 +145,7 @@ class TestCreatePublication(unittest.TestCase):
             pipeline.set_name('Motor Health 1') \
                 .set_eventbuffer(eventbuffer.get_id()) \
                 .set_input_signals(signals) \
-                .set_thing_name('Motor') \
+                .set_entity_name('Motor') \
                 .set_assessment(assessment)
 
             try:
