@@ -7,18 +7,6 @@ host = 'https://dev.falkonry.io'
 token = 'avfgjmmrhhzsau5ohh1uzeri6mqvv7re'  #auth token
 pipeline = 'epis8zwaygocjn'                 #pipeline id
 
-'''
-class OutflowCallback:
-    def __init__(self):
-        pass
-
-    @classmethod
-    def call(cls, result):
-        print result
-        print "Result successfully retrieved"
-        pass
-'''
-
 
 def datastreamer(data):
     print 'Found data'
