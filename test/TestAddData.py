@@ -1,7 +1,7 @@
 import unittest
 
-host  = 'https://dev.falkonry.io'  # host url
-token = 'avfgjmmrhhzsau5ohh1uzeri6mqvv7re'  # auth token
+host  = 'http://localhost:8080'  # host url
+token = ''                       # auth token
 
 
 class TestAddData(unittest.TestCase):

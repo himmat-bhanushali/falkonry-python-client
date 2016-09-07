@@ -1,9 +1,9 @@
 import io
 import unittest
 
-host = 'https://dev.falkonry.io'            # host url
-token = 'avfgjmmrhhzsau5ohh1uzeri6mqvv7re'  # auth token
-pipeline = 'epis8zwaygocjn'                 # pipeline id
+host  = 'http://localhost:8080'  # host url
+token = ''                       # auth token
+pipeline = ''                 # pipeline id
 
 
 class TestPipelineGetOutput(unittest.TestCase):

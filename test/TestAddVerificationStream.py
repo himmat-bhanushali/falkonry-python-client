@@ -3,7 +3,7 @@ import random
 import io
 
 host  = 'http://localhost:8080'  # host url
-token = 'gryw3nodrijv449p67uw2hxtwezr19sm'  # auth token
+token = ''                       # auth token
 
 
 class TestAddVerificationStream(unittest.TestCase):

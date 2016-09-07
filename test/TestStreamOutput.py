@@ -3,9 +3,9 @@ import unittest
 from pubsub import pub
 import time
 
-host = 'https://dev.falkonry.io'
-token = 'avfgjmmrhhzsau5ohh1uzeri6mqvv7re'  #auth token
-pipeline = 'by4plf8zk1qun6'                 #pipeline id
+host  = 'http://localhost:8080'  # host url
+token = ''                       # auth token
+pipeline = ''                 #pipeline id
 
 
 def datastreamer(data):
