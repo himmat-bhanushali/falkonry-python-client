@@ -5,14 +5,13 @@ import time
 
 host = 'https://dev.falkonry.io'
 token = 'avfgjmmrhhzsau5ohh1uzeri6mqvv7re'  #auth token
-pipeline = 'epis8zwaygocjn'                 #pipeline id
+pipeline = 'by4plf8zk1qun6'                 #pipeline id
 
 
 def datastreamer(data):
-    print 'Found data'
-    print data
     for line in data:
-        print "line :" + line + "\n"
+        print line
+
 
 
 class TestStreamOutput(unittest.TestCase):
@@ -26,31 +25,30 @@ class TestStreamOutput(unittest.TestCase):
         try:
             pub.subscribe(datastreamer, 'data')
             streamRunner = fclient.stream_output(pipeline, 123456)
-            print('Back in Test case; retrieved streamRunner')
             try:
-                time.sleep(3000)
+                time.sleep(9)
             except Exception as e:
-                print 'Exception in Test case sleep ' + str(e)
-
+                print('Exception ' + str(e))
+            print 'pause'
             streamRunner.pause()
             try:
-                time.sleep(3000)
+                time.sleep(10)
             except Exception as e:
-                print 'Exception in Test case sleep ' + str(e)
-
+                print('Exception ' + str(e))
+            print 'resume'
             streamRunner.resume()
             try:
-                time.sleep(3000)
+                time.sleep(15)
             except Exception as e:
-                print 'Exception in Test case sleep ' + str(e)
-
+                print('Exception ' + str(e))
+            print 'close'
             streamRunner.close()
             try:
-                time.sleep(3000)
+                time.sleep(5)
             except Exception as e:
-                print 'Exception in Test case sleep ' + str(e)
+                print('Exception ' + str(e))
 
-            print 'Closed Successfully'
+            print('Closed Successfully')
 
         except Exception as e:
             print(e.message)
