@@ -118,7 +118,17 @@ class Eventbuffer:
         return self
 
     def get_time_format(self):
-        return self.raw['timeFormat'] if 'timeFormat' in self.raw else None    
+        return self.raw['timeFormat'] if 'timeFormat' in self.raw else None
+
+    def set_timezone(self, zone=None, offset=None):
+        self.raw['interval'] = {
+          'zone': zone,
+          'offset': offset
+        }
+        return self
+
+    def get_time_format(self):
+        return self.raw['timezone'] if 'timezone' in self.raw else None
 
     def to_json(self):
         subscriptions = []

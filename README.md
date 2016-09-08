@@ -53,6 +53,7 @@ eventbuffer = Schemas.Eventbuffer()
 eventbuffer.set_name('Motor Health')
 eventbuffer.set_time_identifier('time')
 eventbuffer.set_time_format('iso_8601')
+eventbuffer.set_timezone('GMT', 0)
 eventbuffer.set_entity_identifier('motor')
         
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)

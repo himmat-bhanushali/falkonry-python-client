@@ -16,6 +16,7 @@ class TestCreateEventbufferSingleEntity(unittest.TestCase):
         eventbuffer.set_name('Motor Health' + str(random.random()))
         eventbuffer.set_time_identifier('time')
         eventbuffer.set_time_format('iso_8601')
+        eventbuffer.set_timezone('GMT', 0)
 
         try:
             response = fclient.create_eventbuffer(eventbuffer)
@@ -24,6 +25,9 @@ class TestCreateEventbufferSingleEntity(unittest.TestCase):
             self.assertEqual(response.get_name(), eventbuffer.get_name(), 'Invalid Eventbuffer object after creation')
             self.assertEqual(len(response.get_schema()), 1, 'Invalid Eventbuffer object after creation')
             self.assertEqual(len(response.get_subscriptions()), 1, 'Invalid Eventbuffer object after creation')
+            timezone = response.get_timezone()
+            self.assertEqual(timezone.zone, 'GMT', 'Invalid Eventbuffer object after creation')
+            self.assertEqual(timezone.offset, 0, 'Invalid Eventbuffer object after creation')
 
             # tear down
             try:
