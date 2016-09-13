@@ -99,12 +99,12 @@ class Eventbuffer:
     def get_value_column(self):
         return self.raw['valueColumn'] if 'valueColumn' in self.raw else None    
 
-    def set_thing_identifier(self, identifier):
-        self.raw['thingIdentifier'] = identifier
+    def set_entity_identifier(self, identifier):
+        self.raw['entityIdentifier'] = identifier
         return self
 
-    def get_thing_identifier(self):
-        return self.raw['thingIdentifier'] if 'thingIdentifier' in self.raw else None
+    def get_entity_identifier(self):
+        return self.raw['entityIdentifier'] if 'entityIdentifier' in self.raw else None
 
     def set_time_identifier(self, identifier):
         self.raw['timeIdentifier'] = identifier
@@ -118,7 +118,17 @@ class Eventbuffer:
         return self
 
     def get_time_format(self):
-        return self.raw['timeFormat'] if 'timeFormat' in self.raw else None    
+        return self.raw['timeFormat'] if 'timeFormat' in self.raw else None
+
+    def set_timezone(self, zone=None, offset=None):
+        self.raw['interval'] = {
+          'zone': zone,
+          'offset': offset
+        }
+        return self
+
+    def get_time_format(self):
+        return self.raw['timezone'] if 'timezone' in self.raw else None
 
     def to_json(self):
         subscriptions = []

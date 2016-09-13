@@ -87,11 +87,11 @@ class Pipeline:
     def get_eventbuffer(self):
         return self.raw['input'] if 'input' in self.raw else None
 
-    def get_thing_identifier(self):
-        return self.raw['thingIdentifier'] if 'thingIdentifier' in self.raw else None
+    def get_entity_identifier(self):
+        return self.raw['entityIdentifier'] if 'entityIdentifier' in self.raw else None
 
-    def get_thing_name(self):
-        return self.raw['singleThingID'] if 'singleThingID' in self.raw else None
+    def get_entity_name(self):
+        return self.raw['entityName'] if 'entityName' in self.raw else None
 
     def set_input_signal(self, signal, stype,etype):
         if stype is not 'Numeric' and stype is not 'Categorical':

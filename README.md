@@ -25,7 +25,7 @@ $ pip install falkonryclient
     
 ## Quick Start
 
-    * To create Eventbuffer for single thing
+    * To create Eventbuffer for single entity
     
 ```python
 from falkonryclient import client as Falkonry
@@ -41,7 +41,7 @@ eventbuffer.set_time_format('iso_8601')
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 ```
 
-    * To create Eventbuffer with multiple things
+    * To create Eventbuffer with multiple entities
     
 ```python
 from falkonryclient import client as Falkonry
@@ -53,7 +53,8 @@ eventbuffer = Schemas.Eventbuffer()
 eventbuffer.set_name('Motor Health')
 eventbuffer.set_time_identifier('time')
 eventbuffer.set_time_format('iso_8601')
-eventbuffer.set_thing_identifier('motor')
+eventbuffer.set_timezone('GMT', 0)
+eventbuffer.set_entity_identifier('motor')
         
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 ```
@@ -101,7 +102,7 @@ falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
 eventbuffer.set_name('Motor Health')
 eventbuffer.set_time_identifier('time')
 eventbuffer.set_time_format('iso_8601')
-eventbuffer.set_thing_identifier('motor')
+eventbuffer.set_entity_identifier('motor')
         
 createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
 
@@ -152,7 +153,7 @@ stream   = io.open('./data.json')
 response = falkonry.add_input_stream('eventbuffer_id', 'json', {}, stream)
 ```
 
-    * To add verification data
+    * To add facts data
     
 ```python
 from falkonryclient import client as Falkonry
@@ -160,10 +161,10 @@ from falkonryclient import schemas as Schemas
 
 falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
 data          = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
-inputResponse = falkonry.add_verification('pipeline_id', 'json', {}, data)
+inputResponse = falkonry.add_facts('pipeline_id', 'json', {}, data)
 ```
 
-    * To add verification data from a stream
+    * To add facts data from a stream
     
 ```python
 import os, sys
@@ -173,7 +174,7 @@ from falkonryclient import schemas as Schemas
 falkonry = Falkonry('https://service.falkonry.io', 'auth-token')
 stream   = io.open('./data.json')
 
-response = falkonry.add_verification_stream('pipeline_id', 'json', {}, stream)
+response = falkonry.add_facts_stream('pipeline_id', 'json', {}, stream)
 
 ```
 

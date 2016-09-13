@@ -10,7 +10,7 @@ class TestCreatePipeline(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_create_pipeline_for_single_thing(self):
+    def test_create_pipeline_for_single_entity(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
         eventbuffer.set_name('Motor Health' + str(random.random()))
@@ -41,7 +41,7 @@ class TestCreatePipeline(unittest.TestCase):
                     self.assertEqual(isinstance(response, Schemas.Pipeline), True, 'Invalid Pipeline object after creation')
                     self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid Pipeline object after creation')
                     self.assertEqual(response.get_name(), pipeline.get_name(), 'Invalid Pipeline object after creation')
-                    self.assertNotEqual(response.get_thing_name(), None, 'Invalid Pipeline object after creation')
+                    self.assertNotEqual(response.get_entity_name(), None, 'Invalid Pipeline object after creation')
                     self.assertEqual(len(response.get_input_signals()), 3, 'Invalid Pipeline object after creation')
                     self.assertEqual(len(response.get_assessments()), 1, 'Invalid Pipeline object after creation')
                     self.assertEqual(response.get_eventbuffer(), eventbuffer.get_id(), 'Invalid Pipeline object after creation')
@@ -66,7 +66,7 @@ class TestCreatePipeline(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create eventbuffer')
 
-    def test_create_pipeline_for_single_thing_with_eventType(self):
+    def test_create_pipeline_for_single_entity_with_eventType(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
         eventbuffer.set_name('Motor Health' + str(random.random()))
@@ -97,7 +97,7 @@ class TestCreatePipeline(unittest.TestCase):
                     self.assertEqual(isinstance(response, Schemas.Pipeline), True, 'Invalid Pipeline object after creation')
                     self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid Pipeline object after creation')
                     self.assertEqual(response.get_name(), pipeline.get_name(), 'Invalid Pipeline object after creation')
-                    self.assertNotEqual(response.get_thing_name(), None, 'Invalid Pipeline object after creation')
+                    self.assertNotEqual(response.get_entity_name(), None, 'Invalid Pipeline object after creation')
                     self.assertEqual(len(response.get_input_signals()), 3, 'Invalid Pipeline object after creation')
                     self.assertEqual(len(response.get_assessments()), 1, 'Invalid Pipeline object after creation')
                     self.assertEqual(response.get_eventbuffer(), eventbuffer.get_id(), 'Invalid Pipeline object after creation')
@@ -122,13 +122,13 @@ class TestCreatePipeline(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create eventbuffer')
 
-    def test_create_pipeline_for_multiple_thing(self):
+    def test_create_pipeline_for_multiple_entity(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
         eventbuffer.set_name('Motor Health' + str(random.random()))
         eventbuffer.set_time_identifier('time')
         eventbuffer.set_time_format('iso_8601')
-        eventbuffer.set_thing_identifier('motor')
+        eventbuffer.set_entity_identifier('motor')
         try:
             eventbuffer = fclient.create_eventbuffer(eventbuffer)
             data = "time, motor, current, vibration, state\n" + "2016-03-01 01:01:01, Motor1, 12.4, 3.4, On"
@@ -154,7 +154,7 @@ class TestCreatePipeline(unittest.TestCase):
                     self.assertEqual(isinstance(response, Schemas.Pipeline), True, 'Invalid Pipeline object after creation')
                     self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid Pipeline object after creation')
                     self.assertEqual(response.get_name(), pipeline.get_name(), 'Invalid Pipeline object after creation')
-                    self.assertEqual(response.get_thing_identifier(), eventbuffer.get_thing_identifier(), 'Invalid Pipeline object after creation')
+                    self.assertEqual(response.get_entity_identifier(), eventbuffer.get_entity_identifier(), 'Invalid Pipeline object after creation')
                     self.assertEqual(len(response.get_input_signals()), 3, 'Invalid Pipeline object after creation')
                     self.assertEqual(len(response.get_assessments()), 1, 'Invalid Pipeline object after creation')
                     self.assertEqual(response.get_eventbuffer(), eventbuffer.get_id(), 'Invalid Pipeline object after creation')
@@ -185,7 +185,7 @@ class TestCreatePipeline(unittest.TestCase):
         eventbuffer.set_name('Motor Health' + str(random.random()))
         eventbuffer.set_time_identifier('time')
         eventbuffer.set_time_format('iso_8601')
-        eventbuffer.set_thing_identifier('motor')
+        eventbuffer.set_entity_identifier('motor')
         try:
             eventbuffer = fclient.create_eventbuffer(eventbuffer)
             data = "time, motor, current, vibration, state\n" + "2016-03-01 01:01:01, Motor1, 12.4, 3.4, On"
@@ -215,7 +215,7 @@ class TestCreatePipeline(unittest.TestCase):
                     self.assertEqual(isinstance(response, Schemas.Pipeline), True, 'Invalid Pipeline object after creation')
                     self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid Pipeline object after creation')
                     self.assertEqual(response.get_name(), pipeline.get_name(), 'Invalid Pipeline object after creation')
-                    self.assertEqual(response.get_thing_identifier(), eventbuffer.get_thing_identifier(), 'Invalid Pipeline object after creation')
+                    self.assertEqual(response.get_entity_identifier(), eventbuffer.get_entity_identifier(), 'Invalid Pipeline object after creation')
                     self.assertEqual(len(response.get_input_signals()), 3, 'Invalid Pipeline object after creation')
                     self.assertEqual(len(response.get_assessments()), 2, 'Invalid Pipeline object after creation')
                     self.assertEqual(response.get_eventbuffer(), eventbuffer.get_id(), 'Invalid Pipeline object after creation')

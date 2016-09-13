@@ -9,7 +9,7 @@ class TestAddDataStream(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_add_json_data_stream_for_single_thing(self):
+    def test_add_json_data_stream_for_single_entity(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
         eventbuffer.set_name('Motor Health2')
@@ -36,7 +36,7 @@ class TestAddDataStream(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create eventbuffer')
 
-    def test_add_csv_data_stream_for_single_thing(self):
+    def test_add_csv_data_stream_for_single_entity(self):
         fclient = FClient(host=host, token=token)
         eventbuffer = Schemas.Eventbuffer()
         eventbuffer.set_name('Motor Health')
