@@ -1,5 +1,8 @@
 # Release Log
 
+### 0.2.5
+* Terminology changes. Refer to release note - https://github.com/Falkonry/falkonry-python-client/releases/tag/0.2.5
+
 ### 0.2.4
 * Support for narrow format data
 

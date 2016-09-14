@@ -10,7 +10,7 @@ tests_require = ['unittest', 'io']
 
 setup(
     name='falkonryclient',
-    version='0.2.4',
+    version='0.2.5',
     author='Falkonry Inc',
     author_email='info@falkonry.com',
     license='MIT',
