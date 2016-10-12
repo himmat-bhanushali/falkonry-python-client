@@ -29,7 +29,7 @@ class HttpService:
         :param token: Authorization token
         """
         self.host  = host if host is not None else "https://service.falkonry.io"
-        self.token = base64.b64encode(token) if token is not None else ""
+        self.token = token if token is not None else ""
 
     def get(self, url):
         """
@@ -40,7 +40,7 @@ class HttpService:
         response = requests.get(
             self.host + url,
             headers={
-                'Authorization': 'Token ' + self.token
+                'Authorization': 'Bearer ' + self.token
             }
         )
         if response.status_code is 200:
@@ -59,7 +59,7 @@ class HttpService:
             entity.to_json(),
             headers={
                 "Content-Type": "application/json",
-                'Authorization': 'Token ' + self.token
+                'Authorization': 'Bearer ' + self.token
             }
         )
         if response.status_code is 201:
@@ -79,7 +79,7 @@ class HttpService:
             data,
             headers={
                 "Content-Type": "text/plain",
-                'Authorization': 'Token ' + self.token
+                'Authorization': 'Bearer ' + self.token
             }
         )
         if response.status_code is 202 or response.status_code is 200:
@@ -99,7 +99,7 @@ class HttpService:
             entity.to_json(),
             headers={
                 "Content-Type": "application/json",
-                'Authorization': 'Token ' + self.token
+                'Authorization': 'Bearer ' + self.token
             }
         )
         if response.status_code is 200:
@@ -121,7 +121,7 @@ class HttpService:
                 data=form_data['data'] if 'data' in form_data else {},
                 files=form_data['files'] if 'files' in form_data else {},
                 headers={
-                    'Authorization': 'Token ' + self.token
+                    'Authorization': 'Bearer ' + self.token
                 }
             )
         else:
@@ -130,7 +130,7 @@ class HttpService:
                 data=json.dumps(form_data['data'] if 'data' in form_data else {}),
                 headers={
                     'Content-Type': 'application/json',
-                    'Authorization': 'Token ' + self.token
+                    'Authorization': 'Bearer ' + self.token
                 }
             )
         if response.status_code is 201 or response.status_code is 202:
@@ -146,7 +146,7 @@ class HttpService:
         response = requests.delete(
             self.host + url,
             headers={
-              'Authorization': 'Token ' + self.token
+              'Authorization': 'Bearer ' + self.token
             }
         )
         if response.status_code is 200:
@@ -164,7 +164,7 @@ class HttpService:
             self.host + url,
             files=form_data['files'] if 'files' in form_data else {},
             headers={
-                'Authorization': 'Token ' + self.token
+                'Authorization': 'Bearer ' + self.token
             }
         )
         if response.status_code is 202 or response.status_code is 200:
@@ -182,7 +182,7 @@ class HttpService:
             headers={
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-json-stream',
-                'Authorization': 'Token ' + self.token
+                'Authorization': 'Bearer ' + self.token
             },
             stream=True
         )
