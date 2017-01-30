@@ -21,7 +21,6 @@ $ pip install falkonryclient
     * Add data to Eventbuffer (csv/json, stream)
     * Retrieve output of Pipeline
     * Create subscription for Eventbuffer
-    * Create publication for Pipeline
     
 ## Quick Start
 ```
@@ -383,29 +382,6 @@ subscription  = falkonry.create_subscription('eventbuffer_id', subscription)
 
 #delete Subscription
 falkonry.delete_subscription('eventbuffer_id', subscription)
-```
-
-#### To create and delete a publication for a Pipeline
-    
-```python
-from falkonryclient import client as Falkonry
-from falkonryclient import schemas as Schemas
-
-#instantiate Falkonry
-falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
-
-publication   = Schemas.Publication() \                 
-                .set_type('WEBHOOK') \                  #set Publication type
-                .set_path('https://test.example.com/getFalkonryData') \
-                .set_headers({                          #set headers to send 
-                    'Authorization': 'Token 1234567890'
-                })
-
-#create Publication
-publication   = falkonry.create_publication('pipeline_id', publication)
-
-#delete Publication
-falkonry.delete_publication('pipeline_id', publication)
 ```
 
 ## Docs

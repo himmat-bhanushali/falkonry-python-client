@@ -12,9 +12,7 @@ from falkonryclient.helper import schema as Schemas
 from falkonryclient.service.http import HttpService
 from falkonryclient.helper import utils as Utils
 from cStringIO import StringIO
-import multiprocessing
-from pubsub import pub
-import json, time, collections, threading, thread
+import sseclient
 
 """
 FalkonryService
@@ -171,22 +169,14 @@ class FalkonryService:
         response = self.http.upstream(url,form_data)
         return response
 
-    def get_output(self, pipeline, start=None, end=None):
+    def get_output(self, pipeline):
         """
         To get output of a Pipeline
         :param pipeline: string
-        :param start: int
-        :param end: int
         """
-        url = '/Pipeline/' + str(pipeline) + '/output?'
-        if isinstance(end, int):
-            url += 'lastTime=' + str(end)
-        if isinstance(start, int):
-            url += '&startTime=' + str(start)
-        else:
-            if isinstance(start, int):
-                url += '&startTime=' + str(start)
-        stream = self.http.downstream(url)
+        url = '/Pipeline/' + str(pipeline) + '/stream'
+        response = self.http.downstream(url)
+        stream = sseclient.SSEClient(response)
         return stream
 
     def create_subscription(self, eventbuffer, subscription):
@@ -243,92 +233,3 @@ class FalkonryService:
         response = self.http.delete('/Pipeline/' + pipeline + '/Publication' + publication)
         return response
 
-    def stream_output(self, pipeline, start):
-        """
-        To stream the output of a Pipeline
-        :param pipeline:
-        :param start:
-        :return:
-        """
-        try:
-            streamer = StreamingThread(self.http, pipeline, start)
-            fstream = FStream(streamer)
-        except Exception as e:
-            print('Exception ' + str(e))
-        return fstream
-
-class FStream:
-
-    def __init__(self, streamingthread):
-        self.streamingthread = streamingthread
-        self.threadLock = threading.Lock()
-
-    def pause(self):
-        if not self.streamingthread.threadSuspended:
-            self.threadLock.acquire()
-            self.streamingthread.threadSuspended = True
-            self.threadLock.release()
-        else:
-            print('Already Paused')
-
-    def resume(self):
-        if self.streamingthread.threadSuspended:
-            self.threadLock.acquire()
-            self.streamingthread.threadSuspended = False
-            self.threadLock.release()
-        else:
-            print('Already Running')
-
-    def close(self):
-        self.threadLock.acquire()
-        self.streamingthread.blinker = False
-        self.threadLock.release()
-
-
-class StreamingThread:
-
-    def __init__(self, http, pipeline, start):
-        self.pipeline = pipeline
-        self.start = start
-        self.threadrunner = threading._start_new_thread(self.run, ())
-        self.threadSuspended = False
-        self.blinker = True
-        self.http = http
-
-    def run(self):
-        try:
-            while self.blinker:
-                while self.threadSuspended:
-                    try:
-                        time.sleep(1)
-                    except Exception as e:
-                        print('Exception ' + str(e))
-                self.data_streamer()
-        except Exception as e:
-            print('Exception ' + str(e))
-
-    def data_streamer(self):
-        try:
-            self.outflowstatus = self.pipeline_open()
-            if self.outflowstatus:
-                self.url = '/Pipeline/' + str(self.pipeline) + '/output?startTime=' + str(self.start)
-                pub.sendMessage('data', data=self.http.downstream(self.url))
-                self.newstart = self.http.responsestream(self.url)
-                if self.newstart != 0:
-                    self.start = self.newstart
-            else:
-                print('Pipeline closed')
-        except Exception as e:
-            print('Exception ' + str(e))
-
-    def pipeline_open(self):
-        try:
-            self.url = '/pipeline/' + str(self.pipeline)
-            pipeline_data = self.http.get(self.url)
-            json_pipeline_data = json.loads(json.dumps(pipeline_data))
-            value = str(json_pipeline_data["outflowStatus"])
-            if str(value) == 'OPEN':
-                return True
-        except Exception as e:
-            print 'Exception in getting pipeline : ' + str(e)
-        return False
