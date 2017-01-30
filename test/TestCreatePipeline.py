@@ -1,8 +1,8 @@
 import unittest
 import random
 
-host  = 'http://192.168.2.137:8080'  # host url
-token = 'gryw3nodrijv449p67uw2hxtwezr19sm'  # auth token
+host  = 'http://localhost:8080'  # host url
+token = ''                       # auth token
 
 
 class TestCreatePipeline(unittest.TestCase):

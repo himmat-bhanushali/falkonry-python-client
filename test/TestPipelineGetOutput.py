@@ -2,8 +2,8 @@ import io
 import unittest
 
 host  = 'http://localhost:8080'  # host url
-token = 'g7p1bj362pk8s9qlrna7kgpzt467nxcq'  # auth token
-pipeline = ''  # pipeline id
+token = ''                       # auth token
+pipeline = ''                 # pipeline id
 
 
 class TestPipelineGetOutput(unittest.TestCase):

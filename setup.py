@@ -3,6 +3,7 @@ from setuptools import setup, find_packages
 install_requires = [
     'requests',
     'jsonpickle'
+    'pypubsub'
 ]
 dependency_links = []
 setup_requires = []

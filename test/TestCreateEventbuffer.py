@@ -1,8 +1,8 @@
 import unittest
 import random
 
-host     = 'http://localhost:8080';
-token    = 'gryw3nodrijv449p67uw2hxtwezr19sm';  # auth token
+host  = 'http://localhost:8080'  # host url
+token = ''                       # auth token
 
 
 class TestCreateEventbufferSingleEntity(unittest.TestCase):

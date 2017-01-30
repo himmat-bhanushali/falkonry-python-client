@@ -190,3 +190,22 @@ class HttpService:
             return response.iter_lines()
         else:
             raise Exception(response.content)
+
+    def responsestream(self, url):
+        """
+        To make a GET request to Falkonry API server and return stream
+        :param url: string
+        """
+        response = requests.get(
+            self.host + url,
+            headers={
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-json-stream',
+                'Authorization': 'Token ' + self.token
+            },
+            stream=True
+        )
+        if response.status_code is 200:
+            return response.headers['X-Falkonry-Data-Offset']
+        else:
+            raise Exception(response.content)
