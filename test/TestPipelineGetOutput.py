@@ -2,8 +2,8 @@ import unittest
 import json
 
 host  = 'https://localhost:8080'  # host url
-token = ''                       # auth token
-pipeline = ''                 # pipeline id
+token = ''                        # auth token
+pipeline = ''                     # pipeline id
 
 
 class TestPipelineGetOutput(unittest.TestCase):
