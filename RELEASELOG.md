@@ -1,5 +1,8 @@
 # Release Log
 
+### 0.2.7
+* Supports assessment output streaming.
+
 ### 0.2.6
 * Auth token update: Just copy/paste auth token from Falkonry Service UI.
 

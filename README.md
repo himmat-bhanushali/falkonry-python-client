@@ -351,14 +351,10 @@ import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry     = Falkonry('https://service.falkonry.io', 'auth-token')
-stream       = open('/tmp/sample.json', 'r')
-startTime    = '1457018017'                     #seconds since unix epoch 
-endTime      = '1457028017'                     #seconds since unix epoch
-outputStream = falkonry.getOutput('pipeline_id', startTime, endTime)
-with open('/tmp/pipelineOutput.json', 'w') as outputFile:
-    for line in outputStream:
-        outputFile.write(line + '\n')
+falkonry  = Falkonry('https://service.falkonry.io', 'auth-token')
+stream    = falkonry.get_output('pipeline-id')
+for event in stream.events():
+    print(json.dumps(json.loads(event.data)))
 ```
 
 #### To create and delete a subscription for an Eventbuffer
