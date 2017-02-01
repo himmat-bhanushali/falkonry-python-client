@@ -24,7 +24,7 @@ __all__ = [
   'schemas'
 ]
 __title__     = 'falkonryclient'
-__version__   = '0.2.7'
+__version__   = '0.2.8'
 __author__    = 'Falkonry Inc'
 __copyright__ = 'Copyright 2016 Falkonry Inc'
 __license__   = """

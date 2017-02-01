@@ -1,6 +1,6 @@
 # Release Log
 
-### 0.2.7
+### 0.2.8
 * Supports assessment output streaming.
 
 ### 0.2.6
