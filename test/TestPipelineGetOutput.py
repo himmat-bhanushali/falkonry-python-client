@@ -1,9 +1,9 @@
-import io
 import unittest
+import json
 
-host  = 'http://localhost:8080'  # host url
-token = 'g7p1bj362pk8s9qlrna7kgpzt467nxcq'  # auth token
-pipeline = ''  # pipeline id
+host  = 'https://localhost:8080'  # host url
+token = ''                        # auth token
+pipeline = ''                     # pipeline id
 
 
 class TestPipelineGetOutput(unittest.TestCase):
@@ -15,10 +15,9 @@ class TestPipelineGetOutput(unittest.TestCase):
         fclient = FClient(host=host, token=token)
 
         try:
-            response = fclient.get_output(pipeline, 1456794061)
-            with open('/tmp/pipeline_'+pipeline+'output.json', 'w') as f:
-                for line in response:
-                    f.write(line + '\n')
+            stream = fclient.get_output(pipeline)
+            for event in stream.events():
+                print(json.dumps(json.loads(event.data)))
 
         except Exception as e:
             print(e.message)

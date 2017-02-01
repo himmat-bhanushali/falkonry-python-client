@@ -1,2 +1,4 @@
 requests
 jsonpickle
+urllib3
+sseclient-py

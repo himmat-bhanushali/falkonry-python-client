@@ -9,10 +9,8 @@ Client to access Condition Prediction APIs
 """
 
 import json
-import base64
 import requests
-from falkonryclient.helper import utils as Utils
-from cStringIO import StringIO
+import urllib3
 
 """
 HttpService:
@@ -28,6 +26,7 @@ class HttpService:
         :param host: host address of Falkonry service
         :param token: Authorization token
         """
+        urllib3.disable_warnings()
         self.host  = host if host is not None else "https://service.falkonry.io"
         self.token = token if token is not None else ""
 
@@ -177,16 +176,10 @@ class HttpService:
         To make a GET request to Falkonry API server and return stream
         :param url: string
         """
-        response = requests.get(
-            self.host + url,
-            headers={
-                'Accept': 'application/json',
-                'Content-Type': 'application/x-json-stream',
-                'Authorization': 'Bearer ' + self.token
-            },
-            stream=True
-        )
-        if response.status_code is 200:
-            return response.iter_lines()
+
+        http = urllib3.PoolManager()
+        response = http.request('GET', self.host + url, headers={'Authorization': 'Bearer '+self.token}, preload_content=False)
+        if response.status is 200:
+            return response
         else:
             raise Exception(response.content)

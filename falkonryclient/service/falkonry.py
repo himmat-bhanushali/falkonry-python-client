@@ -12,6 +12,7 @@ from falkonryclient.helper import schema as Schemas
 from falkonryclient.service.http import HttpService
 from falkonryclient.helper import utils as Utils
 from cStringIO import StringIO
+import sseclient
 
 """
 FalkonryService
@@ -168,22 +169,14 @@ class FalkonryService:
         response = self.http.upstream(url,form_data)
         return response
 
-    def get_output(self, pipeline, start=None, end=None):
+    def get_output(self, pipeline):
         """
         To get output of a Pipeline
         :param pipeline: string
-        :param start: int
-        :param end: int
         """
-        url = '/Pipeline/' + str(pipeline) + '/output?'
-        if isinstance(end, int):
-            url += 'lastTime=' + str(end)
-        if isinstance(start, int):
-            url += '&startTime=' + str(start)
-        else:
-            if isinstance(start, int):
-                url += '&startTime=' + str(start)
-        stream = self.http.downstream(url)
+        url = '/Pipeline/' + str(pipeline) + '/stream'
+        response = self.http.downstream(url)
+        stream = sseclient.SSEClient(response)
         return stream
 
     def create_subscription(self, eventbuffer, subscription):
@@ -239,3 +232,4 @@ class FalkonryService:
         """
         response = self.http.delete('/Pipeline/' + pipeline + '/Publication' + publication)
         return response
+
