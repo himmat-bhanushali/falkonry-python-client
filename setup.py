@@ -2,8 +2,9 @@ from setuptools import setup, find_packages
 
 install_requires = [
     'requests',
-    'jsonpickle'
-    'pypubsub'
+    'jsonpickle',
+    'urllib3',
+    'sseclient-py'
 ]
 dependency_links = []
 setup_requires = []
