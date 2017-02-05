@@ -10,7 +10,6 @@ Client to access Condition Prediction APIs
 
 import json
 import requests
-import urllib3
 
 """
 HttpService:
@@ -26,7 +25,8 @@ class HttpService:
         :param host: host address of Falkonry service
         :param token: Authorization token
         """
-        urllib3.disable_warnings()
+        from requests.packages.urllib3.exceptions import InsecureRequestWarning
+        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         self.host  = host if host is not None else "https://service.falkonry.io"
         self.token = token if token is not None else ""
 
@@ -177,9 +177,8 @@ class HttpService:
         :param url: string
         """
 
-        http = urllib3.PoolManager()
-        response = http.request('GET', self.host + url, headers={'Authorization': 'Bearer '+self.token}, preload_content=False)
-        if response.status is 200:
+        response = requests.get(self.host + url, stream=True, headers={'Authorization': 'Bearer '+self.token}, verify=False)
+        if response.status_code is 200:
             return response
         else:
-            raise Exception(response.content)
+            raise Exception('Error connecting to Falkonry: '+str(response.status_code))

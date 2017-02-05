@@ -174,7 +174,7 @@ class FalkonryService:
         To get output of a Pipeline
         :param pipeline: string
         """
-        url = '/Pipeline/' + str(pipeline) + '/stream'
+        url = '/pipeline/' + str(pipeline) + '/stream'
         response = self.http.downstream(url)
         stream = sseclient.SSEClient(response)
         return stream
