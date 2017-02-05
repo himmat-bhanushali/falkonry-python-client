@@ -1,5 +1,8 @@
 # Release Log
 
+### 0.2.9
+* Simplifying output streaming.
+
 ### 0.2.8
 * Supports assessment output streaming.
 
