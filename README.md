@@ -1,4 +1,4 @@
-[![Falkonry Logo](https://service.falkonry.io/img/logo.png)](http://falkonry.com/)
+[![Falkonry Logo](https://sandbox.falkonry.ai/img/logo.png)](http://falkonry.com/)
 
 [![Build status](https://img.shields.io/travis/Falkonry/falkonry-python-client.svg?style=flat-square)](https://travis-ci.org/Falkonry/falkonry-python-client)
 
@@ -14,23 +14,45 @@ $ pip install falkonryclient
 
 ## Features
 
-    * Create Eventbuffer
-    * Retrieve Eventbuffers
-    * Create Pipeline
-    * Retrieve Pipelines
-    * Add data to Eventbuffer (csv/json, stream)
-    * Retrieve output of Pipeline
-    * Create subscription for Eventbuffer
+    * Create Datastream for narrow/historian style data from a single entity
+    * Create Datastream for narrow/historian style data from a multiple entities
+    * Create Datastream for wide style data from a single entity
+    * Create Datastream for wide style data from a multiple entities
+    * Retrieve Datastreams
+    * Retrieve Datastream by Id
+    * Delete Datastream
+    * Add EntityMeta to a Datastream
+    * Get EntityMeta of a Datastream
+    * Add historical input data (json format) to Datastream (Used for model revision) 
+    * Add historical input data (csv format) to Datastream (Used for model revision) 
+    * Add historical input data (json format) from a stream to Datastream (Used for model revision) 
+    * Add historical input data (csv format) from a stream to Datastream (Used for model revision) 
+    * Add live input data (json format) to Datastream (Used for live monitoring) 
+    * Add live data (csv format) to Datastream (Used for live monitoring) 
+    * Add live data (json format) from a stream to Datastream (Used for live monitoring) 
+    * Add live data (csv format) from a stream to Datastream (Used for live monitoring) 
+    * Create Assessment
+    * Retrieve Assessments
+    * Retrieve Assessment by Id
+    * Delete Assessment
+    * Add facts data (json format) to Assessment
+    * Add facts data (csv format) to Assessment
+    * Add facts data (json format) from a stream to Assessment
+    * Add facts data (csv format) from a stream to  Assessment
+    * Get Historian Output from Assessment
+    * Get Streaming Output
+    * Datastream On (Start live monitoring of datastream)
+    * Datastream Off (Stop live monitoring of datastream)
     
 ## Quick Start
 ```
     * Get auth token from Falkonry Service UI
-    * Read the examples provided for integratioin with various data formats
+    * Read the examples provided for integration with various data formats
 ```
 
 ## Examples 
 
-#### Setup Eventbuffer for narrow/historian style data from a single thing
+#### Create Datastream for narrow/historian style data from a single entity
     
 Data :
 
@@ -53,25 +75,32 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+datastream = Schemas.Datastream()
+datasource = Schemas.Datasource()
+field = Schemas.Field()
+time = Schemas.Time()
+signal = Schemas.Signal()
 
-eventbuffer = Schemas.Eventbuffer()
-eventbuffer.set_name('Motor Health' + str(random.random())) #set name of the Eventbuffer    
-eventbuffer.set_time_identifier('time')                     #set property to identify time in the data
-eventbuffer.set_time_format('iso_8601')                     #set format of the time in the data
-eventbuffer.set_signals_tag_field('tag')                    #property that identifies signal tag in the data
-eventbuffer.set_value_column('value')                       #property that identifies value of the signal in the data
+datastream.set_name('Motor Health' + str(random.random()))  # set name of the Datastream
+time.set_zone("GMT")                                        # set timezone of the datastream
+time.set_identifier("time")                                 # set time identifier of the datastream
+time.set_format("iso_8601")                                 # set time format of the datastream
+field.set_time(time)            
+signal.set_delimiter(None)                                  # set delimiter to None 
+signal.set_tagIdentifier("tag")                             # set tag identifier
+signal.set_valueIdentifier("value")                         # set value identifier
+signal.set_isSignalPrefix(False)                            # as this is single entity, set signal prefix flag to false
+field.set_signal(signal)                                    # set signal in field
+datasource.set_type("STANDALONE")                           # set datastource type in datastream
+datastream.set_datasource(datasource)
+datastream.set_field(field)
         
-#create Eventbuffer
-createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
-
-#add data to Eventbuffer
-String data = "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal1\", \"value\" : 3.4}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal2\", \"value\" : 9.3}";
-inputResponse = falkonry.add_input_data('eventbuffer_id', 'json', {}, data)
+#create Datastream
+createdDatastream = fclient.create_datastream(datastream)
 ```
 
-#### Setup Eventbuffer for narrow/historian style data from multiple things
+#### Create Datastream for narrow/historian style data from multiple things
     
 Data :
 
@@ -94,34 +123,35 @@ Usage :
 
 ```python
 from falkonryclient import client as Falkonry
-from falkonryclient import schemas as 
+from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+datastream = Schemas.Datastream()
+datasource = Schemas.Datasource()
+field = Schemas.Field()
+time = Schemas.Time()
+signal = Schemas.Signal()
 
-eventbuffer = Schemas.Eventbuffer()
-eventbuffer.set_name('Motor Health')                    #set name of the Eventbuffer
-eventbuffer.set_time_identifier('time')                 #set property to identify time in the data
-eventbuffer.set_time_format('iso_8601')                 #set format of the time in the data
-eventbuffer.set_thing_identifier('motor')               #set property to identify things in the data
-eventbuffer.set_signals_tag_field("tag")                #property that identifies signal tag in the data
-eventbuffer.set_signals_delimiter('_')                  #delimiter used to concat thing id and signal name to create signal tag
-eventbuffer.set_signals_location('prefix')              #part of the tag that identifies the signal name
-eventbuffer.set_value_column("value")                   #property that identifies value of the signal in the data
-       
-#create Eventbuffer
-createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
-
-#add data to Eventbuffer
-String data = "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal1_thing1\", \"value\" : 3.4}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal2_thing1\", \"value\" : 1.4}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal1_thing1\", \"value\" : 9.3}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal2_thing2\", \"value\" : 4.3}";
-
-inputResponse = falkonry.add_input_data('eventbuffer_id', 'json', {}, data)
+datastream.set_name('Motor Health' + str(random.random()))  # set name of the Datastream
+time.set_zone("GMT")                                        # set timezone of the datastream
+time.set_identifier("time")                                 # set time identifier of the datastream
+time.set_format("iso_8601")                                 # set time format of the datastream
+field.set_time(time)            
+signal.set_delimiter("_")                                   # set delimiter
+signal.set_tagIdentifier("tag")                             # set tag identifier
+signal.set_valueIdentifier("value")                         # set value identifier
+signal.set_isSignalPrefix(True)                             # set signal prefix flag
+field.set_signal(signal)                                    # set signal in field
+datasource.set_type("STANDALONE")                           # set datastource type in datastream
+datastream.set_datasource(datasource)
+datastream.set_field(field)
+        
+#create Datastream
+createdDatastream = fclient.create_datastream(datastream)
 ```
 
-#### Setup Eventbuffer for wide style data from a single thing
+#### Create Datastream for wide style data from a single entity
    
 Data :
 
@@ -143,25 +173,47 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+datastream = Schemas.Datastream()
+datasource = Schemas.Datasource()
+field = Schemas.Field()
+time = Schemas.Time()
+signal = Schemas.Signal()
+input1 = Schemas.Input()
+input2 = Schemas.Input()
+input3 = Schemas.Input()
 
-eventbuffer = Schemas.Eventbuffer()
-eventbuffer.set_name('Motor Health')                  #set name of the Eventbuffer
-eventbuffer.set_time_identifier('time')               #set property to identify time in the data
-eventbuffer.set_time_format('iso_8601')               #set time format of the data
-eventbuffer.set_timezone('GMT', 0)                    #set timezone (optional)
-eventbuffer.set_entity_identifier('motor')            #set property to identify entity in the data
-       
-#create Eventbuffer
-createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
+datastream.set_name('Motor Health' + str(random.random()))  # set name of the Datastream
 
-#add data to Eventbuffer
-String data = "{\"time\":1467729675422,\"signal1\":41.11,\"signal2\":82.34,\"signal3\":74.63,\"signal4\":4.8}" + "\n"
-        + "{\"time\":1467729668919,\"signal1\":78.11,\"signal2\":2.33,\"signal3\":4.6,\"signal4\":9.8}";
-inputResponse = falkonry.add_input_data('eventbuffer_id', 'json', {}, data)
+input1.set_name("Signal1")                                  # set name of input signal
+input1.set_value_type("Numeric")                            # set value type of input signal (Numeric for number, Categorical for string type)
+input1.set_event_type("Samples")                            # set event type of input signal
+input2.set_name("Signal2")                                  # set name of input signal
+input2.set_value_type("Numeric")                            # set value type of input signal (Numeric for number, Categorical for string type)
+input2.set_event_type("Samples")                            # set event type of input signal
+input3.set_name("Signal3")                                  # set name of input signal
+input3.set_value_type("Numeric")                            # set value type of input signal (Numeric for number, Categorical for string type)
+input3.set_event_type("Samples")                            # set event type of input signal
+inputs = []
+inputs.append(input1)
+inputs.append(input2)
+inputs.append(input3)
+
+time.set_zone("GMT")                                        # set timezone of the datastream
+time.set_identifier("time")                                 # set time identifier of the datastream
+time.set_format("iso_8601")                                 # set time format of the datastream
+field.set_time(time)            
+field.set_signal(signal)                                    # set signal in field
+datasource.set_type("STANDALONE")                           # set datastource type in datastream
+datastream.set_datasource(datasource)
+datastream.set_field(field)
+datastream.set_inputs(inputs)
+        
+#create Datastream
+createdDatastream = falkonry.create_datastream(datastream)
 ```
 
-#### Setup Eventbuffer for wide style data from multiple things
+#### Create Datastream for wide style data from a multiple entities
 
 Data :
 
@@ -183,206 +235,571 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+datastream = Schemas.Datastream()
+datasource = Schemas.Datasource()
+field = Schemas.Field()
+time = Schemas.Time()
+signal = Schemas.Signal()
+input1 = Schemas.Input()
+input2 = Schemas.Input()
+input3 = Schemas.Input()
 
-eventbuffer = Schemas.Eventbuffer()
-eventbuffer.set_name('Motor Health')                    #set name of the Eventbuffer
-eventbuffer.set_time_identifier('time')                 #set property to identify time in the data
-eventbuffer.set_time_format('iso_8601')                 #set format of the time in the data
-eventbuffer.set_thing_identifier('thing1')               #set property to identify things in the data
-       
-#create Eventbuffer
-createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
+datastream.set_name('Motor Health' + str(random.random()))  # set name of the Datastream
 
-#add data to Eventbuffer
-String data = "time, thing, signal1, signal2, signal3, signal4" + "\n"
-        + "1467729675422, thing1, 41.11, 62.34, 77.63, 4.8" + "\n"
-        + "1467729675445, thing1, 43.91, 82.64, 73.63, 3.8";
-inputResponse = falkonry.add_input_data('eventbuffer_id', 'json', {}, data)
+input1.set_name("Signal1")                                  # set name of input signal
+input1.set_value_type("Numeric")                            # set value type of input signal (Numeric for number, Categorical for string type)
+input1.set_event_type("Samples")                            # set event type of input signal
+input2.set_name("Signal2")                                  # set name of input signal
+input2.set_value_type("Numeric")                            # set value type of input signal (Numeric for number, Categorical for string type)
+input2.set_event_type("Samples")                            # set event type of input signal
+input3.set_name("Signal3")                                  # set name of input signal
+input3.set_value_type("Numeric")                            # set value type of input signal (Numeric for number, Categorical for string type)
+input3.set_event_type("Samples")                            # set event type of input signal
+inputs = []
+inputs.append(input1)
+inputs.append(input2)
+inputs.append(input3)
+
+time.set_zone("GMT")                                        # set timezone of the datastream
+time.set_identifier("time")                                 # set time identifier of the datastream
+time.set_format("iso_8601")                                 # set time format of the datastream
+field.set_time(time)            
+field.set_signal(signal)                                    # set signal in field
+field.set_entityIdentifier("thing")                         # set entity identifier as "thing"
+datasource.set_type("STANDALONE")                           # set datastource type in datastream
+datastream.set_datasource(datasource)
+datastream.set_field(field)
+datastream.set_inputs(inputs)
+        
+#create Datastream
+createdDatastream = falkonry.create_datastream(datastream)
 ```
 
-#### Get an Eventbuffer
+#### Retrieve Datastreams
     
 ```python
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
         
-#return list of Eventbuffers
-eventbuffers = falkonry.get_eventbuffers()
+#return list of Datastreams
+datastreams = falkonry.get_datastreams()
 ```
 
-#### Add json data from a stream to an Eventbuffer
+#### Retrieve Datastream by id
     
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+datastreamId = 'id of the datastream'
+        
+#return sigle datastream
+datastreams = falkonry.get_datastream(datastreamId)
+```
+
+#### Delete Datastream by id
+    
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+datastreamId = 'id of the datastream'
+        
+falkonry.delete_datastream(datastreamId)
+```
+
+#### Add EntityMeta to a Datastream
+
+Data :
+
+```python
+     [{"sourceId": "testId","label": "testName","path": "root/path"}]
+```
+
+Usage :
 ```python
 import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry = Falkonry('https://service.falkonry.io', 'auth-token')
+falkonry = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+data = [{"sourceId": "testId","label": "testName","path": "root/path"}]
+datastreamId = 'id of the datastream'
 
-stream   = io.open('./data.json')                    
-
-response = falkonry.add_input_stream('eventbuffer_id', 'json', {}, stream)
+entityMetaResponse = fclient.add_entity_meta(datastreamId, {}, data)
 ```
 
-#### Add csv data from a stream to an Eventbuffer
+#### Get EntityMeta of a Datastream
 
+Data :
+
+```python
+     [{"sourceId": "testId","label": "testName","path": "root/path"}]
+```
+
+Usage :
 ```python
 import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry = Falkonry('https://service.falkonry.io', 'auth-token')
+falkonry = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+datastreamId = 'id of the datastream'
 
-stream   = io.open('./data.csv')                    
-
-response = falkonry.add_input_stream('eventbuffer_id', 'csv', {}, stream)
+entityMetaResponse = fclient.get_entity_meta(datastreamId)
 ```
 
-#### Setup Pipeline from Eventbuffer
+#### Add historical input data (json format) to a Datastream (Used for model revision) 
     
+Data :
+
+```
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_thing1", "value" : 3.4}
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_thing1", "value" : 1.4}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_thing2", "value" : 9.3}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_thing2", "value" : 4.3}
+```
+
+Usage :    
+
 ```python
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
 
-eventbuffer.set_name('Motor Health')
-eventbuffer.set_time_identifier('time')
-eventbuffer.set_time_format('iso_8601')
-eventbuffer.set_entity_identifier('motor')
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+String data = "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal1_thing1\", \"value\" : 3.4}" + "\n"
+        + "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal2_thing1\", \"value\" : 1.4}" + "\n"
+        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal1_thing1\", \"value\" : 9.3}" + "\n"
+        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal2_thing2\", \"value\" : 4.3}";
         
-createdEventbuffer = falkonry.create_eventbuffer(eventbuffer)
+# set hasMoreData to True if data is sent in batches. When the last batch is getting sent then set  'hasMoreData' to False. For single batch upload it shpuld always be set to False
+options = {'streaming': False, 'hasMoreData':False}   
+inputResponse = falkonry.add_input_data(datastreamId, 'json', options, data)
+```
 
-assessment = Schemas.Assessment()
-                .set_name('Health')                                                     #set name for the Assessment
-                .set_input_signals(['current', 'vibration'])                            #add signal data
-                        
-pipeline   = Schemas.Pipeline()
-                .set_name('Motor Health')                                               #set name for the Pipeline
-                .set_eventbuffer(createdEventbuffer.get_id())                           #set Eventbuffer for the Pipeline
-                .set_input_signals({'current' : 'Numeric', 'vibration' : 'Numeric'})    #signals present in the Eventbuffer
-                .set_assessment(assessment)                                             #add an Assessment to the Pipeline
+#### Add historical input data (csv format) to a Datastream (Used for model revision) 
+    
+Data :
+
+```
+    time, tag, value
+    2016-03-01 01:01:01, signal1_thing1, 3.4
+    2016-03-01 01:01:01, signal2_thing1, 1.4
+```
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+String data = "time, tag, value " + "\n"
+        + "2016-03-01 01:01:01, signal1_thing1, 3.4" + "\n"
+        + "2016-03-01 01:01:01, signal2_thing1, 1.4";
         
-#create Pipeline
-createdPipeline = falkonry.createPipeline(pipeline)
+# set hasMoreData to True if data is sent in batches. When the last batch is getting sent then set  'hasMoreData' to False. For single batch upload it shpuld always be set to False
+options = {'streaming': False, 'hasMoreData':False}   
+inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, data)
 ```
 
-#### To get all Pipelines
+#### Add historical input data (json format) from a stream to a Datastream (Used for model revision) 
+    
+Data :
+
+```
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_thing1", "value" : 3.4}
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_thing1", "value" : 1.4}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_thing2", "value" : 9.3}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_thing2", "value" : 4.3}
+```
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+stream   = io.open('./data.json')
+        
+# set hasMoreData to True if data is sent in batches. When the last batch is getting sent then set  'hasMoreData' to False. For single batch upload it shpuld always be set to False
+options = {'streaming': False, 'hasMoreData':False}   
+inputResponse = falkonry.add_input_data(datastreamId, 'json', options, stream)
+```
+
+#### Add historical input data (csv format) from a stream to a Datastream (Used for model revision)
+    
+Data :
+
+```
+    time, tag, value
+    2016-03-01 01:01:01, signal1_thing1, 3.4
+    2016-03-01 01:01:01, signal2_thing1, 1.4
+```
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+stream   = io.open('./data.csv')
+        
+# set hasMoreData to True if data is sent in batches. When the last batch is getting sent then set  'hasMoreData' to False. For single batch upload it shpuld always be set to False
+options = {'streaming': False, 'hasMoreData':False}   
+inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, stream)
+```
+
+#### Add live input data (json format) to a Datastream (Used for live monitoring) 
+    
+Data :
+
+```
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_thing1", "value" : 3.4}
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_thing1", "value" : 1.4}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_thing2", "value" : 9.3}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_thing2", "value" : 4.3}
+```
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+String data = "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal1_thing1\", \"value\" : 3.4}" + "\n"
+        + "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal2_thing1\", \"value\" : 1.4}" + "\n"
+        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal1_thing1\", \"value\" : 9.3}" + "\n"
+        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal2_thing2\", \"value\" : 4.3}";
+        
+options = {'streaming': True}   
+inputResponse = falkonry.add_input_data(datastreamId, 'json', options, data)
+```
+
+####  Add live data (csv format) to a Datastream (Used for live monitoring) 
+    
+Data :
+
+```
+    time, tag, value
+    2016-03-01 01:01:01, signal1_thing1, 3.4
+    2016-03-01 01:01:01, signal2_thing1, 1.4
+```
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+String data = "time, tag, value " + "\n"
+        + "2016-03-01 01:01:01, signal1_thing1, 3.4" + "\n"
+        + "2016-03-01 01:01:01, signal2_thing1, 1.4";
+        
+options = {'streaming': True}   
+inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, data)
+```
+
+#### Add live data (json format) from a stream to a Datastream (Used for live monitoring)
+    
+Data :
+
+```
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_thing1", "value" : 3.4}
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_thing1", "value" : 1.4}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_thing2", "value" : 9.3}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_thing2", "value" : 4.3}
+```
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+stream   = io.open('./data.json')
+        
+options = {'streaming': True, 'hasMoreData':False}   
+inputResponse = falkonry.add_input_data(datastreamId, 'json', options, stream)
+```
+
+#### Add live data (csv format) from a stream to a Datastream (Used for live monitoring)
+    
+Data :
+
+```
+    time, tag, value
+    2016-03-01 01:01:01, signal1_thing1, 3.4
+    2016-03-01 01:01:01, signal2_thing1, 1.4
+```
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+stream   = io.open('./data.csv')
+        
+options = {'streaming': True}   
+inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, stream)
+```
+
+#### Create Assessment
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+asmtRequest = Schemas.AssessmentRequest()
+asmtRequest.set_name('Assessment Name'))         # Set new assessment name
+asmtRequest.set_datastream(response.get_id())    # Set datatsream id
+asmtRequest.set_rate('PT0S')                     # Set assessment rate
+
+# create new assessment
+assessmentResponse = fclient.create_assessment(asmtRequest)
+```
+
+#### Retrieve Assessments
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+assessmentResponse = fclient.get_assessments()
+```
+
+#### Retrieve Assessment by Id
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+assessmentId = 'id of the datastream'
+assessmentResponse = fclient.get_assessment(assessmentId)
+```
+
+#### Delete Assessment
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+assessmentId = 'id of the datastream'
+assessmentResponse = fclient.delete_assessment(assessmentId)
+```
+
+#### Add facts data (json format) to Assessment
     
 ```python
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://service.falkonry.io', 'auth-token')
-
-#return list of Pipelines
-pipelines  = falkonry.getPipelines()
-```
-
-#### Add verification data (json format) to a Pipeline
-    
-```python
-from falkonryclient import client as Falkonry
-from falkonryclient import schemas as Schemas
-
-#instantiate Falkonry
-falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
-
+falkonry      = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+assessmentId = 'id of the datastream'
 data          = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
-inputResponse = falkonry.add_verification('pipeline_id', 'json', {}, data)
+inputResponse = falkonry.add_verification(assessmentId, 'json', {}, data)
 ```
 
-#### To add verification data (csv format) to a Pipeline
+#### Add facts data (csv format) to Assessment
     
 ```python
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
-
+falkonry      = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+assessmentId = 'id of the datastream'
 data          = 'time,car,end,Health' + "\n"
                  + '2011-03-26T12:00:00Z,HI3821,2012-06-01T00:00:00Z,Normal' + "\n"
                  + '2014-02-10T23:00:00Z,HI3821,2014-03-20T12:00:00Z,Spalling';
 
-inputResponse = falkonry.add_facts('pipeline_id', 'csv', {}, data)
+inputResponse = falkonry.add_facts(assessmentId, 'csv', {}, data)
 ```
 
-#### Add verification data (json format) from a stream to a Pipeline
+#### Add facts data (json format) from a stream to Assessment
     
 ```python
 import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry = Falkonry('https://service.falkonry.io', 'auth-token')
+falkonry = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+assessmentId = 'id of the datastream'
 stream   = io.open('./data.json')
 
-response = falkonry.add_facts_stream('pipeline_id', 'json', {}, stream)
+response = falkonry.add_facts_stream(assessmentId, 'json', {}, stream)
 
 ```
 
-#### Add verification data (csv format) from a stream to a Pipeline
+#### Add facts data (csv format) from a stream to Assessment
     
 ```python
 import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry = Falkonry('https://service.falkonry.io', 'auth-token')
+falkonry = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+assessmentId = 'id of the datastream'
 stream   = io.open('./data.csv')
 
-response = falkonry.add_facts_stream('pipeline_id', 'csv', {}, stream)
+response = falkonry.add_facts_stream(assessmentId, 'csv', {}, stream)
 
 ```
 
-#### Get output of a Pipeline
+#### Get Historian Output from Assessment (Generate output for given time range)
+```python
+import os, sys
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+assessmentId = 'id of the datastream'
+
+options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00.000Z','responseFormat':'application/json'}
+
+response = fclient.get_historical_output(assessment, options)
+
+'''If data is not readily available then, a tracker id will be sent with 202 status code. While falkonry will genrate ouptut data
+ Client should do timely pooling on the using same method, sending tracker id (__id) in the query params
+ Once data is available server will response with 200 status code and data in json/csv format.'''
+
+if response.status_code is 202:
+    trackerResponse = Schemas.Tracker(tracker=response._content)
+    #get id from the tracker
+    trackerId = trackerResponse.get_id()
+    #use this tracker for checking the status of the process.
+    options = {"tarckerId": trackerId, "responseFormat":"application/json"}
+    newResponse = fclient.get_historical_output(assessment, options)
+    '''if status is 202 call the same request again
+    if status is 200, output data will be present in httpResponse.response field'''
+```
+
+
+#### Get Streaming output of Assessment
     
 ```python
 import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry  = Falkonry('https://service.falkonry.io', 'auth-token')
-stream    = falkonry.get_output('pipeline-id')
+falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+assessmentId = 'id of the datastream'
+stream    = falkonry.get_output(assessmentId)
 for event in stream.events():
     print(json.dumps(json.loads(event.data)))
 ```
 
-#### To create and delete a subscription for an Eventbuffer
-    
+#### Datastream On (Start live monitoring of datastream)
 ```python
+import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-#instantiate Falkonry
-falkonry      = Falkonry('https://service.falkonry.io', 'auth-token')
+falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+datastreamId = 'id of the datastream'
 
-subscription  = Schemas.Subscription()
-subscription.set_type('MQTT') \                         #set Subscription type
-            .set_path('mqtt://test.mosquito.com') \     #set Mosquitto broker host url
-            .set_topic('falkonry-eb-1-test') \          #set topic for the Subscription
-            .set_username('test-user') \                #optional parameter
-            .set_password('test') \                     #optional parameter
-            
-#create Subscription
-subscription  = falkonry.create_subscription('eventbuffer_id', subscription)
+# Starts live monitoring of datastream. For live monitoring datastream must have atleast one assessment with active model. 
+response = falkonry.on_datastream(datastreamId)
+```
 
-#delete Subscription
-falkonry.delete_subscription('eventbuffer_id', subscription)
+#### Datastream Off (Stop live monitoring of datastream)
+```python
+import os, sys
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+datastreamId = 'id of the datastream'
+
+# Stops live monitoring of datastream.
+response = falkonry.off_datastream(datastreamId)
 ```
 
 ## Docs
 
-   [Falkonry APIs](https://service.falkonry.io/api)
+   [Falkonry APIs](https://sandbox.falkonry.ai/api)
      
 ## Tests
 

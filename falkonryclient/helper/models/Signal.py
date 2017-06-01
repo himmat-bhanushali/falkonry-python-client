@@ -17,33 +17,33 @@ class Signal:
     def __init__(self, **kwargs):
         self.raw = kwargs.get('signal') if 'signal' in kwargs else {}
 
-    def get_key(self):
-        return self.raw['key'] if 'key' in self.raw else None
+    def get_tagIdentifier(self):
+        return self.raw['tagIdentifier'] if 'tagIdentifier' in self.raw else None
 
-    def set_name(self, name):
-        self.raw['name'] = name
+    def set_tagIdentifier(self, tagIdentifier):
+        self.raw['tagIdentifier'] = tagIdentifier
         return self
 
-    def get_name(self):
-        return self.raw['name'] if 'name' in self.raw else None
+    def get_delimiter(self):
+        return self.raw['delimiter'] if 'delimiter' in self.raw else None
 
-    def set_value_type(self, stype):
-        self.raw['valueType'] = {
-            'type': stype
-        }
+    def set_delimiter(self, delimiter):
+        self.raw['delimiter'] = delimiter
         return self
 
-    def get_value_type(self):
-        return self.raw['valueType'] if 'valueType' in self.raw else None
+    def get_valueIdentifier(self):
+        return self.raw['valueIdentifier'] if 'valueIdentifier' in self.raw else None
 
-    def set_event_type(self, stype):
-        self.raw['eventType'] = {
-            'type': stype
-        }
+    def set_valueIdentifier(self, valueIdentifier):
+        self.raw['valueIdentifier'] = valueIdentifier
         return self
 
-    def get_event_type(self):
-        return self.raw['eventType'] if 'eventType' in self.raw else None        
+    def get_isSignalPrefix(self):
+        return self.raw['isSignalPrefix'] if 'isSignalPrefix' in self.raw else None
+
+    def set_isSignalPrefix(self, isSignalPrefix):
+        self.raw['isSignalPrefix'] = isSignalPrefix
+        return self
 
     def to_json(self):
         return json.dumps(self.raw)
