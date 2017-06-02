@@ -10,6 +10,7 @@ class TestAddDataStream(unittest.TestCase):
     def setUp(self):
         pass
 
+    # Add historical input data (json format) from a stream to Datastream (Used for model revision)
     def test_add_historical_json_data_stream(self):
         fclient = FClient(host=host, token=token)
         datastream = Schemas.Datastream()
@@ -49,6 +50,7 @@ class TestAddDataStream(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
+    # Add historical input data (csv format) from a stream to Datastream (Used for model revision)
     def test_add_historical_csv_data_stream(self):
         fclient = FClient(host=host, token=token)
         datastream = Schemas.Datastream()
@@ -88,6 +90,7 @@ class TestAddDataStream(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
+    # Add live input data (csv format) from a stream to Datastream (Used for live monitoring)
     @unittest.skip("streaming can only be done once ")
     # Streaming data can only be sent to datastream if datastream is live. So make sure that datastream is live first
     def test_add_streaming_csv_data_stream(self):
@@ -96,13 +99,14 @@ class TestAddDataStream(unittest.TestCase):
         try:
             data = io.open('./data.csv')
             options = {'streaming': True, 'hasMoreData':False}
-            response = fclient.add_input_data(datastreamId, 'json', options, data)
+            response = fclient.add_input_data(datastreamId, 'csv', options, data)
             self.assertNotEqual(response, 'Data Submitted Successfully', 'Cannot add historical input data to datastream')
         except Exception as e:
             ## if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
             print(e.message)
             self.assertEqual(0, 1, 'Cannot add input data to datastream')
 
+    # Add live input data (json format) from a stream to Datastream (Used for live monitoring)
     @unittest.skip("streaming can only be done once ")
     # Streaming data can only be sent to datastream if datastream is live. So make sure that datastream is live first
     def test_add_streaming_json_data_stream(self):

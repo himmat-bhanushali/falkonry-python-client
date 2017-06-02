@@ -28,9 +28,9 @@ $ pip install falkonryclient
     * Add historical input data (json format) from a stream to Datastream (Used for model revision) 
     * Add historical input data (csv format) from a stream to Datastream (Used for model revision) 
     * Add live input data (json format) to Datastream (Used for live monitoring) 
-    * Add live data (csv format) to Datastream (Used for live monitoring) 
-    * Add live data (json format) from a stream to Datastream (Used for live monitoring) 
-    * Add live data (csv format) from a stream to Datastream (Used for live monitoring) 
+    * Add live input data (csv format) to Datastream (Used for live monitoring) 
+    * Add live input data (json format) from a stream to Datastream (Used for live monitoring) 
+    * Add live input data (csv format) from a stream to Datastream (Used for live monitoring) 
     * Create Assessment
     * Retrieve Assessments
     * Retrieve Assessment by Id

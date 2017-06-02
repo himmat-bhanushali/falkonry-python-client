@@ -10,6 +10,7 @@ class TestLiveDatastream(unittest.TestCase):
     def setUp(self):
         pass
 
+    # Datastream On (Start live monitoring of datastream)
     def test_turn_datstream_on(self):
         fclient = FClient(host=host, token=token)
         datastream = Schemas.Datastream()
@@ -57,6 +58,7 @@ class TestLiveDatastream(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
+    # Datastream Off (Stop live monitoring of datastream)
     def test_turn_datstream_off(self):
         fclient = FClient(host=host, token=token)
         datastream = Schemas.Datastream()

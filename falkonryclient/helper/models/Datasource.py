@@ -12,7 +12,7 @@ import json
 
 
 class Datasource:
-    """Assessment schema class"""
+    """Datasource schema class"""
 
     def __init__(self, **kwargs):
         self.raw = kwargs.get('datasource') if 'datasource' in kwargs else {}

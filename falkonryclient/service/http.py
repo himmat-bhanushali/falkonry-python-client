@@ -192,7 +192,7 @@ class HttpService:
         """
 
         response = requests.get(self.host + url, stream=True, headers={'Authorization': 'Bearer '+self.token}, verify=False)
-        if response.status_code is 200:
+        if response.status_code is 200 or response.status_code is 202:
             return response
         else:
             raise Exception('Error connecting to Falkonry: '+str(response.status_code))

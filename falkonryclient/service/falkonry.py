@@ -111,12 +111,12 @@ class FalkonryService:
         :param data: string
         """
 
-        if options['streaming'] is not None and options['streaming'] is True:
+        if 'streaming' in options and options['streaming'] is True:
             streaming = 'true'
         else:
             streaming = 'false'
 
-        if options['hasMoreData'] is not None and options['hasMoreData'] is True:
+        if 'hasMoreData' in options and options['hasMoreData'] is True:
             hasMoreData = 'true'
         else:
             hasMoreData = 'false'
@@ -161,12 +161,12 @@ class FalkonryService:
         :param data: Stream
         """
 
-        if options['streaming'] is not None and options['streaming'] is True:
+        if 'streaming' in options and options['streaming'] is True:
             streaming = 'true'
         else:
             streaming = 'false'
 
-        if options['hasMoreData'] is not None and options['hasMoreData'] is True:
+        if 'hasMoreData' in options and options['hasMoreData'] is True:
             hasMoreData = 'true'
         else:
             hasMoreData = 'false'
@@ -229,25 +229,25 @@ class FalkonryService:
         reqParams = ''
         firstQueryParams = True
 
-        if options['trackerId'] is not None and options['trackerId'] is not '':
+        if 'trackerId' in options and options['trackerId'] is not None:
             firstQueryParams = False
             reqParams += '?trackerId='+str(options['trackerId'])
 
-        if options['modelIndex'] is not None and options['modelIndex'] is not '':
+        if 'modelIndex' in options and options['modelIndex'] is not None:
             if firstQueryParams:
                 firstQueryParams = False
                 reqParams += '?modelIndex='+str(options['modelIndex'])
             else:
                 reqParams += '&modelIndex='+str(options['modelIndex'])
 
-        if options['startTime'] is not None and options['startTime'] is not '':
+        if 'startTime' in  options and options['startTime'] is not None:
             if firstQueryParams:
                 firstQueryParams = False
                 reqParams += '?startTime='+str(options['startTime'])
             else:
                 reqParams += '&startTime='+str(options['startTime'])
 
-        if options['endTime'] is not None and options['endTime'] is not '':
+        if 'endTime' in options and options['endTime'] is not None:
             if firstQueryParams:
                 firstQueryParams = False
                 reqParams += '?endTime='+str(options['endTime'])

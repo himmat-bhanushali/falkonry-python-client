@@ -14,7 +14,7 @@ class Tracker:
     """Tracker schema class"""
 
     def __init__(self, **kwargs):
-        self.raw = kwargs.get('entityMeta') if 'entityMeta' in kwargs else {}
+        self.raw = kwargs.get('tracker') if 'tracker' in kwargs else {}
 
     def set_status(self, status):
         self.raw['status'] = status

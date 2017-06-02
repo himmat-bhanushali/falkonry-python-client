@@ -10,6 +10,7 @@ class TestAddFacts(unittest.TestCase):
     def setUp(self):
         pass
 
+    # Add facts data (json format) to Assessment
     def test_add_json_facts(self):
         fclient = FClient(host=host, token=token)
         datastream = Schemas.Datastream()
@@ -62,6 +63,9 @@ class TestAddFacts(unittest.TestCase):
             print(e.message)
             self.assertEqual(0,1,"Cannot add data")
 
+#
+
+    # Add facts data (csv format) to Assessment
     def test_add_csv_facts(self):
         fclient = FClient(host=host, token=token)
         datastream = Schemas.Datastream()

@@ -9,6 +9,7 @@ class TestSchema(unittest.TestCase):
     def setUp(self):
         pass
 
+    # Add EntityMeta to a Datastream
     def test_add_entity_meta(self):
         fclient = FClient(host=host, token=token)
         datastream = Schemas.Datastream()
@@ -54,6 +55,7 @@ class TestSchema(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot add entityMeta to datastream')
 
+    # Get EntityMeta of a Datastream
     def test_get_entity_meta(self):
         fclient = FClient(host=host, token=token)
         datastream = Schemas.Datastream()
