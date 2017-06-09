@@ -1,67 +1,126 @@
 import io
 import unittest
+import random
 
-host  = 'http://localhost:8080'  # host url
-token = ''                       # auth token
+host  = 'https://localhost:8080'  # host url
+token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
 
 class TestAddDataStream(unittest.TestCase):
 
     def setUp(self):
         pass
 
-    def test_add_json_data_stream_for_single_entity(self):
+    # Add historical input data (json format) from a stream to Datastream (Used for model revision)
+    def test_add_historical_json_data_stream(self):
         fclient = FClient(host=host, token=token)
-        eventbuffer = Schemas.Eventbuffer()
-        eventbuffer.set_name('Motor Health2')
-        eventbuffer.set_time_identifier('time')
-        eventbuffer.set_time_format('iso_8601')
+        datastream = Schemas.Datastream()
+        datastream.set_name('Motor Health' + str(random.random()))
+
+        datasource = Schemas.Datasource()
+        field = Schemas.Field()
+        time = Schemas.Time()
+        signal = Schemas.Signal()
+
+        time.set_zone("GMT")
+        time.set_identifier("time")
+        time.set_format("iso_8601")
+        field.set_signal(signal)
+        datasource.set_type("STANDALONE")
+        field.set_time(time)
+        datastream.set_datasource(datasource)
+        datastream.set_field(field)
         try:
-            eventbuffer = fclient.create_eventbuffer(eventbuffer)
+            datastreamResponse = fclient.create_datastream(datastream)
             try:
                 data = io.open('./data.json')
-                response = fclient.add_input_stream(eventbuffer.get_id(), 'json', {}, data)
+                options = {'streaming': False, 'hasMoreData':False}
+                response = fclient.add_input_stream(datastreamResponse.get_id(), 'json', options, data)
 
-                self.assertNotEqual(response['__$id'], None, 'Cannot add input data to eventbuffer')
+                self.assertNotEqual(response['__$id'], None, 'Cannot add input data to datastream')
 
                 # tear down
                 try:
-                    fclient.delete_pipeline(created_pipeline.get_id())
-                    fclient.delete_eventbuffer(eventbuffer.get_id())
+                    fclient.delete_datastream(datastreamResponse.get_id())
                 except Exception as e:
                     pass
             except Exception as e:
                 print(e.message)
-                self.assertEqual(0, 1, 'Cannot add input data to eventbuffer')
+                self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
             print(e.message)
-            self.assertEqual(0, 1, 'Cannot create eventbuffer')
+            self.assertEqual(0, 1, 'Cannot create datastream')
 
-    def test_add_csv_data_stream_for_single_entity(self):
+    # Add historical input data (csv format) from a stream to Datastream (Used for model revision)
+    def test_add_historical_csv_data_stream(self):
         fclient = FClient(host=host, token=token)
-        eventbuffer = Schemas.Eventbuffer()
-        eventbuffer.set_name('Motor Health')
-        eventbuffer.set_time_identifier('time')
-        eventbuffer.set_time_format('iso_8601')
+        datastream = Schemas.Datastream()
+        datastream.set_name('Motor Health' + str(random.random()))
+
+        datasource = Schemas.Datasource()
+        field = Schemas.Field()
+        time = Schemas.Time()
+        signal = Schemas.Signal()
+
+        time.set_zone("GMT")
+        time.set_identifier("time")
+        time.set_format("iso_8601")
+        field.set_signal(signal)
+        datasource.set_type("STANDALONE")
+        field.set_time(time)
+        datastream.set_datasource(datasource)
+        datastream.set_field(field)
         try:
-            eventbuffer = fclient.create_eventbuffer(eventbuffer)
+            datastreamResponse = fclient.create_datastream(datastream)
             try:
                 data = io.open('./data.csv')
-                response = fclient.add_input_stream(eventbuffer.get_id(), 'csv', {}, data)
+                options = {'streaming': False, 'hasMoreData':False}
+                response = fclient.add_input_stream(datastreamResponse.get_id(), 'csv', options, data)
 
-                self.assertNotEqual(response['__$id'], None, 'Cannot add input data to eventbuffer')
+                self.assertNotEqual(response['__$id'], None, 'Cannot add input data to datastream')
 
                 # tear down
                 try:
-                    fclient.delete_pipeline(created_pipeline.get_id())
-                    fclient.delete_eventbuffer(eventbuffer.get_id())
+                    fclient.delete_datastream(datastreamResponse.get_id())
                 except Exception as e:
                     pass
             except Exception as e:
                 print(e.message)
-                self.assertEqual(0, 1, 'Cannot add input data to eventbuffer')
+                self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
             print(e.message)
-            self.assertEqual(0, 1, 'Cannot create eventbuffer')
+            self.assertEqual(0, 1, 'Cannot create datastream')
+
+    # Add live input data (csv format) from a stream to Datastream (Used for live monitoring)
+    @unittest.skip("streaming can only be done once ")
+    # Streaming data can only be sent to datastream if datastream is live. So make sure that datastream is live first
+    def test_add_streaming_csv_data_stream(self):
+        fclient = FClient(host=host, token=token)
+        datastreamId = 'datstream-id' #id if the datastream which is live
+        try:
+            data = io.open('./data.csv')
+            options = {'streaming': True, 'hasMoreData':False}
+            response = fclient.add_input_data(datastreamId, 'csv', options, data)
+            self.assertNotEqual(response, 'Data Submitted Successfully', 'Cannot add historical input data to datastream')
+        except Exception as e:
+            ## if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
+            print(e.message)
+            self.assertEqual(0, 1, 'Cannot add input data to datastream')
+
+    # Add live input data (json format) from a stream to Datastream (Used for live monitoring)
+    @unittest.skip("streaming can only be done once ")
+    # Streaming data can only be sent to datastream if datastream is live. So make sure that datastream is live first
+    def test_add_streaming_json_data_stream(self):
+        fclient = FClient(host=host, token=token)
+        datastreamId = 'datstream-id' #id if the datastream which is live
+        try:
+            data = io.open('./data.json')
+            options = {'streaming': True, 'hasMoreData':False}
+            response = fclient.add_input_data(datastreamId, 'json', options, data)
+            self.assertNotEqual(response, 'Data Submitted Successfully', 'Cannot add historical input data to datastream')
+        except Exception as e:
+            ## if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
+            print(e.message)
+            self.assertEqual(0, 1, 'Cannot add input data to datastream')
 
 if __name__ == '__main__':
     if __package__ is None:

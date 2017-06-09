@@ -12,11 +12,14 @@ from falkonryclient.helper.models import *
 
 Models = {
     "Assessment": Assessment,
-    "Pipeline": Pipeline,
+    "Datastream": Datastream,
+    "Datasource": Datasource,
+    "Field": Field,
     "Signal": Signal,
-    "Eventbuffer": Eventbuffer,
-    "Subscription": Subscription,
-    "Publication": Publication
+    "Input": Input,
+    "Stats": Stats,
+    "EntityMeta": EntityMeta,
+    "Tracker": Tracker
 }
 
 __all__ = [

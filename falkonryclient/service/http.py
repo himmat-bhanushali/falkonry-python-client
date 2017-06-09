@@ -10,6 +10,7 @@ Client to access Condition Prediction APIs
 
 import json
 import requests
+import jsonpickle
 
 """
 HttpService:
@@ -40,7 +41,8 @@ class HttpService:
             self.host + url,
             headers={
                 'Authorization': 'Bearer ' + self.token
-            }
+            },
+            verify=False
         )
         if response.status_code is 200:
             return json.loads(response.content)
@@ -53,13 +55,19 @@ class HttpService:
         :param url: string
         :param entity: Instantiated class object
         """
+
+        try:
+            jsonData = entity.to_json()
+        except Exception as e:
+            jsonData = jsonpickle.pickler.encode(entity)
         response = requests.post(
             self.host + url,
-            entity.to_json(),
+            jsonData,
             headers={
                 "Content-Type": "application/json",
                 'Authorization': 'Bearer ' + self.token
-            }
+            },
+            verify=False
         )
         if response.status_code is 201:
             return json.loads(response.content)
@@ -79,7 +87,8 @@ class HttpService:
             headers={
                 "Content-Type": "text/plain",
                 'Authorization': 'Bearer ' + self.token
-            }
+            },
+            verify=False
         )
         if response.status_code is 202 or response.status_code is 200:
             return json.loads(response.content)
@@ -99,7 +108,8 @@ class HttpService:
             headers={
                 "Content-Type": "application/json",
                 'Authorization': 'Bearer ' + self.token
-            }
+            },
+            verify=False
         )
         if response.status_code is 200:
             return json.loads(response.content)
@@ -121,7 +131,8 @@ class HttpService:
                 files=form_data['files'] if 'files' in form_data else {},
                 headers={
                     'Authorization': 'Bearer ' + self.token
-                }
+                },
+                verify=False
             )
         else:
             response = requests.post(
@@ -130,7 +141,8 @@ class HttpService:
                 headers={
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + self.token
-                }
+                },
+                verify=False
             )
         if response.status_code is 201 or response.status_code is 202:
             return json.loads(response.content)
@@ -146,10 +158,11 @@ class HttpService:
             self.host + url,
             headers={
               'Authorization': 'Bearer ' + self.token
-            }
+            },
+            verify=False
         )
-        if response.status_code is 200:
-            return json.loads(response.content)
+        if response.status_code is 204:
+            return None
         else:
             raise Exception(response.content)
 
@@ -164,7 +177,8 @@ class HttpService:
             files=form_data['files'] if 'files' in form_data else {},
             headers={
                 'Authorization': 'Bearer ' + self.token
-            }
+            },
+            verify=False
         )
         if response.status_code is 202 or response.status_code is 200:
             return json.loads(response.content)
@@ -178,7 +192,7 @@ class HttpService:
         """
 
         response = requests.get(self.host + url, stream=True, headers={'Authorization': 'Bearer '+self.token}, verify=False)
-        if response.status_code is 200:
+        if response.status_code is 200 or response.status_code is 202:
             return response
         else:
             raise Exception('Error connecting to Falkonry: '+str(response.status_code))

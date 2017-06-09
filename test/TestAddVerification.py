@@ -1,8 +1,8 @@
 import unittest
 import random
 
-host  = 'http://localhost:8080'  # host url
-token = ''                       # auth token
+host  = 'https://localhost:8080'  # host url
+token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
 
 
 class TestAddFacts(unittest.TestCase):
@@ -10,104 +10,110 @@ class TestAddFacts(unittest.TestCase):
     def setUp(self):
         pass
 
+    # Add facts data (json format) to Assessment
     def test_add_json_facts(self):
         fclient = FClient(host=host, token=token)
-        eventbuffer = Schemas.Eventbuffer()
-        eventbuffer.set_name('Motor Health' + str(random.random()))
-        eventbuffer.set_time_identifier('time')
-        eventbuffer.set_time_format('iso_8601')
+        datastream = Schemas.Datastream()
+        datastream.set_name('Motor Health' + str(random.random()))
+
+        datasource = Schemas.Datasource()
+        field = Schemas.Field()
+        time = Schemas.Time()
+        signal = Schemas.Signal()
+
+        time.set_zone("GMT")
+        time.set_identifier("time")
+        time.set_format("iso_8601")
+        field.set_signal(signal)
+        datasource.set_type("STANDALONE")
+        field.set_time(time)
+        datastream.set_datasource(datasource)
+        datastream.set_field(field)
+
         try:
-            eventbuffer = fclient.create_eventbuffer(eventbuffer)
+            datastreamResponse = fclient.create_datastream(datastream)
+            data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
+            response = fclient.add_input_data(datastreamResponse.get_id(), 'json', {}, data)
+
+            asmtRequest = Schemas.AssessmentRequest()
+            asmtRequest.set_name('Assessment Name ' + str(random.random()))
+            asmtRequest.set_datastream(datastreamResponse.get_id())
+            asmtRequest.set_rate('PT0S')
+
             try:
-                data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
-                response = fclient.add_input_data(eventbuffer.get_id(), 'json', {}, data)
-                pipeline = Schemas.Pipeline()
-                signals  = {
-                    'current': 'Numeric',
-                    'vibration': 'Numeric',
-                    'state': 'Categorical'
-                }
-                assessment = Schemas.Assessment()
-                assessment.set_name('Health') \
-                    .set_input_signals(['current', 'vibration', 'state'])
-                pipeline.set_name('Motor Health 1') \
-                    .set_eventbuffer(eventbuffer.get_id()) \
-                    .set_input_signals(signals) \
-                    .set_assessment(assessment)
+                resp_assessment = fclient.create_assessment(asmtRequest)
+                data = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
 
+                response = fclient.add_facts(resp_assessment.get_id(), 'json', {}, data)
+                # tear down
                 try:
-                    resp_pipeline = fclient.create_pipeline(pipeline)
-                    data = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
-
-                    response = fclient.add_facts(resp_pipeline.get_id(), 'json', {}, data)
-                    # tear down
-                    try:
-                        fclient.delete_pipeline(resp_pipeline.get_id())
-                        fclient.delete_eventbuffer(eventbuffer.get_id())
-                    except Exception as e:
-                        pass
+                    fclient.delete_assessment(resp_assessment.get_id())
+                    fclient.delete_datastream(datastreamResponse.get_id())
                 except Exception as e:
                     print(e.message)
-                    try:
-                        fclient.delete_eventbuffer(eventbuffer.get_id())
-                    except Exception as e:
-                        pass
-                    self.assertEqual(0, 1, 'Cannot create pipeline')
+                    pass
             except Exception as e:
                 print(e.message)
-                self.assertEqual(0,1,"Cannot add data")        
+                try:
+                    fclient.delete_datastream(datastreamResponse.get_id())
+                except Exception as e:
+                    pass
+                self.assertEqual(0, 1, 'Cannot create assessment')
         except Exception as e:
             print(e.message)
-            self.assertEqual(0, 1, 'Cannot create eventbuffer')
+            self.assertEqual(0,1,"Cannot add data")
 
+#
+
+    # Add facts data (csv format) to Assessment
     def test_add_csv_facts(self):
         fclient = FClient(host=host, token=token)
-        eventbuffer = Schemas.Eventbuffer()
-        eventbuffer.set_name('Motor Health' + str(random.random()))
-        eventbuffer.set_time_identifier('time')
-        eventbuffer.set_time_format('iso_8601')
-        try:
-            eventbuffer = fclient.create_eventbuffer(eventbuffer)
-            try:
-                data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
-                response = fclient.add_input_data(eventbuffer.get_id(), 'json', {}, data)
-                pipeline = Schemas.Pipeline()
-                signals  = {
-                    'current': 'Numeric',
-                    'vibration': 'Numeric',
-                    'state': 'Categorical'
-                }
-                assessment = Schemas.Assessment()
-                assessment.set_name('Health') \
-                    .set_input_signals(['current', 'vibration', 'state'])
-                pipeline.set_name('Motor Health 1') \
-                    .set_eventbuffer(eventbuffer.get_id()) \
-                    .set_input_signals(signals) \
-                    .set_assessment(assessment)
+        datastream = Schemas.Datastream()
+        datastream.set_name('Motor Health' + str(random.random()))
 
+        datasource = Schemas.Datasource()
+        field = Schemas.Field()
+        time = Schemas.Time()
+        signal = Schemas.Signal()
+
+        time.set_zone("GMT")
+        time.set_identifier("time")
+        time.set_format("iso_8601")
+        field.set_signal(signal)
+        datasource.set_type("STANDALONE")
+        field.set_time(time)
+        datastream.set_datasource(datasource)
+        datastream.set_field(field)
+        try:
+            datastreamResponse = fclient.create_datastream(datastream)
+            data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
+            response = fclient.add_input_data(datastreamResponse.get_id(), 'json', {}, data)
+
+            asmtRequest = Schemas.AssessmentRequest()
+            asmtRequest.set_name('Assessment Name ' + str(random.random()))
+            asmtRequest.set_datastream(datastreamResponse.get_id())
+            asmtRequest.set_rate('PT0S')
+
+            try:
+                resp_assessment = fclient.create_assessment(asmtRequest)
+                data = "time,end,car,Health\n2011-03-31T00:00:00Z,2011-04-01T00:00:00Z,IL9753,Normal\n2011-03-31T00:00:00Z,2011-04-01T00:00:00Z,HI3821,Normal"
+                response = fclient.add_facts(resp_assessment.get_id(), 'csv', {}, data)
+                # tear down
                 try:
-                    resp_pipeline = fclient.create_pipeline(pipeline)
-                    data = "time,end,car,Health\n2011-03-31T00:00:00Z,2011-04-01T00:00:00Z,IL9753,Normal\n2011-03-31T00:00:00Z,2011-04-01T00:00:00Z,HI3821,Normal"
-                    response = fclient.add_facts(resp_pipeline.get_id(), 'csv', {}, data)
-                    # tear down
-                    try:
-                        fclient.delete_pipeline(resp_pipeline.get_id())
-                        fclient.delete_eventbuffer(eventbuffer.get_id())
-                    except Exception as e:
-                        pass
+                    fclient.delete_assessment(resp_assessment.get_id())
+                    fclient.delete_datastream(datastreamResponse.get_id())
                 except Exception as e:
-                    print(e.message)
-                    try:
-                        fclient.delete_eventbuffer(eventbuffer.get_id())
-                    except Exception as e:
-                        pass
-                    self.assertEqual(0, 1, 'Cannot create pipeline')
+                    pass
             except Exception as e:
                 print(e.message)
-                self.assertEqual(0,1,"Cannot add data")        
+                try:
+                    fclient.delete_datastream(datastreamResponse.get_id())
+                except Exception as e:
+                    pass
+                self.assertEqual(0, 1, 'Cannot create assessment')
         except Exception as e:
             print(e.message)
-            self.assertEqual(0, 1, 'Cannot create eventbuffer')            
+            self.assertEqual(0,1,"Cannot add data")
 
 if __name__ == '__main__':
     if __package__ is None:

@@ -12,6 +12,7 @@ from falkonryclient.helper import schema as Schemas
 from falkonryclient.service.http import HttpService
 from falkonryclient.helper import utils as Utils
 from cStringIO import StringIO
+import json
 import sseclient
 
 """
@@ -32,69 +33,96 @@ class FalkonryService:
         self.token = token
         self.http  = HttpService(host, token)
 
-    def get_eventbuffers(self):
+    def get_datastreams(self):
         """
-        To get list of Eventbuffers
+        To get list of Datastream
         """
-        eventbuffers = []
-        response = self.http.get('/Eventbuffer')
-        for eventbuffer in response:
-            eventbuffers.append(Schemas.Eventbuffer(eventbuffer=eventbuffer))
-        return eventbuffers
+        datastreams = []
+        response = self.http.get('/Datastream')
+        for datastream in response:
+            datastreams.append(Schemas.Datastream(datastream=datastream))
+        return datastreams
 
-    def create_eventbuffer(self, eventbuffer):
+    def get_datastream(self, datastream):
         """
-        To create Eventbuffer
-        :param eventbuffer: Eventbuffer
+        To get Datastream by id
+        """
+        response = self.http.get('/Datastream/' + str(datastream))
+        datastream = Schemas.Datastream(datastream=response)
+        return datastream
+
+    def create_datastream(self, datastream):
+        """
+        To create Datastream
+        :param datastream: Datastream
         :param options: dict
         """
-        raw_eventbuffer = self.http.post('/Eventbuffer', eventbuffer)
-        return Schemas.Eventbuffer(eventbuffer=raw_eventbuffer)
+        raw_datastream = self.http.post('/Datastream', datastream)
+        return Schemas.Datastream(datastream=raw_datastream)
 
-    def delete_eventbuffer(self, eventbuffer):
+    def delete_datastream(self, datastream):
         """
-        To delete a Eventbuffer
-        :param eventbuffer: string
+        To delete a Datastream
+        :param datastream: string
         """
-        response = self.http.delete('/Eventbuffer/' + str(eventbuffer))
+        response = self.http.delete('/Datastream/' + str(datastream))
         return response
 
-    def get_pipelines(self):
+    def get_assessments(self):
         """
-        To get list of Pipelines
+        To get list of Assessments
         """
-        pipelines = []
-        response = self.http.get('/Pipeline')
-        for pipeline in response:
-            pipelines.append(Schemas.Pipeline(pipeline=pipeline))
-        return pipelines
+        assessments = []
+        response = self.http.get('/Assessment')
+        for assessment in response:
+            assessments.append(Schemas.Assessment(assessment=assessment))
+        return assessments
 
-    def create_pipeline(self, pipeline):
+    def get_assessment(self, assessment):
         """
-        To create Pipeline
-        :param pipeline: Pipeline
+        To get list of Assessments
         """
-        raw_pipeline = self.http.post('/Pipeline', pipeline)
-        return Schemas.Pipeline(pipeline=raw_pipeline)
+        response = self.http.get('/Assessment/' + str(assessment))
+        assessment = Schemas.Assessment(assessment=response)
+        return assessment
 
-    def delete_pipeline(self, pipeline):
+    def create_assessment(self, assessment):
         """
-        To delete a Pipeline
-        :param pipeline: string
+        To create Assessment
+        :param assessment: Assessment
         """
-        response = self.http.delete('/Pipeline/' + str(pipeline))
+        raw_assessment = self.http.post('/Assessment', assessment)
+        return Schemas.Assessment(assessment=raw_assessment)
+
+    def delete_assessment(self, assessment):
+        """
+        To delete a Assessment
+        :param assessment: string
+        """
+        response = self.http.delete('/Assessment/' + str(assessment))
         return response
 
-    def add_input_data(self, eventbuffer, data_type, options, data):
+    def add_input_data(self, datastream, data_type, options, data):
         """
-        To add data to a Eventbuffer
-        :param eventbuffer: string
+        To add data to a Datastream
+        :param datastream: string
         :param data_type: string
         :param options: dict
         :param data: string
         """
-        url = '/Eventbuffer/' + str(eventbuffer) + \
-              (('?subscriptionKey=' + options['subscription']) if 'subscription' in options else '')
+
+        if 'streaming' in options and options['streaming'] is True:
+            streaming = 'true'
+        else:
+            streaming = 'false'
+
+        if 'hasMoreData' in options and options['hasMoreData'] is True:
+            hasMoreData = 'true'
+        else:
+            hasMoreData = 'false'
+
+
+        url = '/Datastream/' + str(datastream) + '?streaming=' + streaming + '&hasMoreData=' + hasMoreData
         form_data = {
             'files': {
                 'data': (
@@ -108,15 +136,15 @@ class FalkonryService:
         response = self.http.fpost(url, form_data)
         return response
 
-    def add_facts(self, pipeline, data_type, options, data):
+    def add_facts(self, assessment, data_type, options, data):
         """
-        To add facts data to a Pipeline
-        :param pipeline: string
+        To add facts data to a Assessment
+        :param assessment: string
         :param data_type: string
         :param options: dict
         :param data: string
         """
-        url = '/pipeline/' + pipeline + '/facts'
+        url = '/assessment/' + assessment + '/facts'
         try:
             response = self.http.postData(url, data)
         except Exception as e:
@@ -124,16 +152,27 @@ class FalkonryService:
         return response
 
 
-    def add_input_stream(self, eventbuffer, data_type, options, data):
+    def add_input_stream(self, datastream, data_type, options, data):
         """
-        To add data stream to a Eventbuffer
-        :param eventbuffer: string
+        To add data stream to a Datastream
+        :param datastream: string
         :param data_type: string
         :param options: dict
         :param data: Stream
         """
-        url = '/Eventbuffer/' + str(eventbuffer) + \
-              (('?subscriptionKey=' + options['subscription']) if 'subscription' in options else '')
+
+        if 'streaming' in options and options['streaming'] is True:
+            streaming = 'true'
+        else:
+            streaming = 'false'
+
+        if 'hasMoreData' in options and options['hasMoreData'] is True:
+            hasMoreData = 'true'
+        else:
+            hasMoreData = 'false'
+
+
+        url = '/Datastream/' + str(datastream) + '?streaming=' + streaming + '&hasMoreData=' + hasMoreData
         form_data = {
             'files': {
                 'data': (
@@ -147,15 +186,15 @@ class FalkonryService:
         response = self.http.upstream(url, form_data)
         return response
 
-    def add_facts_stream(self, pipeline, data_type, options, data):
+    def add_facts_stream(self, assessment, data_type, options, data):
         """
-        To add  facts data stream to a Pipeline
-        :param eventbuffer: string
+        To add  facts data stream to a Assessment
+        :param datastream: string
         :param data_type: string
         :param options: dict
         :param data: Stream
         """
-        url = '/pipeline/' + pipeline + '/facts'
+        url = '/assessment/' + assessment + '/facts'
         form_data = {
             'files': {
                 'data': (
@@ -169,67 +208,97 @@ class FalkonryService:
         response = self.http.upstream(url,form_data)
         return response
 
-    def get_output(self, pipeline):
+    def get_output(self, assessment):
         """
-        To get output of a Pipeline
-        :param pipeline: string
+        To get output of a Assessment
+        :param assessment: string
         """
-        url = '/pipeline/' + str(pipeline) + '/stream'
+
+        url = '/assessment/' + str(assessment) + '/output'
         response = self.http.downstream(url)
         stream = sseclient.SSEClient(response)
         return stream
 
-    def create_subscription(self, eventbuffer, subscription):
+    def get_historical_output(self, assessment, options):
         """
-        To create Subscription
-        :param eventbuffer: string
-        :param subscription: Subscription
+        To get output of a historical Assessment
+        :param assessment: string
+        :param options: dict
         """
-        raw_subscription = self.http.post('/Eventbuffer/' + eventbuffer + '/Subscription', subscription)
-        return Schemas.Subscription(subscription=raw_subscription)
 
-    def update_subscription(self, eventbuffer, subscription):
-        """
-        To update Subscription
-        :param eventbuffer: string
-        :param subscription: Subscription
-        """
-        raw_subscription = self.http.put('/Eventbuffer/' + eventbuffer + '/Subscription/' + subscription.get_key(), subscription)
-        return Schemas.Subscription(subscription=raw_subscription)
+        reqParams = ''
+        firstQueryParams = True
 
-    def delete_subscription(self, eventbuffer, subscription):
-        """
-        To delete Subscription
-        :param eventbuffer: string
-        :param subscription: Subscription
-        """
-        response = self.http.delete('/Eventbuffer/' + eventbuffer + '/Subscription/' + subscription)
+        if 'trackerId' in options and options['trackerId'] is not None:
+            firstQueryParams = False
+            reqParams += '?trackerId='+str(options['trackerId'])
+
+        if 'modelIndex' in options and options['modelIndex'] is not None:
+            if firstQueryParams:
+                firstQueryParams = False
+                reqParams += '?modelIndex='+str(options['modelIndex'])
+            else:
+                reqParams += '&modelIndex='+str(options['modelIndex'])
+
+        if 'startTime' in  options and options['startTime'] is not None:
+            if firstQueryParams:
+                firstQueryParams = False
+                reqParams += '?startTime='+str(options['startTime'])
+            else:
+                reqParams += '&startTime='+str(options['startTime'])
+
+        if 'endTime' in options and options['endTime'] is not None:
+            if firstQueryParams:
+                firstQueryParams = False
+                reqParams += '?endTime='+str(options['endTime'])
+            else:
+                reqParams += '&endTime='+str(options['endTime'])
+
+        url = '/assessment/' + str(assessment) + '/output' + reqParams
+        response = self.http.downstream(url)
         return response
 
-    def create_publication(self, pipeline, publication):
+    def add_entity_meta(self, datastream, options, data):
         """
-        To create Publication
-        :param pipeline: string
-        :param publication: Publication
+        To add entity meta data to a datastream
+        :param datastream: string
+        :param options: dict
+        :param data: list
         """
-        raw_publication = self.http.post('/Pipeline/' + pipeline + '/Publication', publication)
-        return Schemas.Publication(publication=raw_publication)
+        url = '/datastream/' + str(datastream) + '/entityMeta'
+        response = self.http.post(url, data)
+        entityMetaList = []
+        for entityMeta in response:
+            entityMetaList.append(Schemas.EntityMeta(entityMeta=entityMeta))
+        return entityMetaList
 
-    def update_publication(self, pipeline, publication):
+    def get_entity_meta(self, datastream):
         """
-        To update Publication
-        :param pipeline: string
-        :param publication: Publication
+        To add entity meta data to a datastream
+        :param datastream: string
+        :param options: dict
         """
-        raw_publication = self.http.put('/Pipeline/' + pipeline + '/Publication/' + publication.get_key(), publication)
-        return Schemas.Publication(publication=raw_publication)
+        url = '/datastream/' + str(datastream) + '/entityMeta'
+        response = self.http.get(url)
+        entityMetaList = []
+        for entityMeta in response:
+            entityMetaList.append(Schemas.EntityMeta(entityMeta=entityMeta))
+        return entityMetaList
 
-    def delete_publication(self, pipeline, publication):
+    def on_datastream(self, datastream):
         """
-        To delete Publication
-        :param pipeline: string
-        :param publication: Publication
+        To turn on datastream
+        :param datastream: string
         """
-        response = self.http.delete('/Pipeline/' + pipeline + '/Publication' + publication)
+        url = '/datastream/' + str(datastream) + '/on'
+        response = self.http.post(url,"")
         return response
 
+    def off_datastream(self, datastream):
+        """
+        To turn on datastream
+        :param datastream: string
+        """
+        url = '/datastream/' + str(datastream) + '/off'
+        response = self.http.post(url,"")
+        return response
