@@ -60,3 +60,6 @@ class Assessment:
 
     def to_json(self):
         return json.dumps(self.raw)
+
+    def get_aprioriConditionList(self):
+        return self.raw['aprioriConditionList'] if 'aprioriConditionList' in self.raw else []
