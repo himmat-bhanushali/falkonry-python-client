@@ -35,6 +35,7 @@ $ pip install falkonryclient
     * Retrieve Assessments
     * Retrieve Assessment by Id
     * Delete Assessment
+    * Get Condition List Of Assessment
     * Add facts data (json format) to Assessment
     * Add facts data (csv format) to Assessment
     * Add facts data (json format) from a stream to Assessment
@@ -43,7 +44,7 @@ $ pip install falkonryclient
     * Get Streaming Output
     * Datastream On (Start live monitoring of datastream)
     * Datastream Off (Stop live monitoring of datastream)
-    
+
 ## Quick Start
 ```
     * Get auth token from Falkonry Service UI
@@ -667,6 +668,25 @@ falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
 
 assessmentId = 'id of the datastream'
 assessmentResponse = fclient.delete_assessment(assessmentId)
+```
+
+#### Get Condition List Of Assessment
+
+Usage :    
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+
+assessmentId = 'id of the datastream'
+assessmentResponse = fclient.get_assessment(assessmentId)
+
+// aprioriConditionList 
+conditionList = assessment.get_aprioriConditionList()
+
 ```
 
 #### Add facts data (json format) to Assessment

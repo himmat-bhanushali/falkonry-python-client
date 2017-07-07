@@ -28,7 +28,7 @@ class HttpService:
         """
         from requests.packages.urllib3.exceptions import InsecureRequestWarning
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-        self.host  = host if host is not None else "https://service.falkonry.io"
+        self.host  = host if host is not None else "https://sandbox.falkonry.ai"
         self.token = token if token is not None else ""
 
     def get(self, url):
@@ -44,8 +44,10 @@ class HttpService:
             },
             verify=False
         )
-        if response.status_code is 200:
+        if response.status_code == 200:
             return json.loads(response.content)
+        elif response.status_code == 401:
+            raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
             raise Exception(response.content)
 
@@ -69,8 +71,10 @@ class HttpService:
             },
             verify=False
         )
-        if response.status_code is 201:
+        if response.status_code == 201:
             return json.loads(response.content)
+        elif response.status_code == 401:
+            raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
             raise Exception(response.content)
 
@@ -90,8 +94,10 @@ class HttpService:
             },
             verify=False
         )
-        if response.status_code is 202 or response.status_code is 200:
+        if response.status_code == 202 or response.status_code == 200:
             return json.loads(response.content)
+        elif response.status_code == 401:
+            raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
             raise Exception(response.content)           
 
@@ -111,8 +117,10 @@ class HttpService:
             },
             verify=False
         )
-        if response.status_code is 200:
+        if response.status_code == 200:
             return json.loads(response.content)
+        elif response.status_code == 401:
+            raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
             raise Exception(response.content)
 
@@ -144,8 +152,10 @@ class HttpService:
                 },
                 verify=False
             )
-        if response.status_code is 201 or response.status_code is 202:
+        if response.status_code == 201 or response.status_code == 202:
             return json.loads(response.content)
+        elif response.status_code == 401:
+            raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
             raise Exception(response.content)
 
@@ -161,8 +171,10 @@ class HttpService:
             },
             verify=False
         )
-        if response.status_code is 204:
+        if response.status_code == 204:
             return None
+        elif response.status_code == 401:
+            raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
             raise Exception(response.content)
 
@@ -180,8 +192,10 @@ class HttpService:
             },
             verify=False
         )
-        if response.status_code is 202 or response.status_code is 200:
+        if response.status_code == 202 or response.status_code == 200:
             return json.loads(response.content)
+        elif response.status_code == 401:
+            raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
             raise Exception(response.content)
 
@@ -192,7 +206,9 @@ class HttpService:
         """
 
         response = requests.get(self.host + url, stream=True, headers={'Authorization': 'Bearer '+self.token}, verify=False)
-        if response.status_code is 200 or response.status_code is 202:
+        if response.status_code == 200 or response.status_code == 202:
             return response
+        elif response.status_code == 401:
+            raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
             raise Exception('Error connecting to Falkonry: '+str(response.status_code))

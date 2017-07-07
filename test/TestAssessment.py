@@ -120,11 +120,13 @@ class TestCreateAssessment(unittest.TestCase):
             self.assertEqual(assessmentResponse.get_datastream(), asmtRequest.get_datastream(), 'Invalid datastream in assessment after creation')
             self.assertEqual(assessmentResponse.get_rate(), asmtRequest.get_rate(), 'Invalid rate of Assessment after creation')
             self.assertEqual(assessmentResponse.get_live(), 'OFF', 'Invalid rate of Assessment after creation')
+           
 
             # get assessments
             assessmentListResponse = fclient.get_assessments()
             self.assertEqual(isinstance(assessmentListResponse, list), True, 'Invalid Assessment object after creation')
             self.assertEqual(len(assessmentListResponse)>0,True,'Invalid length of assessment')
+
 
             # tear down
             try:
@@ -191,6 +193,8 @@ class TestCreateAssessment(unittest.TestCase):
             assessmentGetResp = fclient.get_assessment(assessmentResponse.get_id())
             self.assertEqual(isinstance(assessmentGetResp, Schemas.Assessment), True, 'Invalid Assessment object after creation')
             self.assertEqual(assessmentGetResp.get_id(), assessmentResponse.get_id(), 'Invalid assessment fetched')
+            self.assertEqual(isinstance(assessmentGetResp.get_aprioriConditionList(), list), True, 'Invalid aprioriConditionList object after creation')
+            self.assertEqual(len(assessmentGetResp.get_aprioriConditionList()) == 0,True,'Invalid length of aprioriConditionList')
 
             # tear down
             try:
