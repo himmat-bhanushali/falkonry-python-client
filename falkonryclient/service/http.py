@@ -59,7 +59,10 @@ class HttpService:
         """
 
         try:
-            jsonData = entity.to_json()
+            if entity is None || entity == "":
+                jsonData = ""
+            else:
+                jsonData = entity.to_json()
         except Exception as e:
             jsonData = jsonpickle.pickler.encode(entity)
         response = requests.post(

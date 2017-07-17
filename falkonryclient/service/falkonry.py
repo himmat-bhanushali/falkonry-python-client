@@ -80,7 +80,7 @@ class FalkonryService:
 
     def get_assessment(self, assessment):
         """
-        To get list of Assessments
+        To get Assessment by id
         """
         response = self.http.get('/Assessment/' + str(assessment))
         assessment = Schemas.Assessment(assessment=response)
