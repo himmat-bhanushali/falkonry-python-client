@@ -23,7 +23,7 @@ FalkonryService
 
 class FalkonryService:
 
-    def __init__(self, host, token):
+    def __init__(self, host, token, options):
         """
         constructor
         :param host: host address of Falkonry service
@@ -31,7 +31,10 @@ class FalkonryService:
         """
         self.host  = host
         self.token = token
-        self.http  = HttpService(host, token)
+        if options is not None:        
+            self.http  = HttpService(host, token, options)
+        else:
+            self.http  = HttpService(host, token)
 
     def get_datastreams(self):
         """

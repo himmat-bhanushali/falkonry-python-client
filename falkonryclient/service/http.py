@@ -19,8 +19,7 @@ HttpService:
 
 
 class HttpService:
-
-    def __init__(self, host, token):
+    def __init__(self, host, token, options):
         """
         constructor
         :param host: host address of Falkonry service
@@ -30,6 +29,11 @@ class HttpService:
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         self.host  = host if host is not None else "https://sandbox.falkonry.ai"
         self.token = token if token is not None else ""
+        if options is not None and options['header'] is not None:
+            self.sourceHeader = options['header']
+        else:    
+            self.sourceHeader = "python-client"
+
 
     def get(self, url):
         """
@@ -40,7 +44,8 @@ class HttpService:
         response = requests.get(
             self.host + url,
             headers={
-                'Authorization': 'Bearer ' + self.token
+                'Authorization': 'Bearer ' + self.token,
+                'x-falkonry-source':self.sourceHeader
             },
             verify=False
         )
@@ -59,7 +64,7 @@ class HttpService:
         """
 
         try:
-            if entity is None || entity == "":
+            if entity is None or entity == "":
                 jsonData = ""
             else:
                 jsonData = entity.to_json()
@@ -70,7 +75,8 @@ class HttpService:
             jsonData,
             headers={
                 "Content-Type": "application/json",
-                'Authorization': 'Bearer ' + self.token
+                'Authorization': 'Bearer ' + self.token,
+                'x-falkonry-source':self.sourceHeader
             },
             verify=False
         )
@@ -93,7 +99,8 @@ class HttpService:
             data,
             headers={
                 "Content-Type": "text/plain",
-                'Authorization': 'Bearer ' + self.token
+                'Authorization': 'Bearer ' + self.token,
+                'x-falkonry-source':self.sourceHeader
             },
             verify=False
         )
@@ -116,7 +123,8 @@ class HttpService:
             entity.to_json(),
             headers={
                 "Content-Type": "application/json",
-                'Authorization': 'Bearer ' + self.token
+                'Authorization': 'Bearer ' + self.token,
+                'x-falkonry-source':self.sourceHeader
             },
             verify=False
         )
@@ -141,7 +149,8 @@ class HttpService:
                 data=form_data['data'] if 'data' in form_data else {},
                 files=form_data['files'] if 'files' in form_data else {},
                 headers={
-                    'Authorization': 'Bearer ' + self.token
+                    'Authorization': 'Bearer ' + self.token,
+                    'x-falkonry-source':self.sourceHeader
                 },
                 verify=False
             )
@@ -151,7 +160,8 @@ class HttpService:
                 data=json.dumps(form_data['data'] if 'data' in form_data else {}),
                 headers={
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + self.token
+                    'Authorization': 'Bearer ' + self.token,
+                    'x-falkonry-source':self.sourceHeader
                 },
                 verify=False
             )
@@ -170,7 +180,8 @@ class HttpService:
         response = requests.delete(
             self.host + url,
             headers={
-              'Authorization': 'Bearer ' + self.token
+              'Authorization': 'Bearer ' + self.token,
+              'x-falkonry-source':self.sourceHeader
             },
             verify=False
         )
@@ -191,7 +202,8 @@ class HttpService:
             self.host + url,
             files=form_data['files'] if 'files' in form_data else {},
             headers={
-                'Authorization': 'Bearer ' + self.token
+                'Authorization': 'Bearer ' + self.token,
+                'x-falkonry-source':self.sourceHeader
             },
             verify=False
         )
@@ -208,7 +220,7 @@ class HttpService:
         :param url: string
         """
 
-        response = requests.get(self.host + url, stream=True, headers={'Authorization': 'Bearer '+self.token}, verify=False)
+        response = requests.get(self.host + url, stream=True, headers={'Authorization': 'Bearer '+self.token, 'x-falkonry-source':self.sourceHeader}, verify=False)
         if response.status_code == 200 or response.status_code == 202:
             return response
         elif response.status_code == 401:
