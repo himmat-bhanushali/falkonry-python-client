@@ -129,7 +129,7 @@ class FalkonryService:
         form_data = {
             'files': {
                 'data': (
-                    Utils.random_string(10)+('.json' if data_type is 'json' else '.csv'),
+                    Utils.random_string(10)+('.json' if data_type == 'json' else '.csv'),
                     StringIO(data),
                     'text/plain;charset=UTF-8',
                     {'Expires': '0'}
@@ -179,7 +179,7 @@ class FalkonryService:
         form_data = {
             'files': {
                 'data': (
-                    Utils.random_string(10)+('.json' if data_type is 'json' else '.csv'),
+                    Utils.random_string(10)+('.json' if data_type == 'json' else '.csv'),
                     data,
                     'text/plain;charset=UTF-8',
                     {'Expires': '0'}
@@ -201,7 +201,7 @@ class FalkonryService:
         form_data = {
             'files': {
                 'data': (
-                    Utils.random_string(10)+('.json' if data_type is 'json' else '.csv'),
+                    Utils.random_string(10)+('.json' if data_type == 'json' else '.csv'),
                     data,
                     'text/plain;charset=UTF-8',
                     {'Expires': '0'}
