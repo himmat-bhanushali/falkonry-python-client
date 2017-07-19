@@ -214,16 +214,18 @@ class HttpService:
         else:
             raise Exception(response.content)
 
-    def downstream(self, url):
+    def downstream(self, url, format):
         """
         To make a GET request to Falkonry API server and return stream
         :param url: string
         """
-
-        response = requests.get(self.host + url, stream=True, headers={'Authorization': 'Bearer '+self.token, 'x-falkonry-source':self.sourceHeader}, verify=False)
+        headers={'Authorization': 'Bearer '+self.token, 'x-falkonry-source':self.sourceHeader}
+        if format is not None:
+            headers['accept'] = format
+        response = requests.get(self.host + url, stream=True, headers=headers, verify=False)
         if response.status_code == 200 or response.status_code == 202:
             return response
         elif response.status_code == 401:
             raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
-            raise Exception('Error connecting to Falkonry: '+str(response.status_code))
+            raise Exception(json.dumps({'message':str(response.text)}))

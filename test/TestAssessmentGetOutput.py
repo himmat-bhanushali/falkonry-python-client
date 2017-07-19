@@ -16,7 +16,7 @@ class TestAssessmentGetOutput(unittest.TestCase):
         fclient = FClient(host=host, token=token)
 
         try:
-            stream = fclient.get_output(assessment)
+            stream = fclient.get_output(assessment, {})
             for event in stream.events():
                 print(json.dumps(json.loads(event.data)))
 

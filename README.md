@@ -786,7 +786,8 @@ from falkonryclient import schemas as Schemas
 
 falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
 assessmentId = 'id of the datastream'
-stream    = falkonry.get_output(assessmentId)
+options = {"format":"text/csv"}
+stream    = falkonry.get_output(assessmentId, options)
 for event in stream.events():
     print(json.dumps(json.loads(event.data)))
 ```
