@@ -218,7 +218,7 @@ class FalkonryService:
         :param assessment: string
         """
         responseFormat=None
-        if options and options['format'] is not None:
+        if options and 'format' in options and options['format'] is not None:
             responseFormat = options['format']
             options['format'] = None
 
@@ -234,7 +234,7 @@ class FalkonryService:
         :param options: dict
         """
         responseFormat=None
-        if options and options['format'] is not None:
+        if options and 'format' in options and options['format'] is not None:
             responseFormat = options['format']
             options['format'] = None
 
