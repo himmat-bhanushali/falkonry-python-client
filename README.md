@@ -214,7 +214,7 @@ datastream.set_inputs(inputs)
 createdDatastream = falkonry.create_datastream(datastream)
 ```
 
-#### Create Datastream for wide style data from a multiple entities
+#### Create Datastream for wide style data from multiple entities
 
 Data :
 
@@ -761,7 +761,7 @@ options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00
 
 response = fclient.get_historical_output(assessment, options)
 
-'''If data is not readily available then, a tracker id will be sent with 202 status code. While falkonry will genrate ouptut data
+'''If data is not readily available then, a tracker id will be sent with 202 status code. While falkonry will generate output data
  Client should do timely pooling on the using same method, sending tracker id (__id) in the query params
  Once data is available server will response with 200 status code and data in json/csv format.'''
 
@@ -801,7 +801,7 @@ from falkonryclient import schemas as Schemas
 falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
 datastreamId = 'id of the datastream'
 
-# Starts live monitoring of datastream. For live monitoring datastream must have atleast one assessment with active model. 
+# Starts live monitoring of datastream. For live monitoring, datastream must have at least one assessment with an active model. 
 response = falkonry.on_datastream(datastreamId)
 ```
 
