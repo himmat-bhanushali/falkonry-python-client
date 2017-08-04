@@ -32,10 +32,7 @@ class FalkonryService:
         """
         self.host  = host
         self.token = token
-        if options is not None:        
-            self.http  = HttpService(host, token, options)
-        else:
-            self.http  = HttpService(host, token)
+        self.http  = HttpService(host, token, options)
 
     def get_datastreams(self):
         """
@@ -280,9 +277,25 @@ class FalkonryService:
 
     def off_datastream(self, datastream):
         """
-        To turn on datastream
+        To turn off datastream
         :param datastream: string
         """
         url = '/datastream/' + str(datastream) + '/off'
         response = self.http.post(url,"")
+        return response
+
+    def get_facts(self, assessment, options):
+        """
+        Get facts data for the assessment
+        :param assessment: string
+        :param options: dict
+        """
+
+        response_format=None
+        if options and 'format' in options and options['format'] is not None:
+            response_format = options['format']
+            options['format'] = None
+
+        url = '/assessment/' + str(assessment) + '/facts?' + urllib.urlencode(options)
+        response = self.http.downstream(url, response_format)
         return response

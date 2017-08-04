@@ -11,7 +11,7 @@ class TestSchema(unittest.TestCase):
 
     # Add EntityMeta to a Datastream
     def test_add_entity_meta(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -57,7 +57,7 @@ class TestSchema(unittest.TestCase):
 
     # Get EntityMeta of a Datastream
     def test_get_entity_meta(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 

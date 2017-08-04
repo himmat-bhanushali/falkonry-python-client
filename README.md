@@ -42,6 +42,7 @@ $ pip install falkonryclient
     * Add facts data (csv format) from a stream to  Assessment
     * Get Historian Output from Assessment
     * Get Streaming Output
+    * Get Facts Data
     * Datastream On (Start live monitoring of datastream)
     * Datastream Off (Stop live monitoring of datastream)
 
@@ -757,7 +758,7 @@ from falkonryclient import schemas as Schemas
 falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
 assessmentId = 'id of the datastream'
 
-options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00.000Z','responseFormat':'application/json'}
+options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00.000Z','format':'application/json'}
 
 response = fclient.get_historical_output(assessment, options)
 
@@ -770,7 +771,7 @@ if response.status_code is 202:
     #get id from the tracker
     trackerId = trackerResponse.get_id()
     #use this tracker for checking the status of the process.
-    options = {"tarckerId": trackerId, "responseFormat":"application/json"}
+    options = {"tarckerId": trackerId, "format":"application/json"}
     newResponse = fclient.get_historical_output(assessment, options)
     '''if status is 202 call the same request again
     if status is 200, output data will be present in httpResponse.response field'''
@@ -790,6 +791,20 @@ options = {"format":"text/csv"}
 stream    = falkonry.get_output(assessmentId, options)
 for event in stream.events():
     print(json.dumps(json.loads(event.data)))
+```
+
+
+#### Get Facts Data
+```python
+import os, sys
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+assessmentId = 'id of the datastream'
+options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00.000Z','format':'application/json',}
+response = falkonry.get_facts(assessmentId, options)
+print(response.text)
 ```
 
 #### Datastream On (Start live monitoring of datastream)

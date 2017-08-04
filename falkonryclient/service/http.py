@@ -50,11 +50,16 @@ class HttpService:
             verify=False
         )
         if response.status_code == 200:
-            return json.loads(response.content)
+            try:
+                return json.loads(response.content)
+            except Exception as error:
+                return response.content
         elif response.status_code == 401:
             raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
             raise Exception(response.content)
+
+
 
     def post(self, url, entity):
         """

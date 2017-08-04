@@ -12,7 +12,7 @@ class TestAddDataStream(unittest.TestCase):
 
     # Add historical input data (json format) from a stream to Datastream (Used for model revision)
     def test_add_historical_json_data_stream(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -52,7 +52,7 @@ class TestAddDataStream(unittest.TestCase):
 
     # Add historical input data (csv format) from a stream to Datastream (Used for model revision)
     def test_add_historical_csv_data_stream(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -94,7 +94,7 @@ class TestAddDataStream(unittest.TestCase):
     @unittest.skip("streaming can only be done once ")
     # Streaming data can only be sent to datastream if datastream is live. So make sure that datastream is live first
     def test_add_streaming_csv_data_stream(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastreamId = 'datstream-id' #id if the datastream which is live
         try:
             data = io.open('./data.csv')
@@ -110,7 +110,7 @@ class TestAddDataStream(unittest.TestCase):
     @unittest.skip("streaming can only be done once ")
     # Streaming data can only be sent to datastream if datastream is live. So make sure that datastream is live first
     def test_add_streaming_json_data_stream(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastreamId = 'datstream-id' #id if the datastream which is live
         try:
             data = io.open('./data.json')
