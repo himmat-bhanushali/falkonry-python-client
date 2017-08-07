@@ -312,7 +312,7 @@ class FalkonryService:
             response_format = options['format']
             options['format'] = None
 
-        url = '/datastream/' + str(datastream) + '/data?' + urllib.urlencode(options)
+        url = '/datastream/' + str(datastream) + '/data'
         response = self.http.downstream(url, response_format)
         return response
 
