@@ -299,3 +299,20 @@ class FalkonryService:
         url = '/assessment/' + str(assessment) + '/facts?' + urllib.urlencode(options)
         response = self.http.downstream(url, response_format)
         return response
+
+    def get_datastream_data(self, datastream, options):
+        """
+        Get input data for the datastream
+        :param datastream: string
+        :param options: dict
+        """
+
+        response_format=None
+        if options and 'format' in options and options['format'] is not None:
+            response_format = options['format']
+            options['format'] = None
+
+        url = '/datastream/' + str(datastream) + '/data?' + urllib.urlencode(options)
+        response = self.http.downstream(url, response_format)
+        return response
+

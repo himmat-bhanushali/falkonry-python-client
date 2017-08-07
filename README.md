@@ -43,6 +43,7 @@ $ pip install falkonryclient
     * Get Historian Output from Assessment
     * Get Streaming Output
     * Get Facts Data
+    * Get Input Data of Datastream
     * Datastream On (Start live monitoring of datastream)
     * Datastream Off (Stop live monitoring of datastream)
 
@@ -801,11 +802,37 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
-assessmentId = 'id of the datastream'
+assessmentId = 'id of the assessment'
 options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00.000Z','format':'application/json',}
 response = falkonry.get_facts(assessmentId, options)
 print(response.text)
 ```
+
+#### Get Input Data of Datastream
+```python
+import os, sys
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+datastreamId = 'id of the datastream'
+options = {'format':"application/json"}
+response = fclient.get_datastream_data(datastream, options)
+pprint(response.text)
+```
+```python
+import os, sys
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+datastreamId = 'id of the datastream'
+options = {'format':"text/csv"}
+response = fclient.get_datastream_data(datastream, options)
+pprint(response.text)
+```
+
+
 
 #### Datastream On (Start live monitoring of datastream)
 ```python

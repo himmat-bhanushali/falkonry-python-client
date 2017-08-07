@@ -16,7 +16,7 @@ class TestAssessmentGetFacts(unittest.TestCase):
         try:
             response = fclient.get_facts(assessment, {})
             pprint(response.text)
-            self.assertEqual(len(response.text)==0,True, 'Invalid facts response')
+            self.assertEqual(len(response.text)==0,False, 'Invalid facts response')
         except Exception as e:
             print(e.message)
 
@@ -27,7 +27,7 @@ class TestAssessmentGetFacts(unittest.TestCase):
             options = {'startTime':'2007-01-01T01:00:00.000Z','endTime':'2017-06-13T01:00:00.000Z','model':'3'}
             response = fclient.get_facts(assessment, options)
             pprint(response.text)
-            self.assertEqual(len(response.text)==0,True, 'Invalid facts response')
+            self.assertEqual(len(response.text)==0,False, 'Invalid facts response')
         except Exception as e:
             print(e.message)
 
