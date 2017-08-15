@@ -1,5 +1,8 @@
 # Release Log
 
+### 1.0.0
+* [Updated] New API integration. Refer to readme.
+
 ### 0.2.9
 * Simplifying output streaming.
 
