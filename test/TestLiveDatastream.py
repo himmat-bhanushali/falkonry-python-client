@@ -12,7 +12,7 @@ class TestLiveDatastream(unittest.TestCase):
 
     # Datastream On (Start live monitoring of datastream)
     def test_turn_datstream_on(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -60,7 +60,7 @@ class TestLiveDatastream(unittest.TestCase):
 
     # Datastream Off (Stop live monitoring of datastream)
     def test_turn_datstream_off(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -89,7 +89,7 @@ class TestLiveDatastream(unittest.TestCase):
             self.assertEqual(fieldResponse.get_entityName(),response.get_name(),'Invalid entity name object after creation')
 
             timeResponse = fieldResponse.get_time()
-            self.assertEqual(isinstance(timeResponse, Schemas.Time), True, 'Invalid time object after creation')
+
             self.assertEqual(timeResponse.get_zone(), time.get_zone(), 'Invalid zone object after creation')
             self.assertEqual(timeResponse.get_identifier(), time.get_identifier(), 'Invalid time identifier object after creation')
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')

@@ -42,6 +42,8 @@ $ pip install falkonryclient
     * Add facts data (csv format) from a stream to  Assessment
     * Get Historian Output from Assessment
     * Get Streaming Output
+    * Get Facts Data
+    * Get Input Data of Datastream
     * Datastream On (Start live monitoring of datastream)
     * Datastream Off (Stop live monitoring of datastream)
 
@@ -214,7 +216,7 @@ datastream.set_inputs(inputs)
 createdDatastream = falkonry.create_datastream(datastream)
 ```
 
-#### Create Datastream for wide style data from a multiple entities
+#### Create Datastream for wide style data from multiple entities
 
 Data :
 
@@ -757,11 +759,11 @@ from falkonryclient import schemas as Schemas
 falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
 assessmentId = 'id of the datastream'
 
-options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00.000Z','responseFormat':'application/json'}
+options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00.000Z','format':'application/json'}
 
 response = fclient.get_historical_output(assessment, options)
 
-'''If data is not readily available then, a tracker id will be sent with 202 status code. While falkonry will genrate ouptut data
+'''If data is not readily available then, a tracker id will be sent with 202 status code. While falkonry will generate output data
  Client should do timely pooling on the using same method, sending tracker id (__id) in the query params
  Once data is available server will response with 200 status code and data in json/csv format.'''
 
@@ -770,7 +772,7 @@ if response.status_code is 202:
     #get id from the tracker
     trackerId = trackerResponse.get_id()
     #use this tracker for checking the status of the process.
-    options = {"tarckerId": trackerId, "responseFormat":"application/json"}
+    options = {"tarckerId": trackerId, "format":"application/json"}
     newResponse = fclient.get_historical_output(assessment, options)
     '''if status is 202 call the same request again
     if status is 200, output data will be present in httpResponse.response field'''
@@ -786,10 +788,51 @@ from falkonryclient import schemas as Schemas
 
 falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
 assessmentId = 'id of the datastream'
-stream    = falkonry.get_output(assessmentId)
+options = {"format":"text/csv"}
+stream    = falkonry.get_output(assessmentId, options)
 for event in stream.events():
     print(json.dumps(json.loads(event.data)))
 ```
+
+
+#### Get Facts Data
+```python
+import os, sys
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+assessmentId = 'id of the assessment'
+options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00.000Z','format':'application/json',}
+response = falkonry.get_facts(assessmentId, options)
+print(response.text)
+```
+
+#### Get Input Data of Datastream
+```python
+import os, sys
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+datastreamId = 'id of the datastream'
+options = {'format':"application/json"}
+response = fclient.get_datastream_data(datastream, options)
+pprint(response.text)
+```
+```python
+import os, sys
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+datastreamId = 'id of the datastream'
+options = {'format':"text/csv"}
+response = fclient.get_datastream_data(datastream, options)
+pprint(response.text)
+```
+
+
 
 #### Datastream On (Start live monitoring of datastream)
 ```python
@@ -800,7 +843,7 @@ from falkonryclient import schemas as Schemas
 falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
 datastreamId = 'id of the datastream'
 
-# Starts live monitoring of datastream. For live monitoring datastream must have atleast one assessment with active model. 
+# Starts live monitoring of datastream. For live monitoring, datastream must have at least one assessment with an active model. 
 response = falkonry.on_datastream(datastreamId)
 ```
 

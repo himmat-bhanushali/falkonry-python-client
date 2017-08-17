@@ -12,7 +12,7 @@ class TestCreateAssessment(unittest.TestCase):
 
     # Create Assessment
     def test_create_assessment(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -72,7 +72,7 @@ class TestCreateAssessment(unittest.TestCase):
 
     # Retrieve Assessments
     def test_get_assessments(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -140,7 +140,7 @@ class TestCreateAssessment(unittest.TestCase):
 
     # Retrieve Assessment by Id
     def test_get_assessment_by_id(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -208,7 +208,7 @@ class TestCreateAssessment(unittest.TestCase):
 
     # Delete Assessment
     def test_delete_assessment(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 

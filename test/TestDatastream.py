@@ -13,7 +13,7 @@ class TestDatastream(unittest.TestCase):
 
     # Create datastream without any signals
     def test_create_standalone_datastream(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -58,7 +58,7 @@ class TestDatastream(unittest.TestCase):
 
     # Create Datastream for narrow/historian style data from a single entity
     def test_create_datastream_narrow_style_single_entity(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datasource = Schemas.Datasource()
         field = Schemas.Field()
@@ -111,7 +111,7 @@ class TestDatastream(unittest.TestCase):
 
     # Create Datastream for narrow/historian style data from a multiple entities
     def test_create_datastream_narrow_style_multiple_entity(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datasource = Schemas.Datasource()
         field = Schemas.Field()
@@ -164,7 +164,7 @@ class TestDatastream(unittest.TestCase):
 
     # Create Datastream for wide style data from a single entity
     def test_create_datastream_wide_style_single_entity(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datasource = Schemas.Datasource()
         field = Schemas.Field()
@@ -242,7 +242,7 @@ class TestDatastream(unittest.TestCase):
 
     # Create Datastream for wide style data from a multiple entities
     def test_create_datastream_wide_style_multiple_entity(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datasource = Schemas.Datasource()
         field = Schemas.Field()
@@ -321,7 +321,7 @@ class TestDatastream(unittest.TestCase):
 
     # Retrieve Datastreams
     def test_get_datastream_list(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -371,7 +371,7 @@ class TestDatastream(unittest.TestCase):
 
     # Retrieve Datastream by Id
     def test_get_datastream_by_id(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -421,7 +421,7 @@ class TestDatastream(unittest.TestCase):
 
     # Delete Datastream
     def test_delete_datastream_by_id(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 

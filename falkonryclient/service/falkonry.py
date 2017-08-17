@@ -14,6 +14,7 @@ from falkonryclient.helper import utils as Utils
 from cStringIO import StringIO
 import json
 import sseclient
+import urllib
 
 """
 FalkonryService
@@ -23,7 +24,7 @@ FalkonryService
 
 class FalkonryService:
 
-    def __init__(self, host, token):
+    def __init__(self, host, token, options):
         """
         constructor
         :param host: host address of Falkonry service
@@ -31,7 +32,7 @@ class FalkonryService:
         """
         self.host  = host
         self.token = token
-        self.http  = HttpService(host, token)
+        self.http  = HttpService(host, token, options)
 
     def get_datastreams(self):
         """
@@ -80,7 +81,7 @@ class FalkonryService:
 
     def get_assessment(self, assessment):
         """
-        To get list of Assessments
+        To get Assessment by id
         """
         response = self.http.get('/Assessment/' + str(assessment))
         assessment = Schemas.Assessment(assessment=response)
@@ -126,7 +127,7 @@ class FalkonryService:
         form_data = {
             'files': {
                 'data': (
-                    Utils.random_string(10)+('.json' if data_type is 'json' else '.csv'),
+                    Utils.random_string(10)+('.json' if data_type == 'json' else '.csv'),
                     StringIO(data),
                     'text/plain;charset=UTF-8',
                     {'Expires': '0'}
@@ -176,7 +177,7 @@ class FalkonryService:
         form_data = {
             'files': {
                 'data': (
-                    Utils.random_string(10)+('.json' if data_type is 'json' else '.csv'),
+                    Utils.random_string(10)+('.json' if data_type == 'json' else '.csv'),
                     data,
                     'text/plain;charset=UTF-8',
                     {'Expires': '0'}
@@ -198,7 +199,7 @@ class FalkonryService:
         form_data = {
             'files': {
                 'data': (
-                    Utils.random_string(10)+('.json' if data_type is 'json' else '.csv'),
+                    Utils.random_string(10)+('.json' if data_type == 'json' else '.csv'),
                     data,
                     'text/plain;charset=UTF-8',
                     {'Expires': '0'}
@@ -208,14 +209,18 @@ class FalkonryService:
         response = self.http.upstream(url,form_data)
         return response
 
-    def get_output(self, assessment):
+    def get_output(self, assessment, options):
         """
         To get output of a Assessment
         :param assessment: string
         """
+        responseFormat=None
+        if options and 'format' in options and options['format'] is not None:
+            responseFormat = options['format']
+            options['format'] = None
 
         url = '/assessment/' + str(assessment) + '/output'
-        response = self.http.downstream(url)
+        response = self.http.downstream(url, responseFormat)
         stream = sseclient.SSEClient(response)
         return stream
 
@@ -225,37 +230,13 @@ class FalkonryService:
         :param assessment: string
         :param options: dict
         """
+        responseFormat=None
+        if options and 'format' in options and options['format'] is not None:
+            responseFormat = options['format']
+            options['format'] = None
 
-        reqParams = ''
-        firstQueryParams = True
-
-        if 'trackerId' in options and options['trackerId'] is not None:
-            firstQueryParams = False
-            reqParams += '?trackerId='+str(options['trackerId'])
-
-        if 'modelIndex' in options and options['modelIndex'] is not None:
-            if firstQueryParams:
-                firstQueryParams = False
-                reqParams += '?modelIndex='+str(options['modelIndex'])
-            else:
-                reqParams += '&modelIndex='+str(options['modelIndex'])
-
-        if 'startTime' in  options and options['startTime'] is not None:
-            if firstQueryParams:
-                firstQueryParams = False
-                reqParams += '?startTime='+str(options['startTime'])
-            else:
-                reqParams += '&startTime='+str(options['startTime'])
-
-        if 'endTime' in options and options['endTime'] is not None:
-            if firstQueryParams:
-                firstQueryParams = False
-                reqParams += '?endTime='+str(options['endTime'])
-            else:
-                reqParams += '&endTime='+str(options['endTime'])
-
-        url = '/assessment/' + str(assessment) + '/output' + reqParams
-        response = self.http.downstream(url)
+        url = '/assessment/' + str(assessment) + '/output?' + urllib.urlencode(options)
+        response = self.http.downstream(url, responseFormat)
         return response
 
     def add_entity_meta(self, datastream, options, data):
@@ -296,9 +277,42 @@ class FalkonryService:
 
     def off_datastream(self, datastream):
         """
-        To turn on datastream
+        To turn off datastream
         :param datastream: string
         """
         url = '/datastream/' + str(datastream) + '/off'
         response = self.http.post(url,"")
         return response
+
+    def get_facts(self, assessment, options):
+        """
+        Get facts data for the assessment
+        :param assessment: string
+        :param options: dict
+        """
+
+        response_format=None
+        if options and 'format' in options and options['format'] is not None:
+            response_format = options['format']
+            options['format'] = None
+
+        url = '/assessment/' + str(assessment) + '/facts?' + urllib.urlencode(options)
+        response = self.http.downstream(url, response_format)
+        return response
+
+    def get_datastream_data(self, datastream, options):
+        """
+        Get input data for the datastream
+        :param datastream: string
+        :param options: dict
+        """
+
+        response_format=None
+        if options and 'format' in options and options['format'] is not None:
+            response_format = options['format']
+            options['format'] = None
+
+        url = '/datastream/' + str(datastream) + '/data'
+        response = self.http.downstream(url, response_format)
+        return response
+

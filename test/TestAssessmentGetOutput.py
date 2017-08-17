@@ -13,10 +13,10 @@ class TestAssessmentGetOutput(unittest.TestCase):
 
     @unittest.skip("streaming can only be done once ")
     def test_get_assessment_output(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
 
         try:
-            stream = fclient.get_output(assessment)
+            stream = fclient.get_output(assessment, {})
             for event in stream.events():
                 print(json.dumps(json.loads(event.data)))
 
@@ -26,7 +26,7 @@ class TestAssessmentGetOutput(unittest.TestCase):
 
     @unittest.skip("streaming can only be done once ")
     def test_get_assessment_historical_output(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         try:
             options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2013-06-13T01:00:00.000Z','responseFormat':'application/json'}
             response = fclient.get_historical_output(assessment, options)

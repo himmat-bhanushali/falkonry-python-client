@@ -106,6 +106,10 @@ class Datastream:
     def get_field(self):
         return self.raw['field'] if 'field' in self.raw else None
 
+
+    def get_live(self):
+        return self.raw['live'] if 'live' in self.raw else None
+
     def to_json(self):
         inputs = []
         for input in self.get_inputs():

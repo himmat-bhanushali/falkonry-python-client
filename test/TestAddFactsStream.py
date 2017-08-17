@@ -1,3 +1,4 @@
+import io
 import unittest
 import random
 
@@ -10,9 +11,9 @@ class TestAddFacts(unittest.TestCase):
     def setUp(self):
         pass
 
-    # Add facts data (json format) to Assessment
+    # Add facts data (json format) from a stream to Assessment
     def test_add_json_facts(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -42,7 +43,7 @@ class TestAddFacts(unittest.TestCase):
 
             try:
                 resp_assessment = fclient.create_assessment(asmtRequest)
-                data = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
+                data = io.open('./factsData.json')
 
                 response = fclient.add_facts(resp_assessment.get_id(), 'json', {}, data)
                 # tear down
@@ -50,7 +51,6 @@ class TestAddFacts(unittest.TestCase):
                     fclient.delete_assessment(resp_assessment.get_id())
                     fclient.delete_datastream(datastreamResponse.get_id())
                 except Exception as e:
-                    print(e.message)
                     pass
             except Exception as e:
                 print(e.message)
@@ -63,11 +63,9 @@ class TestAddFacts(unittest.TestCase):
             print(e.message)
             self.assertEqual(0,1,"Cannot add data")
 
-#
-
-    # Add facts data (csv format) to Assessment
+    # Add facts data (csv format) from a stream to  Assessment
     def test_add_csv_facts(self):
-        fclient = FClient(host=host, token=token)
+        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -96,7 +94,7 @@ class TestAddFacts(unittest.TestCase):
 
             try:
                 resp_assessment = fclient.create_assessment(asmtRequest)
-                data = "time,end,car,Health\n2011-03-31T00:00:00Z,2011-04-01T00:00:00Z,IL9753,Normal\n2011-03-31T00:00:00Z,2011-04-01T00:00:00Z,HI3821,Normal"
+                data = io.open('./factsData.csv')
                 response = fclient.add_facts(resp_assessment.get_id(), 'csv', {}, data)
                 # tear down
                 try:
@@ -105,7 +103,6 @@ class TestAddFacts(unittest.TestCase):
                 except Exception as e:
                     pass
             except Exception as e:
-                print(e.message)
                 try:
                     fclient.delete_datastream(datastreamResponse.get_id())
                 except Exception as e:
