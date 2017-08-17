@@ -1,5 +1,8 @@
 # Release Log
 
+### 1.0.1
+* Support for downloading input data and fact data.
+
 ### 1.0.0
 * [Updated] New API integration. Refer to readme.
 
