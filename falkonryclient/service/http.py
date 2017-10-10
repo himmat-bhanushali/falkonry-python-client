@@ -87,6 +87,8 @@ class HttpService:
         )
         if response.status_code == 201:
             return json.loads(response.content)
+        elif response.status_code == 409:
+            return json.loads(response.content)  
         elif response.status_code == 401:
             raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
