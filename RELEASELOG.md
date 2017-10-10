@@ -1,5 +1,8 @@
 # Release Log
 
+### 1.0.2
+* Minor bug fix
+
 ### 1.0.1
 * Support for downloading input data and fact data.
 
