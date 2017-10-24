@@ -73,6 +73,13 @@ class Datastream:
     def get_inputs(self):
         return self.raw['inputList'] if 'inputList' in self.raw else []
 
+    def get_time_precision(self):
+        return self.raw['timePrecision'] if 'timePrecision' in self.raw else None
+
+    def set_time_precision(self, timePrecision):
+        self.raw['timePrecision'] = timePrecision
+        return self
+
     def set_inputs(self, inputs):
         input_list = []
         for input in inputs:

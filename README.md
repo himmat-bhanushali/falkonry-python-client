@@ -18,6 +18,7 @@ $ pip install falkonryclient
     * Create Datastream for narrow/historian style data from a multiple entities
     * Create Datastream for wide style data from a single entity
     * Create Datastream for wide style data from a multiple entities
+    * Create Datastream with microseconds precision
     * Retrieve Datastreams
     * Retrieve Datastream by Id
     * Delete Datastream
@@ -277,6 +278,55 @@ datastream.set_inputs(inputs)
         
 #create Datastream
 createdDatastream = falkonry.create_datastream(datastream)
+```
+
+#### Create Datastream with microseconds precision
+
+Data :
+
+```
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal1", "value" : 3.4}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal2", "value" : 9.3}
+
+    or
+
+    time, tag, value
+    2016-03-01 01:01:01, signal1, 3.4
+    2016-03-01 01:01:02, signal2, 9.3
+
+```
+
+Usage :
+    
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+datastream = Schemas.Datastream()
+datasource = Schemas.Datasource()
+field = Schemas.Field()
+time = Schemas.Time()
+signal = Schemas.Signal()
+
+datastream.set_name('Motor Health' + str(random.random()))  # set name of the Datastream
+datastream.set_time_precision("micro")                      # this is use to store your data in different date time format. If input data precision is in micorseconds then set "micro" else "millis". If not sent then it will be "millis"
+time.set_zone("GMT")                                        # set timezone of the datastream
+time.set_identifier("time")                                 # set time identifier of the datastream
+time.set_format("iso_8601")                                 # set time format of the datastream
+field.set_time(time)            
+signal.set_delimiter(None)                                  # set delimiter to None 
+signal.set_tagIdentifier("tag")                             # set tag identifier
+signal.set_valueIdentifier("value")                         # set value identifier
+signal.set_isSignalPrefix(False)                            # as this is single entity, set signal prefix flag to false
+field.set_signal(signal)                                    # set signal in field
+datasource.set_type("STANDALONE")                           # set datastource type in datastream
+datastream.set_datasource(datasource)
+datastream.set_field(field)
+        
+#create Datastream
+createdDatastream = fclient.create_datastream(datastream)
 ```
 
 #### Retrieve Datastreams

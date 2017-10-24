@@ -465,6 +465,61 @@ class TestDatastream(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
+    # Create Datastream microseconds precision
+    def test_create_datastream_narrow_style_multiple_entity(self):
+        fclient = FClient(host=host, token=token,options=None)
+        datastream = Schemas.Datastream()
+        datasource = Schemas.Datasource()
+        field = Schemas.Field()
+        time = Schemas.Time()
+        signal = Schemas.Signal()
+
+        datastream.set_name('Motor Health' + str(random.random()))  # set name of the Datastream
+        datastream.set_time_precision('micro')                      # set 'micro' for microseconds precision
+        time.set_zone("GMT")                                        # set timezone of the datastream
+        time.set_identifier("time")                                 # set time identifier of the datastream
+        time.set_format("iso_8601")                                 # set time format of the datastream
+        field.set_time(time)
+        signal.set_delimiter("_")                                   # set delimiter to None
+        signal.set_tagIdentifier("tag")                             # set tag identifier
+        signal.set_valueIdentifier("value")                         # set value identifier
+        signal.set_isSignalPrefix(False)                            # as this is single entity, set signal prefix flag to false
+        field.set_signal(signal)                                    # set signal in field
+        datasource.set_type("STANDALONE")                           # set datastource type in datastream
+        datastream.set_datasource(datasource)
+        datastream.set_field(field)
+
+        try:
+            # create Datastream
+            response = fclient.create_datastream(datastream)
+            self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
+            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
+            fieldResponse = response.get_field()
+            self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
+            self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
+            self.assertEqual(fieldResponse.get_entityName(),None,'Invalid entity name object after creation')
+            signalResponse = fieldResponse.get_signal()
+            self.assertEqual(signalResponse.get_delimiter(),signal.get_delimiter(), 'Invalid delimiter after object creation')
+            self.assertEqual(signalResponse.get_tagIdentifier(),signal.get_tagIdentifier(), 'Invalid tag identifier after object creation')
+            self.assertEqual(signalResponse.get_valueIdentifier(),signal.get_valueIdentifier(), 'Invalid value identifier after object creation')
+            self.assertEqual(signalResponse.get_isSignalPrefix(),signal.get_isSignalPrefix(), 'Invalid is signal prefix after object creation')
+            timeResponse = fieldResponse.get_time()
+            self.assertEqual(isinstance(timeResponse, Schemas.Time), True, 'Invalid time object after creation')
+            self.assertEqual(timeResponse.get_zone(), time.get_zone(), 'Invalid zone object after creation')
+            self.assertEqual(timeResponse.get_identifier(), time.get_identifier(), 'Invalid time identifier object after creation')
+            self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
+            self.assertEqual(response.get_time_precision(), datastream.get_time_precision(), 'Invalid time precision after creation')
+
+            # tear down
+            try:
+                fclient.delete_datastream(response.get_id())
+            except Exception as e:
+                pass
+        except Exception as e:
+            print(e.message)
+            self.assertEqual(0, 1, 'Cannot create datastream')
+
 if __name__ == '__main__':
     if __package__ is None:
         import sys
