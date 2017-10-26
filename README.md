@@ -61,14 +61,14 @@ $ pip install falkonryclient
 Data :
 
 ```
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal1", "value" : 3.4}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal2", "value" : 9.3}
+    {"time" :"2016-03-01T01:01:01Z", "tag" : "signal1", "value" : 3.4}
+    {"time" :"2016-03-01T01:01:02Z", "tag" : "signal2", "value" : 9.3}
 
     or
 
     time, tag, value
-    2016-03-01 01:01:01, signal1, 3.4
-    2016-03-01 01:01:02, signal2, 9.3
+    2016-03-01T01:01:01Z, signal1, 3.4
+    2016-03-01T01:01:02Z, signal2, 9.3
 
 ```
 
@@ -79,7 +79,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 datastream = Schemas.Datastream()
 datasource = Schemas.Datasource()
 field = Schemas.Field()
@@ -130,7 +130,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 datastream = Schemas.Datastream()
 datasource = Schemas.Datasource()
 field = Schemas.Field()
@@ -140,7 +140,7 @@ signal = Schemas.Signal()
 datastream.set_name('Motor Health' + str(random.random()))  # set name of the Datastream
 time.set_zone("GMT")                                        # set timezone of the datastream
 time.set_identifier("time")                                 # set time identifier of the datastream
-time.set_format("iso_8601")                                 # set time format of the datastream
+time.set_format("YYYY-MM-DD HH:mm:ss")                      # set time format of the datastream
 field.set_time(time)            
 signal.set_delimiter("_")                                   # set delimiter
 signal.set_tagIdentifier("tag")                             # set tag identifier
@@ -177,7 +177,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 datastream = Schemas.Datastream()
 datasource = Schemas.Datasource()
 field = Schemas.Field()
@@ -205,7 +205,7 @@ inputs.append(input3)
 
 time.set_zone("GMT")                                        # set timezone of the datastream
 time.set_identifier("time")                                 # set time identifier of the datastream
-time.set_format("iso_8601")                                 # set time format of the datastream
+time.set_format("millis")                                   # set time format of the datastream
 field.set_time(time)            
 field.set_signal(signal)                                    # set signal in field
 datasource.set_type("STANDALONE")                           # set datastource type in datastream
@@ -239,7 +239,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 datastream = Schemas.Datastream()
 datasource = Schemas.Datasource()
 field = Schemas.Field()
@@ -267,7 +267,7 @@ inputs.append(input3)
 
 time.set_zone("GMT")                                        # set timezone of the datastream
 time.set_identifier("time")                                 # set time identifier of the datastream
-time.set_format("iso_8601")                                 # set time format of the datastream
+time.set_format("millis")                                   # set time format of the datastream
 field.set_time(time)            
 field.set_signal(signal)                                    # set signal in field
 field.set_entityIdentifier("thing")                         # set entity identifier as "thing"
@@ -303,7 +303,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 datastream = Schemas.Datastream()
 datasource = Schemas.Datasource()
 field = Schemas.Field()
@@ -314,7 +314,7 @@ datastream.set_name('Motor Health' + str(random.random()))  # set name of the Da
 datastream.set_time_precision("micro")                      # this is use to store your data in different date time format. If input data precision is in micorseconds then set "micro" else "millis". If not sent then it will be "millis"
 time.set_zone("GMT")                                        # set timezone of the datastream
 time.set_identifier("time")                                 # set time identifier of the datastream
-time.set_format("iso_8601")                                 # set time format of the datastream
+time.set_format("YYYY-MM-DD HH:mm:ss")                      # set time format of the datastream
 field.set_time(time)            
 signal.set_delimiter(None)                                  # set delimiter to None 
 signal.set_tagIdentifier("tag")                             # set tag identifier
@@ -336,7 +336,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
         
 #return list of Datastreams
 datastreams = falkonry.get_datastreams()
@@ -349,7 +349,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 datastreamId = 'id of the datastream'
         
@@ -364,7 +364,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 datastreamId = 'id of the datastream'
         
@@ -386,7 +386,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry = Falkonry('http://localhost:8080', 'auth-token')
 data = [{"sourceId": "testId","label": "testName","path": "root/path"}]
 datastreamId = 'id of the datastream'
 
@@ -408,7 +408,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 
 entityMetaResponse = fclient.get_entity_meta(datastreamId)
@@ -432,7 +432,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 datastreamId = 'id of the datastream'
 
@@ -464,7 +464,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 datastreamId = 'id of the datastream'
 
@@ -496,7 +496,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 datastreamId = 'id of the datastream'
 
@@ -525,7 +525,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 datastreamId = 'id of the datastream'
 
@@ -555,7 +555,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 datastreamId = 'id of the datastream'
 
@@ -586,7 +586,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 datastreamId = 'id of the datastream'
 
@@ -617,7 +617,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 datastreamId = 'id of the datastream'
 
@@ -645,7 +645,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 datastreamId = 'id of the datastream'
 
@@ -665,7 +665,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 datastreamId = 'id of the datastream'
 
@@ -687,7 +687,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 assessmentResponse = fclient.get_assessments()
 ```
@@ -701,7 +701,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 assessmentId = 'id of the datastream'
 assessmentResponse = fclient.get_assessment(assessmentId)
@@ -716,7 +716,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 assessmentId = 'id of the datastream'
 assessmentResponse = fclient.delete_assessment(assessmentId)
@@ -731,7 +731,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry   = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 assessmentId = 'id of the datastream'
 assessmentResponse = fclient.get_assessment(assessmentId)
@@ -748,7 +748,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry      = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry      = Falkonry('http://localhost:8080', 'auth-token')
 assessmentId = 'id of the datastream'
 data          = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
 inputResponse = falkonry.add_verification(assessmentId, 'json', {}, data)
@@ -761,7 +761,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
-falkonry      = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry      = Falkonry('http://localhost:8080', 'auth-token')
 assessmentId = 'id of the datastream'
 data          = 'time,car,end,Health' + "\n"
                  + '2011-03-26T12:00:00Z,HI3821,2012-06-01T00:00:00Z,Normal' + "\n"
@@ -777,7 +777,7 @@ import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry = Falkonry('http://localhost:8080', 'auth-token')
 assessmentId = 'id of the datastream'
 stream   = io.open('./data.json')
 
@@ -792,7 +792,7 @@ import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry = Falkonry('http://localhost:8080', 'auth-token')
 assessmentId = 'id of the datastream'
 stream   = io.open('./data.csv')
 
@@ -806,7 +806,7 @@ import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry  = Falkonry('http://localhost:8080', 'auth-token')
 assessmentId = 'id of the datastream'
 
 options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00.000Z','format':'application/json'}
@@ -836,7 +836,7 @@ import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry  = Falkonry('http://localhost:8080', 'auth-token')
 assessmentId = 'id of the datastream'
 options = {"format":"text/csv"}
 stream    = falkonry.get_output(assessmentId, options)
@@ -851,7 +851,7 @@ import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry  = Falkonry('http://localhost:8080', 'auth-token')
 assessmentId = 'id of the assessment'
 options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00.000Z','format':'application/json',}
 response = falkonry.get_facts(assessmentId, options)
@@ -864,7 +864,7 @@ import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry  = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 options = {'format':"application/json"}
 response = fclient.get_datastream_data(datastream, options)
@@ -875,7 +875,7 @@ import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry  = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 options = {'format':"text/csv"}
 response = fclient.get_datastream_data(datastream, options)
@@ -890,7 +890,7 @@ import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry  = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 
 # Starts live monitoring of datastream. For live monitoring, datastream must have at least one assessment with an active model. 
@@ -903,7 +903,7 @@ import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
-falkonry  = Falkonry('https://sandbox.falkonry.ai', 'auth-token')
+falkonry  = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 
 # Stops live monitoring of datastream.
@@ -912,7 +912,7 @@ response = falkonry.off_datastream(datastreamId)
 
 ## Docs
 
-   [Falkonry APIs](https://sandbox.falkonry.ai/api)
+   [Falkonry APIs](http://localhost:8080/api)
      
 ## Tests
 

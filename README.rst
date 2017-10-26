@@ -2,7 +2,7 @@
 
 |Build Status|
 
-This python client allows interaction with the Falkonry's Condition Prediction APIs. API documentation can be found here : https://sandbox.falkonry.io/api
+This python client allows interaction with the Falkonry's Condition Prediction APIs. API documentation can be found here : https://app.falkonry.io/api
 
 Documentation
 -------------

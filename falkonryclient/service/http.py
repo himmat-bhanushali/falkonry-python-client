@@ -27,7 +27,7 @@ class HttpService:
         """
         from requests.packages.urllib3.exceptions import InsecureRequestWarning
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-        self.host  = host if host is not None else "https://sandbox.falkonry.ai"
+        self.host  = host if host is not None else "https://app.falkonry.ai"
         self.token = token if token is not None else ""
         if options is not None and options['header'] is not None:
             self.sourceHeader = options['header']

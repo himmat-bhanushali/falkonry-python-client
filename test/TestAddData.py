@@ -23,7 +23,7 @@ class TestAddData(unittest.TestCase):
 
         time.set_zone("GMT")
         time.set_identifier("time")
-        time.set_format("iso_8601")
+        time.set_format("YYYY-MM-DD HH:mm:ss")
         field.set_signal(signal)
         datasource.set_type("STANDALONE")
         field.set_time(time)
@@ -63,7 +63,7 @@ class TestAddData(unittest.TestCase):
 
         time.set_zone("GMT")
         time.set_identifier("time")
-        time.set_format("iso_8601")
+        time.set_format("YYYY-MM-DD HH:mm:ss")
         field.set_signal(signal)
         datasource.set_type("STANDALONE")
         field.set_time(time)
