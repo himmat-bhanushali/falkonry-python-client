@@ -1,5 +1,8 @@
 # Release Log
 
+### 1.0.3
+* Support for time precision upto microseconds
+
 ### 1.0.2
 * Minor bug fix
 
