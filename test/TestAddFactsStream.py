@@ -43,9 +43,17 @@ class TestAddFacts(unittest.TestCase):
 
             try:
                 resp_assessment = fclient.create_assessment(asmtRequest)
-                data = io.open('./factsData.json')
+                data = io.open('./test/factsData.json')
 
-                response = fclient.add_facts(resp_assessment.get_id(), 'json', {}, data)
+                options = {
+                    'startTimeIdentifier': "time",
+                    'endTimeIdentifier': "end",
+                    'timeFormat': "iso_8601",
+                    'timeZone': time.get_zone(),
+                    # 'entityIdentifier': "car",
+                    'valueIdentifier': "Health"
+                }
+                response = fclient.add_facts_stream(resp_assessment.get_id(), 'json', options, data)
                 # tear down
                 try:
                     fclient.delete_assessment(resp_assessment.get_id())
@@ -94,8 +102,19 @@ class TestAddFacts(unittest.TestCase):
 
             try:
                 resp_assessment = fclient.create_assessment(asmtRequest)
-                data = io.open('./factsData.csv')
-                response = fclient.add_facts(resp_assessment.get_id(), 'csv', {}, data)
+                data = io.open('./test/factsData.csv')
+
+                options = {
+                    'startTimeIdentifier': "time",
+                    'endTimeIdentifier': "end",
+                    'timeFormat': "iso_8601",
+                    'timeZone': time.get_zone(),
+                    # 'entityIdentifier': "car",
+                    'valueIdentifier': "Health"
+                }
+
+
+                response = fclient.add_facts_stream(resp_assessment.get_id(), 'csv', options, data)
                 # tear down
                 try:
                     fclient.delete_assessment(resp_assessment.get_id())

@@ -145,7 +145,65 @@ class FalkonryService:
         :param options: dict
         :param data: string
         """
-        url = '/assessment/' + assessment + '/facts'
+        url = '/assessment/' + assessment + '/facts?'
+
+        firstReqParam = True
+
+        if 'startTimeIdentifier' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "startTimeIdentifier=" + str(options['startTimeIdentifier'])
+
+        if 'endTimeIdentifier' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "endTimeIdentifier=" + str(options['endTimeIdentifier'])
+
+        if 'timeFormat' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "timeFormat=" + str(options['timeFormat'])
+
+        if 'timeZone' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "timeZone=" + str(options['timeZone'])
+
+        if 'entityIdentifier' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "entityIdentifier=" + str(options['entityIdentifier'])
+
+        if 'valueIdentifier' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "valueIdentifier=" + str(options['valueIdentifier'])
+
+        if 'tagIdentifier' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "tagIdentifier=" + str(options['tagIdentifier'])
+
+        if 'additionalTag' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "additionalTag=" + str(options['additionalTag'])
         try:
             response = self.http.postData(url, data)
         except Exception as e:
@@ -195,7 +253,67 @@ class FalkonryService:
         :param options: dict
         :param data: Stream
         """
-        url = '/assessment/' + assessment + '/facts'
+
+        firstReqParam = True
+
+        url = '/assessment/' + assessment + '/facts?'
+
+        if 'startTimeIdentifier' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "startTimeIdentifier=" + str(options['startTimeIdentifier'])
+
+        if 'endTimeIdentifier' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "endTimeIdentifier=" + str(options['endTimeIdentifier'])
+
+        if 'timeFormat' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "timeFormat=" + str(options['timeFormat'])
+
+        if 'timeZone' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "timeZone=" + str(options['timeZone'])
+
+        if 'entityIdentifier' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "entityIdentifier=" + str(options['entityIdentifier'])
+
+        if 'valueIdentifier' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "valueIdentifier=" + str(options['valueIdentifier'])
+
+        if 'tagIdentifier' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "tagIdentifier=" + str(options['tagIdentifier'])
+
+        if 'additionalTag' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "additionalTag=" + str(options['additionalTag'])
+
         form_data = {
             'files': {
                 'data': (

@@ -703,7 +703,7 @@ from falkonryclient import schemas as Schemas
 #instantiate Falkonry
 falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
-assessmentId = 'id of the datastream'
+assessmentId = 'id of the assessment'
 assessmentResponse = fclient.get_assessment(assessmentId)
 ```
 
@@ -718,7 +718,7 @@ from falkonryclient import schemas as Schemas
 #instantiate Falkonry
 falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
-assessmentId = 'id of the datastream'
+assessmentId = 'id of the assessment'
 assessmentResponse = fclient.delete_assessment(assessmentId)
 ```
 
@@ -733,7 +733,7 @@ from falkonryclient import schemas as Schemas
 #instantiate Falkonry
 falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
-assessmentId = 'id of the datastream'
+assessmentId = 'id of the assessment'
 assessmentResponse = fclient.get_assessment(assessmentId)
 
 // aprioriConditionList 
@@ -741,7 +741,7 @@ conditionList = assessment.get_aprioriConditionList()
 
 ```
 
-#### Add facts data (json format) to Assessment
+#### Add facts data (json format) to Assessment of a multi entity datastream
     
 ```python
 from falkonryclient import client as Falkonry
@@ -749,12 +749,42 @@ from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
 falkonry      = Falkonry('http://localhost:8080', 'auth-token')
-assessmentId = 'id of the datastream'
-data          = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
-inputResponse = falkonry.add_verification(assessmentId, 'json', {}, data)
+assessmentId = 'id of the assessment'
+data          = '{"time" : "2011-03-26T12:00:00.000Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00.000Z", "Health" : "Normal"}'
+
+options = {
+        'startTimeIdentifier': "time",
+        'endTimeIdentifier': "end",
+        'timeFormat': "iso_8601",
+        'timeZone': time.get_zone(),
+        'entityIdentifier': "car",
+        'valueIdentifier': "Health"
+    }
+inputResponse = falkonry.add_facts(assessmentId, 'json', options, data)
 ```
 
-#### Add facts data (csv format) to Assessment
+#### Add facts data (json format) to Assessment of a single entity datastream
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry      = Falkonry('http://localhost:8080', 'auth-token')
+assessmentId = 'id of the assessment'
+data          = '{"time" : "2011-03-26T12:00:00.000Z", "end" : "2012-06-01T00:00:00.000Z", "Health" : "Normal"}'
+
+options = {
+        'startTimeIdentifier': "time",
+        'endTimeIdentifier': "end",
+        'timeFormat': "iso_8601",
+        'timeZone': time.get_zone(),
+        'valueIdentifier': "Health"
+    }
+inputResponse = falkonry.add_facts(assessmentId, 'json', options, data)
+```
+
+#### Add facts data (csv format) to Assessment of a multi entity datastream
     
 ```python
 from falkonryclient import client as Falkonry
@@ -762,41 +792,76 @@ from falkonryclient import schemas as Schemas
 
 #instantiate Falkonry
 falkonry      = Falkonry('http://localhost:8080', 'auth-token')
-assessmentId = 'id of the datastream'
+assessmentId = 'id of the assessment'
 data          = 'time,car,end,Health' + "\n"
-                 + '2011-03-26T12:00:00Z,HI3821,2012-06-01T00:00:00Z,Normal' + "\n"
-                 + '2014-02-10T23:00:00Z,HI3821,2014-03-20T12:00:00Z,Spalling';
+                 + '2011-03-26T12:00:00.000Z,HI3821,2012-06-01T00:00:00.000Z,Normal' + "\n"
+                 + '2014-02-10T23:00:00.000Z,HI3821,2014-03-20T12:00:00.000Z,Spalling';
 
-inputResponse = falkonry.add_facts(assessmentId, 'csv', {}, data)
+options = {
+        'startTimeIdentifier': "time",
+        'endTimeIdentifier': "end",
+        'timeFormat': "iso_8601",
+        'timeZone': time.get_zone(),
+        'entityIdentifier': "car",
+        'valueIdentifier': "Health"
+    }
+
+inputResponse = falkonry.add_facts(assessmentId, 'csv', options, data)
 ```
 
-#### Add facts data (json format) from a stream to Assessment
-    
+#### Add facts data (json format) from a stream to Assessment of a multi entity datastream
+Sample Facts json file
+    {"time" : "2011-03-26T12:00:00.000Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00.000Z", "Health" : "Normal"}
+    {"time" : "2014-02-10T23:00:00.000Z", "car" : "HI3821", "end" : "2014-03-20T12:00:00.000Z", "Health" : "Spalling"}
+
 ```python
 import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 falkonry = Falkonry('http://localhost:8080', 'auth-token')
-assessmentId = 'id of the datastream'
-stream   = io.open('./data.json')
+assessmentId = 'id of the assessment'
+stream   = io.open('./factsData.json')
 
-response = falkonry.add_facts_stream(assessmentId, 'json', {}, stream)
+options = {
+        'startTimeIdentifier': "time",
+        'endTimeIdentifier': "end",
+        'timeFormat': "iso_8601",
+        'timeZone': time.get_zone(),
+        'entityIdentifier': "car",
+        'valueIdentifier': "Health"
+    }
+
+response = falkonry.add_facts_stream(assessmentId, 'json', options, stream)
 
 ```
 
-#### Add facts data (csv format) from a stream to Assessment
-    
+#### Add facts data (csv format) from a stream to Assessment of a multi entity datastream
+Sample CSV Files
+time,car,end,Health
+2011-03-26T12:00:00.000Z,HI3821,2012-06-01T00:00:00.000Z,Normal
+2014-02-10T23:00:00.000Z,HI3821,2014-03-20T12:00:00.000Z,Spalling
+
 ```python
 import os, sys
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
+from falkonryclient import schemas as Schemas
 
 falkonry = Falkonry('http://localhost:8080', 'auth-token')
-assessmentId = 'id of the datastream'
-stream   = io.open('./data.csv')
+assessmentId = 'id of the assessment'
+stream   = io.open('./factsData.csv')
 
-response = falkonry.add_facts_stream(assessmentId, 'csv', {}, stream)
+options = {
+        'startTimeIdentifier': "time",
+        'endTimeIdentifier': "end",
+        'timeFormat': "iso_8601",
+        'timeZone': time.get_zone(),
+        'entityIdentifier': "car",
+        'valueIdentifier': "Health"
+    }
+
+response = falkonry.add_facts_stream(assessmentId, 'csv', options, stream)
 
 ```
 
@@ -807,7 +872,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 falkonry  = Falkonry('http://localhost:8080', 'auth-token')
-assessmentId = 'id of the datastream'
+assessmentId = 'id of the assessment'
 
 options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00.000Z','format':'application/json'}
 
@@ -837,7 +902,7 @@ from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
 
 falkonry  = Falkonry('http://localhost:8080', 'auth-token')
-assessmentId = 'id of the datastream'
+assessmentId = 'id of the assessment'
 options = {"format":"text/csv"}
 stream    = falkonry.get_output(assessmentId, options)
 for event in stream.events():

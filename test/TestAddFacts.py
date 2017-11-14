@@ -1,9 +1,11 @@
 import unittest
 import random
+import json
+
+
 
 host  = 'https://localhost:8080'  # host url
 token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
-
 
 class TestAddFacts(unittest.TestCase):
 
@@ -42,9 +44,18 @@ class TestAddFacts(unittest.TestCase):
 
             try:
                 resp_assessment = fclient.create_assessment(asmtRequest)
-                data = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
+                data = '{"time" : "2011-03-26T12:00:00.000Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00.000Z", "Health" : "Normal"}'
 
-                response = fclient.add_facts(resp_assessment.get_id(), 'json', {}, data)
+                options = {
+                    'startTimeIdentifier': "time",
+                    'endTimeIdentifier': "end",
+                    'timeFormat': "iso_8601",
+                    'timeZone': time.get_zone(),
+                    'entityIdentifier': "car",
+                    'valueIdentifier': "Health"
+                }
+
+                response = fclient.add_facts(resp_assessment.get_id(), 'json', options, data)
                 # tear down
                 try:
                     fclient.delete_assessment(resp_assessment.get_id())
@@ -67,6 +78,7 @@ class TestAddFacts(unittest.TestCase):
 
     # Add facts data (csv format) to Assessment
     def test_add_csv_facts(self):
+        pass
         fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
@@ -96,8 +108,19 @@ class TestAddFacts(unittest.TestCase):
 
             try:
                 resp_assessment = fclient.create_assessment(asmtRequest)
-                data = "time,end,car,Health\n2011-03-31T00:00:00Z,2011-04-01T00:00:00Z,IL9753,Normal\n2011-03-31T00:00:00Z,2011-04-01T00:00:00Z,HI3821,Normal"
-                response = fclient.add_facts(resp_assessment.get_id(), 'csv', {}, data)
+                data = "time,end,car,Health\n2011-03-31T00:00:00.000Z,2011-04-01T00:00:00.000Z,IL9753,Normal\n2011-03-31T00:00:00.000Z,2011-04-01T00:00:00.000Z,HI3821,Normal"
+
+                options = {
+                    'startTimeIdentifier': "time",
+                    'endTimeIdentifier': "end",
+                    # 'timeFormat': "YYYY-MM-DDTHH:mm:ss.SSSZ",
+                    'timeFormat': "iso_8601",
+                    'timeZone': time.get_zone(),
+                    # 'entityIdentifier': "car",
+                    'valueIdentifier': "Health"
+                }
+
+                response = fclient.add_facts(resp_assessment.get_id(), 'csv', options, data)
                 # tear down
                 try:
                     fclient.delete_assessment(resp_assessment.get_id())
