@@ -3,8 +3,8 @@ import unittest
 import random
 
 host  = 'https://localhost:8080'  # host url
-# token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
-
+token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
+token = '0aqon6ponw6dwxoog74k2urp1fzxhqag'
 
 
 
@@ -46,7 +46,7 @@ class TestAddFacts(unittest.TestCase):
 
             try:
                 resp_assessment = fclient.create_assessment(asmtRequest)
-                data = io.open('./test/factsData.json')
+                data = io.open('./factsData.json')
 
                 options = {
                     'startTimeIdentifier': "time",
@@ -104,7 +104,7 @@ class TestAddFacts(unittest.TestCase):
 
             try:
                 resp_assessment = fclient.create_assessment(asmtRequest)
-                data = io.open('./test/factsData.csv')
+                data = io.open('./factsData.csv')
 
                 options = {
                     'startTimeIdentifier': "time",
@@ -163,7 +163,7 @@ class TestAddFacts(unittest.TestCase):
 
             try:
                 resp_assessment = fclient.create_assessment(asmtRequest)
-                data = io.open('./test/factsDataWithTags.csv')
+                data = io.open('./factsDataWithTags.csv')
 
                 options = {
                     'startTimeIdentifier': "time",
@@ -223,7 +223,7 @@ class TestAddFacts(unittest.TestCase):
 
             try:
                 resp_assessment = fclient.create_assessment(asmtRequest)
-                data = io.open('./test/factsData.csv')
+                data = io.open('./factsData.csv')
 
                 options = {
                     'startTimeIdentifier': "time",

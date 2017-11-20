@@ -6,6 +6,8 @@ Falkonry Python Client to access [Falkonry Condition Prediction](falkonry.com) A
 
 [Releases](https://github.com/Falkonry/falkonry-python-client/releases)
 
+
+
 ## Installation
 
 ```bash
@@ -1040,6 +1042,8 @@ response = falkonry.off_datastream(datastreamId)
 $ pip install -r requirements.txt
 $ python test/*.py
 ```
+
+##Run test cases from test directory
 
 ## License
 
