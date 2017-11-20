@@ -4,6 +4,7 @@ import random
 
 host  = 'https://localhost:8080'  # host url
 token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
+token = 'n4qlyqyl7eejz9i2sc1bpi5bz6ry3wvx'
 
 class TestAddDataStream(unittest.TestCase):
 
@@ -33,7 +34,15 @@ class TestAddDataStream(unittest.TestCase):
             datastreamResponse = fclient.create_datastream(datastream)
             try:
                 data = io.open('./data.json')
-                options = {'streaming': False, 'hasMoreData':False}
+                options = {'streaming': False,
+                           'hasMoreData':False,
+                           'timeFormat': time.get_format(),
+                           'timeZone': time.get_zone(),
+                           'timeIdentifier': time.get_identifier(),
+                           'signalIdentifier': signal.get_tagIdentifier(),
+                           'valueIdentifier': signal.get_valueIdentifier(),
+                           'entityIdentifier': 'signal'
+                           }
                 response = fclient.add_input_stream(datastreamResponse.get_id(), 'json', options, data)
 
                 self.assertNotEqual(response['__$id'], None, 'Cannot add input data to datastream')
@@ -139,3 +148,6 @@ if __name__ == '__main__':
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
     unittest.main()
+else:
+    from falkonryclient import schemas as Schemas
+    from falkonryclient import client as FClient
