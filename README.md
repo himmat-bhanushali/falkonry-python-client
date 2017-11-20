@@ -38,7 +38,7 @@ $ pip install falkonryclient
     * Delete Assessment
     * Get Condition List Of Assessment
     * Add facts data (json format) to Assessment
-    * Add facts data (csv format) to Assessment
+    * Add facts data (csv format) to Assessment of a multi entity datastream
     * Add facts data (json format) from a stream to Assessment
     * Add facts data (csv format) from a stream to  Assessment
     * Get Historian Output from Assessment
@@ -807,6 +807,59 @@ options = {
     }
 
 inputResponse = falkonry.add_facts(assessmentId, 'csv', options, data)
+```
+
+#### Add facts data (csv format) with tags to Assessment of a multi entity datastream
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry      = Falkonry('http://localhost:8080', 'auth-token')
+assessmentId = 'id of the assessment'
+data          = 'time,car,end,Health,Tags' + "\n"
+                 + '2011-03-26T12:00:00.000Z,HI3821,2012-06-01T00:00:00.000Z,Normal,testTag' + "\n"
+                 + '2014-02-10T23:00:00.000Z,HI3821,2014-03-20T12:00:00.000Z,Spalling,testTag1';
+
+options = {
+        'startTimeIdentifier': "time",
+        'endTimeIdentifier': "end",
+        'timeFormat': "iso_8601",
+        'timeZone': time.get_zone(),
+        'entityIdentifier': "car",
+        'valueIdentifier': "Health",
+        'tagIdentifier': 'Tags'
+    }
+
+inputResponse = falkonry.add_facts(assessmentId, 'csv', options, data)
+```
+
+#### Add facts data (csv format) with additional Tags to Assessment of a multi entity datastream
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry      = Falkonry('http://localhost:8080', 'auth-token')
+assessmentId = 'id of the assessment'
+data          = 'time,car,end,Health' + "\n"
+                 + '2011-03-26T12:00:00.000Z,HI3821,2012-06-01T00:00:00.000Z,Normal' + "\n"
+                 + '2014-02-10T23:00:00.000Z,HI3821,2014-03-20T12:00:00.000Z,Spalling';
+
+options = {
+        'startTimeIdentifier': "time",
+        'endTimeIdentifier': "end",
+        'timeFormat': "iso_8601",
+        'timeZone': time.get_zone(),
+        'entityIdentifier': "car",
+        'valueIdentifier': "Health",
+        'additionalTags': 'testTag'
+    }
+
+input
+
 ```
 
 #### Add facts data (json format) from a stream to Assessment of a multi entity datastream

@@ -7,6 +7,8 @@ import json
 host  = 'https://localhost:8080'  # host url
 token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
 
+
+# Add facts for single entity datastream
 class TestAddFacts(unittest.TestCase):
 
     def setUp(self):
@@ -113,10 +115,8 @@ class TestAddFacts(unittest.TestCase):
                 options = {
                     'startTimeIdentifier': "time",
                     'endTimeIdentifier': "end",
-                    # 'timeFormat': "YYYY-MM-DDTHH:mm:ss.SSSZ",
                     'timeFormat': "iso_8601",
                     'timeZone': time.get_zone(),
-                    # 'entityIdentifier': "car",
                     'valueIdentifier': "Health"
                 }
 
@@ -138,6 +138,128 @@ class TestAddFacts(unittest.TestCase):
             print(e.message)
             self.assertEqual(0,1,"Cannot add data")
 
+    # Add facts data (csv format) wit tags to Assessment
+    def test_add_csv_facts_with_tags(self):
+            pass
+            fclient = FClient(host=host, token=token, options=None)
+            datastream = Schemas.Datastream()
+            datastream.set_name('Motor Health' + str(random.random()))
+
+            datasource = Schemas.Datasource()
+            field = Schemas.Field()
+            time = Schemas.Time()
+            signal = Schemas.Signal()
+
+            time.set_zone("GMT")
+            time.set_identifier("time")
+            time.set_format("YYYY-MM-DD HH:mm:ss")
+            field.set_signal(signal)
+            datasource.set_type("STANDALONE")
+            field.set_time(time)
+            datastream.set_datasource(datasource)
+            datastream.set_field(field)
+            try:
+                datastreamResponse = fclient.create_datastream(datastream)
+                data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
+                response = fclient.add_input_data(datastreamResponse.get_id(), 'json', {}, data)
+
+                asmtRequest = Schemas.AssessmentRequest()
+                asmtRequest.set_name('Assessment Name ' + str(random.random()))
+                asmtRequest.set_datastream(datastreamResponse.get_id())
+                asmtRequest.set_rate('PT0S')
+
+                try:
+                    resp_assessment = fclient.create_assessment(asmtRequest)
+                    data = "time,end,car,Health,Tags\n2011-03-31T00:00:00.000Z,2011-04-01T00:00:00.000Z,IL9753,Normal,testTag1\n2011-03-31T00:00:00.000Z,2011-04-01T00:00:00.000Z,HI3821,Normal,testTag2"
+
+                    options = {
+                        'startTimeIdentifier': "time",
+                        'endTimeIdentifier': "end",
+                        'timeFormat': "iso_8601",
+                        'timeZone': time.get_zone(),
+                        'valueIdentifier': "Health",
+                        'tagIdentifier': 'Tags'
+                    }
+
+                    response = fclient.add_facts(resp_assessment.get_id(), 'csv', options, data)
+                    # tear down
+                    try:
+                        fclient.delete_assessment(resp_assessment.get_id())
+                        fclient.delete_datastream(datastreamResponse.get_id())
+                    except Exception as e:
+                        pass
+                except Exception as e:
+                    print(e.message)
+                    try:
+                        fclient.delete_datastream(datastreamResponse.get_id())
+                    except Exception as e:
+                        pass
+                    self.assertEqual(0, 1, 'Cannot create assessment')
+            except Exception as e:
+                print(e.message)
+                self.assertEqual(0, 1, "Cannot add data")
+
+    # Add facts data (csv format) wit additional Tag to Assessment
+    def test_add_csv_facts_with_tags(self):
+            pass
+            fclient = FClient(host=host, token=token, options=None)
+            datastream = Schemas.Datastream()
+            datastream.set_name('Motor Health' + str(random.random()))
+
+            datasource = Schemas.Datasource()
+            field = Schemas.Field()
+            time = Schemas.Time()
+            signal = Schemas.Signal()
+
+            time.set_zone("GMT")
+            time.set_identifier("time")
+            time.set_format("YYYY-MM-DD HH:mm:ss")
+            field.set_signal(signal)
+            datasource.set_type("STANDALONE")
+            field.set_time(time)
+            datastream.set_datasource(datasource)
+            datastream.set_field(field)
+            try:
+                datastreamResponse = fclient.create_datastream(datastream)
+                data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
+                response = fclient.add_input_data(datastreamResponse.get_id(), 'json', {}, data)
+
+                asmtRequest = Schemas.AssessmentRequest()
+                asmtRequest.set_name('Assessment Name ' + str(random.random()))
+                asmtRequest.set_datastream(datastreamResponse.get_id())
+                asmtRequest.set_rate('PT0S')
+
+                try:
+                    resp_assessment = fclient.create_assessment(asmtRequest)
+                    data = "time,end,car,Health\n2011-03-31T00:00:00.000Z,2011-04-01T00:00:00.000Z,IL9753,Normal\n2011-03-31T00:00:00.000Z,2011-04-01T00:00:00.000Z,HI3821,Normal"
+
+                    options = {
+                        'startTimeIdentifier': "time",
+                        'endTimeIdentifier': "end",
+                        'timeFormat': "iso_8601",
+                        'timeZone': time.get_zone(),
+                        'valueIdentifier': "Health",
+                        'additionalTag': 'testTag'
+                    }
+
+                    response = fclient.add_facts(resp_assessment.get_id(), 'csv', options, data)
+                    # tear down
+                    try:
+                        fclient.delete_assessment(resp_assessment.get_id())
+                        fclient.delete_datastream(datastreamResponse.get_id())
+                    except Exception as e:
+                        pass
+                except Exception as e:
+                    print(e.message)
+                    try:
+                        fclient.delete_datastream(datastreamResponse.get_id())
+                    except Exception as e:
+                        pass
+                    self.assertEqual(0, 1, 'Cannot create assessment')
+            except Exception as e:
+                print(e.message)
+                self.assertEqual(0, 1, "Cannot add data")
+
 if __name__ == '__main__':
     if __package__ is None:
         import sys
@@ -155,3 +277,6 @@ if __name__ == '__main__':
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
     unittest.main()
+else:
+    from falkonryclient import schemas as Schemas
+    from falkonryclient import client as FClient

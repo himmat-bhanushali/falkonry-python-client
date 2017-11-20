@@ -6,6 +6,7 @@ host  = 'https://localhost:8080'  # host url
 token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
 
 
+#Add facts for single thing datastream
 class TestAddFacts(unittest.TestCase):
 
     def setUp(self):
@@ -50,7 +51,6 @@ class TestAddFacts(unittest.TestCase):
                     'endTimeIdentifier': "end",
                     'timeFormat': "iso_8601",
                     'timeZone': time.get_zone(),
-                    # 'entityIdentifier': "car",
                     'valueIdentifier': "Health"
                 }
                 response = fclient.add_facts_stream(resp_assessment.get_id(), 'json', options, data)
@@ -130,6 +130,7 @@ class TestAddFacts(unittest.TestCase):
         except Exception as e:
             print(e.message)
             self.assertEqual(0,1,"Cannot add data")
+
 
 if __name__ == '__main__':
     if __package__ is None:
