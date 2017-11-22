@@ -1,5 +1,8 @@
 # Release Log
 
+### 1.0.4
+* Supports custom column identifiers for fact API
+
 ### 1.0.3
 * Support for time precision upto microseconds
 
