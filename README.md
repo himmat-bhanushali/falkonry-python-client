@@ -45,10 +45,6 @@ $ pip install falkonryclient
     * Add facts data (csv format) with tags Assessment of single entity datastream
     * Add facts data (json format) from a stream to Assessment of multi entity datastream
     * Add facts data (csv format) from a stream to  Assessment of multi entity datastream
-    * Add facts data (json format) to Assessment
-    * Add facts data (csv format) to Assessment of a multi entity datastream
-    * Add facts data (json format) from a stream to Assessment
-    * Add facts data (csv format) from a stream to  Assessment
     * Get Historian Output from Assessment
     * Get Streaming Output
     * Get Facts Data
@@ -845,9 +841,12 @@ inputResponse = falkonry.add_facts(assessmentId, 'csv', options, data)
 ```
 
 #### Add facts data (json format) from a stream to Assessment of a multi entity datastream
-Sample Facts json file
+
+Sample file:
+```
     {"time" : "2011-03-26T12:00:00.000Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00.000Z", "Health" : "Normal"}
     {"time" : "2014-02-10T23:00:00.000Z", "car" : "HI3821", "end" : "2014-03-20T12:00:00.000Z", "Health" : "Spalling"}
+```
 
 ```python
 import os, sys
@@ -872,10 +871,13 @@ response = falkonry.add_facts_stream(assessmentId, 'json', options, stream)
 ```
 
 #### Add facts data (csv format) from a stream to Assessment of a multi entity datastream
-Sample CSV Files
-time,car,end,Health
-2011-03-26T12:00:00.000Z,HI3821,2012-06-01T00:00:00.000Z,Normal
-2014-02-10T23:00:00.000Z,HI3821,2014-03-20T12:00:00.000Z,Spalling
+
+Sample File
+```
+    time,car,end,Health
+    2011-03-26T12:00:00.000Z,HI3821,2012-06-01T00:00:00.000Z,Normal
+    2014-02-10T23:00:00.000Z,HI3821,2014-03-20T12:00:00.000Z,Spalling
+```
 
 ```python
 import os, sys
