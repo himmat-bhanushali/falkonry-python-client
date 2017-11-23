@@ -1,0 +1,7 @@
+time,signal,value,car
+2016-03-01 01:01:01,current,3.4,car1
+2016-03-01 01:01:02,current,2.2,car1
+2016-03-01 01:01:03,vibration,3.8,car1
+2016-03-01 01:02:03,vibration,3.8,car1
+2016-03-01 01:02:03,state,on,car2
+2016-03-01 01:02:05,state,off,car2

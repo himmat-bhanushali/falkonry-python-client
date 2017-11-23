@@ -751,7 +751,7 @@ from falkonryclient import schemas as Schemas
 falkonry      = Falkonry('http://localhost:8080', 'auth-token')
 assessmentId = 'id of the datastream'
 data          = '{"time" : "2011-03-26T12:00:00Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00Z", "Health" : "Normal"}'
-inputResponse = falkonry.add_verification(assessmentId, 'json', {}, data)
+inputResponse = falkonry.add_facts(assessmentId, 'json', {}, data)
 ```
 
 #### Add facts data (csv format) to Assessment

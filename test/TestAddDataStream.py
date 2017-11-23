@@ -6,12 +6,15 @@ host  = 'https://localhost:8080'  # host url
 token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
 token = 'n4qlyqyl7eejz9i2sc1bpi5bz6ry3wvx'
 
+host = 'https://dev.falkonry.ai'
+token = 'n4qlyqyl7eejz9i2sc1bpi5bz6ry3wvx'
+
 class TestAddDataStream(unittest.TestCase):
 
     def setUp(self):
         pass
 
-    # Add historical input data (json format) from a stream to Datastream (Used for model revision)
+    # Add historical wide input data (json format) to single thing Datastream (Used for model revision)
     def test_add_historical_json_data_stream(self):
         fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
@@ -24,7 +27,7 @@ class TestAddDataStream(unittest.TestCase):
 
         time.set_zone("GMT")
         time.set_identifier("time")
-        time.set_format("iso_8601")
+        time.set_format("YYYY-MM-DD HH:mm:ss")
         field.set_signal(signal)
         datasource.set_type("STANDALONE")
         field.set_time(time)
@@ -39,9 +42,6 @@ class TestAddDataStream(unittest.TestCase):
                            'timeFormat': time.get_format(),
                            'timeZone': time.get_zone(),
                            'timeIdentifier': time.get_identifier(),
-                           'signalIdentifier': signal.get_tagIdentifier(),
-                           'valueIdentifier': signal.get_valueIdentifier(),
-                           'entityIdentifier': 'signal'
                            }
                 response = fclient.add_input_stream(datastreamResponse.get_id(), 'json', options, data)
 
@@ -59,7 +59,7 @@ class TestAddDataStream(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
-    # Add historical input data (csv format) from a stream to Datastream (Used for model revision)
+    # Add historical input data (csv format) from a stream to single thing Datastream (Used for model revision)
     def test_add_historical_csv_data_stream(self):
         fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
@@ -72,7 +72,7 @@ class TestAddDataStream(unittest.TestCase):
 
         time.set_zone("GMT")
         time.set_identifier("time")
-        time.set_format("iso_8601")
+        time.set_format("YYYY-MM-DD HH:mm:ss")
         field.set_signal(signal)
         datasource.set_type("STANDALONE")
         field.set_time(time)
@@ -82,7 +82,62 @@ class TestAddDataStream(unittest.TestCase):
             datastreamResponse = fclient.create_datastream(datastream)
             try:
                 data = io.open('./data.csv')
-                options = {'streaming': False, 'hasMoreData':False}
+
+                options = {'streaming': False,
+                           'hasMoreData':False,
+                           'timeFormat': time.get_format(),
+                           'timeZone': time.get_zone(),
+                           'timeIdentifier': time.get_identifier()}
+                response = fclient.add_input_stream(datastreamResponse.get_id(), 'csv', options, data)
+
+                self.assertNotEqual(response['__$id'], None, 'Cannot add input data to datastream')
+
+                # tear down
+                try:
+                    fclient.delete_datastream(datastreamResponse.get_id())
+                except Exception as e:
+                    pass
+            except Exception as e:
+                print(e.message)
+                self.assertEqual(0, 1, 'Cannot add input data to datastream')
+        except Exception as e:
+            print(e.message)
+            self.assertEqual(0, 1, 'Cannot create datastream')
+
+    # Add historical input data (csv format) from a stream to Multi thing Datastream (Used for model revision)
+    def test_add_historical_csv_data_stream_multi(self):
+        fclient = FClient(host=host, token=token, options=None)
+        datastream = Schemas.Datastream()
+        datastream.set_name('Motor Health' + str(random.random()))
+
+        datasource = Schemas.Datasource()
+        field = Schemas.Field()
+        time = Schemas.Time()
+        signal = Schemas.Signal()
+
+        time.set_zone("GMT")
+        time.set_identifier("time")
+        time.set_format("YYYY-MM-DD HH:mm:ss")
+        field.set_signal(signal)
+        datasource.set_type("STANDALONE")
+        field.set_time(time)
+        field.set_entityIdentifier('car')
+        datastream.set_datasource(datasource)
+        datastream.set_field(field)
+        try:
+            datastreamResponse = fclient.create_datastream(datastream)
+            try:
+                data = io.open('./dataMultiThing.csv')
+
+                options = {'streaming': False,
+                           'hasMoreData': False,
+                           'timeFormat': time.get_format(),
+                           'timeZone': time.get_zone(),
+                           'timeIdentifier': time.get_identifier(),
+                           'entityIdentifier': 'car',
+                           'valueIdentifier': 'value',
+                           'signalIdentifier': 'signal'
+                           }
                 response = fclient.add_input_stream(datastreamResponse.get_id(), 'csv', options, data)
 
                 self.assertNotEqual(response['__$id'], None, 'Cannot add input data to datastream')
