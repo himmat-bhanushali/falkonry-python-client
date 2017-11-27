@@ -4,6 +4,7 @@ import random
 host  = 'https://localhost:8080'  # host url
 token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
 
+token = '0aqon6ponw6dwxoog74k2urp1fzxhqag'
 
 class TestAddFacts(unittest.TestCase):
 
@@ -63,7 +64,7 @@ class TestAddFacts(unittest.TestCase):
             print(e.message)
             self.assertEqual(0,1,"Cannot add data")
 
-#
+
 
     # Add facts data (csv format) to Assessment
     def test_add_csv_facts(self):
@@ -132,3 +133,6 @@ if __name__ == '__main__':
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
     unittest.main()
+else:
+        from falkonryclient import schemas as Schemas
+        from falkonryclient import client as FClient

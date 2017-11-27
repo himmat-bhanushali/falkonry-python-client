@@ -193,22 +193,22 @@ class FalkonryService:
             url += '&hasMoreData=false'
 
         if 'timeFormat' in options:
-            url += 'timeFormat=' + str(options['timeFormat'])
+            url += '&timeFormat=' + str(options['timeFormat'])
 
         if 'timeZone' in options:
-            url += 'timeZone=' + str(options['timeZone'])
+            url += '&timeZone=' + str(options['timeZone'])
 
         if 'timeIdentifier' in options:
-            url += 'timeIdentifier=' + str(options['timeIdentifier'])
+            url += '&timeIdentifier=' + str(options['timeIdentifier'])
 
         if 'signalIdentifier' in options:
-            url += 'signalIdentifier=' + str(options['signalIdentifier'])
+            url += '&signalIdentifier=' + str(options['signalIdentifier'])
 
         if 'valueIdentifier' in options:
-            url += 'valueIdentifier=' + str(options['valueIdentifier'])
+            url += '&valueIdentifier=' + str(options['valueIdentifier'])
 
         if 'entityIdentifier' in options:
-            url += 'entityIdentifier=' + str(options['entityIdentifier'])
+            url += '&entityIdentifier=' + str(options['entityIdentifier'])
 
         return  url
 

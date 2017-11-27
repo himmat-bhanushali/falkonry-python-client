@@ -24,10 +24,10 @@ $ pip install falkonryclient
     * Delete Datastream
     * Add EntityMeta to a Datastream
     * Get EntityMeta of a Datastream
-    * Add historical input data (json format) to Datastream (Used for model revision) 
-    * Add historical input data (csv format) to Datastream (Used for model revision) 
-    * Add historical input data (json format) from a stream to Datastream (Used for model revision) 
-    * Add historical input data (csv format) from a stream to Datastream (Used for model revision) 
+    * Add narrow input data (json format) to multi thing Datastream
+    * Add narrow input data (csv format) single thing to Datastream
+    * Add wide input data (json format) to single thing Datastream
+    * Add wide input data (csv format) to multi thing Datastream
     * Add live input data (json format) to Datastream (Used for live monitoring) 
     * Add live input data (csv format) to Datastream (Used for live monitoring) 
     * Add live input data (json format) from a stream to Datastream (Used for live monitoring) 
@@ -414,15 +414,17 @@ datastreamId = 'id of the datastream'
 entityMetaResponse = fclient.get_entity_meta(datastreamId)
 ```
 
-#### Add historical input data (json format) to a Datastream (Used for model revision) 
+#### Add narrow input data (json format) to multi thing Datastream
     
 Data :
 
 ```
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_thing1", "value" : 3.4}
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_thing1", "value" : 1.4}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_thing2", "value" : 9.3}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_thing2", "value" : 4.3}
+    {"time" :"2016-03-01 01:01:01", "signal" : "current", "value" : 12.4, "car" : "car1"}
+    {"time" :"2016-03-01 01:01:01", "signal" : "vibration", "value" : 3.4, "car" : "car1"}
+    {"time" :"2016-03-01 01:01:01", "signal" : "state", "value" : on, "car" : "car1"}
+    {"time" :"2016-03-01 01:01:01", "signal" : "current", "value" : 31.4, "car" : "car2"}
+    {"time" :"2016-03-01 01:01:01", "signal" : "vibration", "value" : 2.4, "car" : "car2"}
+    {"time" :"2016-03-01 01:01:01", "signal" : "state", "value" : off, "car" : "car2"}
 ```
 
 Usage :    
@@ -437,24 +439,35 @@ falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 
 #add data to Datastream
-String data = "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal1_thing1\", \"value\" : 3.4}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal2_thing1\", \"value\" : 1.4}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal1_thing1\", \"value\" : 9.3}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal2_thing2\", \"value\" : 4.3}";
+String data = "{\"time\" :\"2016-03-01 01:01:01\", \"signal\" : \"current\", \"value\" : 12.4, \"car\" : \"car1\"} + "\n"
+        + "{\"time\" :\"2016-03-01 01:01:01\", \"signal\" : \"vibration\", \"value\" : 2.4, \"car\" : \"car1\"} + "\n"
+        + "{\"time\" :\"2016-03-01 01:01:01\", \"signal\" : \"state\", \"value\" : on, \"car\" : \"car1\"} + "\n"
+        + "{\"time\" :\"2016-03-01 01:01:01\", \"signal\" : \"current\", \"value\" : 22.4, \"car\" : \"car2\"} + "\n"
+        + "{\"time\" :\"2016-03-01 01:01:01\", \"signal\" : \"vibration\", \"value\" : 3.4, \"car\" : \"car2\"} + "\n"
+        + "{\"time\" :\"2016-03-01 01:01:01\", \"signal\" : \"state\", \"value\" : off, \"car\" : \"car2\"}";
+
         
 # set hasMoreData to True if data is sent in batches. When the last batch is getting sent then set  'hasMoreData' to False. For single batch upload it shpuld always be set to False
-options = {'streaming': False, 'hasMoreData':False}   
+options = {'streaming': False,
+           'hasMoreData': False,
+           'timeFormat': "YYYY-MM-DD HH:mm:ss",
+           'timeZone': "GMT",
+           'timeIdentifier': "time",
+           'signalIdentifier': 'signal',
+           'valueIdentifier': 'value',
+           'entityIdentifier': 'car'}
 inputResponse = falkonry.add_input_data(datastreamId, 'json', options, data)
 ```
 
-#### Add historical input data (csv format) to a Datastream (Used for model revision) 
+#### Add narrow input data (csv format) single thing to Datastream
     
 Data :
 
 ```
-    time, tag, value
-    2016-03-01 01:01:01, signal1_thing1, 3.4
-    2016-03-01 01:01:01, signal2_thing1, 1.4
+    time, signal, value
+    2016-03-01 01:01:01, current, 3.4
+    2016-03-01 01:01:01, vibration, 1.4
+
 ```
 
 Usage :    
@@ -469,53 +482,30 @@ falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 
 #add data to Datastream
-String data = "time, tag, value " + "\n"
-        + "2016-03-01 01:01:01, signal1_thing1, 3.4" + "\n"
-        + "2016-03-01 01:01:01, signal2_thing1, 1.4";
+String data = "time,signal,value " + "\n"
+        + "2016-03-01 01:01:01,current,3.4" + "\n"
+        + "2016-03-01 01:01:01,vibration,1.4";
         
 # set hasMoreData to True if data is sent in batches. When the last batch is getting sent then set  'hasMoreData' to False. For single batch upload it shpuld always be set to False
-options = {'streaming': False, 'hasMoreData':False}   
+options = {'streaming': False,
+           'hasMoreData': False,
+           'timeFormat': "YYYY-MM-DD HH:mm:ss",
+           'timeZone': "GMT",
+           'timeIdentifier': "time"}
 inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, data)
 ```
 
-#### Add historical input data (json format) from a stream to a Datastream (Used for model revision) 
+#### Add wide input data (json format) to single thing Datastream
     
 Data :
 
 ```
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_thing1", "value" : 3.4}
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_thing1", "value" : 1.4}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_thing2", "value" : 9.3}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_thing2", "value" : 4.3}
-```
-
-Usage :    
-
-```python
-from falkonryclient import client as Falkonry
-from falkonryclient import schemas as Schemas
-
-#instantiate Falkonry
-falkonry   = Falkonry('http://localhost:8080', 'auth-token')
-
-datastreamId = 'id of the datastream'
-
-#add data to Datastream
-stream   = io.open('./data.json')
-        
-# set hasMoreData to True if data is sent in batches. When the last batch is getting sent then set  'hasMoreData' to False. For single batch upload it shpuld always be set to False
-options = {'streaming': False, 'hasMoreData':False}   
-inputResponse = falkonry.add_input_data(datastreamId, 'json', options, stream)
-```
-
-#### Add historical input data (csv format) from a stream to a Datastream (Used for model revision)
-    
-Data :
-
-```
-    time, tag, value
-    2016-03-01 01:01:01, signal1_thing1, 3.4
-    2016-03-01 01:01:01, signal2_thing1, 1.4
+    {"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}
+    {"time" :"2016-03-01 01:01:02", "current" : 11.3, "vibration" : 2.2, "state" : "On"}
+    {"time" :"2016-03-01 01:01:03", "current" : 10.5, "vibration" : 3.8, "state" : "On"}
+    {"time" :"2016-03-01 01:02:03", "current" : 19.2, "vibration" : 3.8, "state" : "On"}
+    {"time" :"2016-03-01 01:02:03", "current" : 1.2, "vibration" : 0.8, "state" : "Off"}
+    {"time" :"2016-03-01 01:02:05", "current" : 0.2, "vibration" : 0.3, "state" : "Off"}
 ```
 
 Usage :    
@@ -533,7 +523,50 @@ datastreamId = 'id of the datastream'
 stream   = io.open('./data.csv')
         
 # set hasMoreData to True if data is sent in batches. When the last batch is getting sent then set  'hasMoreData' to False. For single batch upload it shpuld always be set to False
-options = {'streaming': False, 'hasMoreData':False}   
+
+options = {'streaming': False,
+           'hasMoreData': False,
+           'timeFormat': "YYYY-MM-DD HH:mm:ss",
+           'timeZone': "GMT",
+           'timeIdentifier': "time"}
+inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, stream)
+```
+
+#### Add wide input data (csv format) to multi thing Datastream
+
+Data :
+
+```
+    time,signal,value,car
+    2016-03-01 01:01:01,current,3.4,car1
+    2016-03-01 01:01:02,current,2.2,car1
+    2016-03-01 01:01:03,vibration,3.8,car1
+    2016-03-01 01:02:03,vibration,3.8,car1
+    2016-03-01 01:02:03,state,on,car2
+    2016-03-01 01:02:05,state,off,car2
+```
+
+Usage :
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+stream   = io.open('./dataMultiThing.csv')
+
+# set hasMoreData to True if data is sent in batches. When the last batch is getting sent then set  'hasMoreData' to False. For single batch upload it shpuld always be set to False
+
+options = {'streaming': False,
+           'hasMoreData': False,
+           'timeFormat': "YYYY-MM-DD HH:mm:ss",
+           'timeZone': "GMT",
+           'timeIdentifier': "time"}
 inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, stream)
 ```
 

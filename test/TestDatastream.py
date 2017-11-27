@@ -70,10 +70,7 @@ class TestDatastream(unittest.TestCase):
         time.set_identifier("time")                                 # set time identifier of the datastream
         time.set_format("iso_8601")                                 # set time format of the datastream
         field.set_time(time)
-        signal.set_delimiter(None)                                  # set delimiter to None
-        signal.set_tagIdentifier("tag")                             # set tag identifier
         signal.set_valueIdentifier("value")                         # set value identifier
-        signal.set_isSignalPrefix(False)                            # as this is single entity, set signal prefix flag to false
         field.set_signal(signal)                                    # set signal in field
         datasource.set_type("STANDALONE")                           # set datastource type in datastream
         datastream.set_datasource(datasource)
@@ -90,10 +87,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
             self.assertEqual(fieldResponse.get_entityName(),response.get_name(),'Invalid entity name object after creation')
             signalResponse = fieldResponse.get_signal()
-            self.assertEqual(signalResponse.get_delimiter(),signal.get_delimiter(), 'Invalid delimiter after object creation')
-            self.assertEqual(signalResponse.get_tagIdentifier(),signal.get_tagIdentifier(), 'Invalid tag identifier after object creation')
             self.assertEqual(signalResponse.get_valueIdentifier(),signal.get_valueIdentifier(), 'Invalid value identifier after object creation')
-            self.assertEqual(signalResponse.get_isSignalPrefix(),signal.get_isSignalPrefix(), 'Invalid is signal prefix after object creation')
             timeResponse = fieldResponse.get_time()
             self.assertEqual(isinstance(timeResponse, Schemas.Time), True, 'Invalid time object after creation')
             self.assertEqual(timeResponse.get_zone(), time.get_zone(), 'Invalid zone object after creation')
@@ -123,10 +117,7 @@ class TestDatastream(unittest.TestCase):
         time.set_identifier("time")                                 # set time identifier of the datastream
         time.set_format("iso_8601")                                 # set time format of the datastream
         field.set_time(time)
-        signal.set_delimiter("_")                                  # set delimiter to None
-        signal.set_tagIdentifier("tag")                             # set tag identifier
         signal.set_valueIdentifier("value")                         # set value identifier
-        signal.set_isSignalPrefix(False)                            # as this is single entity, set signal prefix flag to false
         field.set_signal(signal)                                    # set signal in field
         datasource.set_type("STANDALONE")                           # set datastource type in datastream
         datastream.set_datasource(datasource)
@@ -143,10 +134,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
             self.assertEqual(fieldResponse.get_entityName(),None,'Invalid entity name object after creation')
             signalResponse = fieldResponse.get_signal()
-            self.assertEqual(signalResponse.get_delimiter(),signal.get_delimiter(), 'Invalid delimiter after object creation')
-            self.assertEqual(signalResponse.get_tagIdentifier(),signal.get_tagIdentifier(), 'Invalid tag identifier after object creation')
             self.assertEqual(signalResponse.get_valueIdentifier(),signal.get_valueIdentifier(), 'Invalid value identifier after object creation')
-            self.assertEqual(signalResponse.get_isSignalPrefix(),signal.get_isSignalPrefix(), 'Invalid is signal prefix after object creation')
             timeResponse = fieldResponse.get_time()
             self.assertEqual(isinstance(timeResponse, Schemas.Time), True, 'Invalid time object after creation')
             self.assertEqual(timeResponse.get_zone(), time.get_zone(), 'Invalid zone object after creation')
@@ -480,10 +468,7 @@ class TestDatastream(unittest.TestCase):
         time.set_identifier("time")                                 # set time identifier of the datastream
         time.set_format("iso_8601")                                 # set time format of the datastream
         field.set_time(time)
-        signal.set_delimiter("_")                                   # set delimiter to None
-        signal.set_tagIdentifier("tag")                             # set tag identifier
         signal.set_valueIdentifier("value")                         # set value identifier
-        signal.set_isSignalPrefix(False)                            # as this is single entity, set signal prefix flag to false
         field.set_signal(signal)                                    # set signal in field
         datasource.set_type("STANDALONE")                           # set datastource type in datastream
         datastream.set_datasource(datasource)
@@ -500,10 +485,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
             self.assertEqual(fieldResponse.get_entityName(),None,'Invalid entity name object after creation')
             signalResponse = fieldResponse.get_signal()
-            self.assertEqual(signalResponse.get_delimiter(),signal.get_delimiter(), 'Invalid delimiter after object creation')
-            self.assertEqual(signalResponse.get_tagIdentifier(),signal.get_tagIdentifier(), 'Invalid tag identifier after object creation')
             self.assertEqual(signalResponse.get_valueIdentifier(),signal.get_valueIdentifier(), 'Invalid value identifier after object creation')
-            self.assertEqual(signalResponse.get_isSignalPrefix(),signal.get_isSignalPrefix(), 'Invalid is signal prefix after object creation')
             timeResponse = fieldResponse.get_time()
             self.assertEqual(isinstance(timeResponse, Schemas.Time), True, 'Invalid time object after creation')
             self.assertEqual(timeResponse.get_zone(), time.get_zone(), 'Invalid zone object after creation')

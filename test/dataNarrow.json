@@ -1,0 +1,6 @@
+{"time" :"2016-03-01 01:01:01", "signal" : "current", "value" : 12.4, "car" : "car1"}
+{"time" :"2016-03-01 01:01:01", "signal" : "vibration", "value" : 3.4, "car" : "car1"}
+{"time" :"2016-03-01 01:01:01", "signal" : "state", "value" : on, "car" : "car1"}
+{"time" :"2016-03-01 01:01:01", "signal" : "current", "value" : 31.4, "car" : "car2"}
+{"time" :"2016-03-01 01:01:01", "signal" : "vibration", "value" : 2.4, "car" : "car2"}
+{"time" :"2016-03-01 01:01:01", "signal" : "state", "value" : off, "car" : "car2"}
