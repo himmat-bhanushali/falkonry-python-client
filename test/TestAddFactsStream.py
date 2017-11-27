@@ -4,7 +4,7 @@ import random
 
 host  = 'https://localhost:8080'  # host url
 token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
-token = '0aqon6ponw6dwxoog74k2urp1fzxhqag'
+
 
 class TestAddFacts(unittest.TestCase):
 

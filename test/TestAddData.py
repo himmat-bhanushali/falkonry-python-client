@@ -4,11 +4,6 @@ import random
 host  = 'https://localhost:8080'  # host url
 token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
 
-token = '0aqon6ponw6dwxoog74k2urp1fzxhqag'
-#
-# host = 'https://dev.falkonry.ai'
-# token = 'n4qlyqyl7eejz9i2sc1bpi5bz6ry3wvx'
-
 
 class TestAddData(unittest.TestCase):
 
