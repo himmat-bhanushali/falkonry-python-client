@@ -36,7 +36,6 @@ class TestAddData(unittest.TestCase):
         try:
             datastreamResponse = fclient.create_datastream(datastream)
             try:
-                # data = "time,signal,car,value " + "\n" + "2016-03-01 01:01:01,signal1,car1,3.4" + "\n" + "2016-03-01 01:01:01,signal2,car1,1.4" + "\n" + "2016-03-01 01:01:01,signal1,car2,1.4" + "\n" + "2016-03-01 01:01:01,signal2,car2,1.4"
                 data = '{"time" : "2016-03-01 01:01:01", "signal" : "current", "value" : 12.4, "car" : "unit1"}'
                 options = {'streaming': False,
                            'hasMoreData': False,
@@ -75,7 +74,7 @@ class TestAddData(unittest.TestCase):
         signal.set_signalIdentifier("signal")
         time.set_zone("GMT")
         time.set_identifier("time")
-        time.set_format("YYYY-MM-DD HH:mm:ss")
+        time.set_format("iso_8601")
 
         field.set_signal(signal)
         datasource.set_type("STANDALONE")
@@ -86,10 +85,11 @@ class TestAddData(unittest.TestCase):
         try:
             datastreamResponse = fclient.create_datastream(datastream)
             try:
+                # input data has timeformat different than the one set  while creating datastream
                 data = "time, signal, value " + "\n" + "2016-03-01 01:01:01, signal1, 3.4" + "\n" + "2016-03-01 01:01:01, signal2, 1.4"
                 options = {'streaming': False,
                            'hasMoreData': False,
-                           'timeFormat': time.get_format(),
+                           'timeFormat': "YYYY-MM-DD HH:mm:ss",
                            'timeZone': time.get_zone(),
                            'timeIdentifier': time.get_identifier()}
                 response = fclient.add_input_data(datastreamResponse.get_id(), 'csv', options, data)
@@ -224,10 +224,9 @@ class TestAddData(unittest.TestCase):
                            'hasMoreData': False,
                            'timeFormat': time.get_format(),
                            'timeZone': time.get_zone(),
-                           # 'timeIdentifier': time.get_identifier(),
                            'entityIdentifier': 'car'}
                 response = fclient.add_input_data(datastreamResponse.get_id(), 'csv', options, data)
-
+                self.assertEqual(0, 1, 'Missing time identifer error not caught')
                 # tear down
                 try:
                     fclient.delete_datastream(datastreamResponse.get_id())
@@ -267,10 +266,10 @@ class TestAddData(unittest.TestCase):
                 options = {'streaming': False,
                            'hasMoreData': False,
                            'timeFormat': time.get_format(),
-                           # 'timeZone': time.get_zone(),
                            'timeIdentifier': time.get_identifier(),
                            'entityIdentifier': 'car'}
                 response = fclient.add_input_data(datastreamResponse.get_id(), 'csv', options, data)
+                self.assertEqual(0, 1, 'Missing time zone error not caught')
 
                 # tear down
                 try:
@@ -310,11 +309,11 @@ class TestAddData(unittest.TestCase):
                 data = "time,current,vibrarion,state,car " + "\n" + "2016-03-01 01:01:01,12.4,3.4,on,car1" + "\n" + "2016-03-01 01:01:01,31.2,1.4.off,car1" + "\n" + "2016-03-01 01:01:01,24,3.2,on,car2" + "\n" + "2016-03-01 01:01:01,31,3.4.off,car2"
                 options = {'streaming': False,
                            'hasMoreData': False,
-                           # 'timeFormat': time.get_format(),
                            'timeZone': time.get_zone(),
                            'timeIdentifier': time.get_identifier(),
                            'entityIdentifier': 'car'}
                 response = fclient.add_input_data(datastreamResponse.get_id(), 'csv', options, data)
+                self.assertEqual(0, 1, 'Missing time format error not caught')
 
                 # tear down
                 try:
