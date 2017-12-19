@@ -3,11 +3,11 @@ import unittest
 import random
 
 host  = 'https://localhost:8080'  # host url
-token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
+token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                       # auth token
 
 
 
-#Add facts for single thing datastream
+#Add facts for single entity datastream
 class TestAddFacts(unittest.TestCase):
 
     def setUp(self):

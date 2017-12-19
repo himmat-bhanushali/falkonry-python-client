@@ -2,7 +2,7 @@ import unittest
 from pprint import pprint
 
 host  = 'https://localhost:8080'  # host url
-token = 'lmm3orvm1yaa4j1y5b78i8f870fhon6z'                        # auth token
+token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                        # auth token
 assessment = '743cveg32hkwl2'                     # assessment id
 
 
@@ -48,3 +48,6 @@ if __name__ == '__main__':
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
     unittest.main()
+else:
+    from falkonryclient import schemas as Schemas
+    from falkonryclient import client as FClient

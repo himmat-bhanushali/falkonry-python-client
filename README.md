@@ -27,10 +27,10 @@ $ pip install falkonryclient
     * Delete Datastream
     * Add EntityMeta to a Datastream
     * Get EntityMeta of a Datastream
-    * Add narrow input data (json format) to multi thing Datastream
-    * Add narrow input data (csv format) single thing to Datastream
-    * Add wide input data (json format) to single thing Datastream
-    * Add wide input data (csv format) to multi thing Datastream
+    * Add narrow input data (json format) to multi entity Datastream
+    * Add narrow input data (csv format) single entity to Datastream
+    * Add wide input data (json format) to single entity Datastream
+    * Add wide input data (csv format) to multi entity Datastream
     * Add live input data (json format) to Datastream (Used for live monitoring) 
     * Add live input data (csv format) to Datastream (Used for live monitoring) 
     * Add live input data (json format) from a stream to Datastream (Used for live monitoring) 
@@ -44,10 +44,12 @@ $ pip install falkonryclient
     * Retrieve Assessment by Id
     * Delete Assessment
     * Get Condition List Of Assessment
-    * Add facts data (json format) to Assessment
-    * Add facts data (csv format) to Assessment of a multi entity datastream
-    * Add facts data (json format) from a stream to Assessment
-    * Add facts data (csv format) from a stream to  Assessment
+    * Add facts data (json format) to Assessment of single entity datastream
+    * Add facts data (json format) with addition tag to Assessment of multi entity datastream
+    * Add facts data (csv format) to Assessment of single entity datastream
+    * Add facts data (csv format) with tags Assessment of single entity datastream
+    * Add facts data (json format) from a stream to Assessment of multi entity datastream
+    * Add facts data (csv format) from a stream to  Assessment of multi entity datastream
     * Get Historian Output from Assessment
     * Get Streaming Output
     * Get Facts Data
@@ -111,23 +113,23 @@ datastream.set_field(field)
 createdDatastream = fclient.create_datastream(datastream)
 ```
 
-#### Create Datastream for narrow/historian style data from multiple things
+#### Create Datastream for narrow/historian style data from multiple entitys
     
 Data :
 
 ```
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_thing1", "value" : 3.4}
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_thing1", "value" : 1.4}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_thing2", "value" : 9.3}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_thing2", "value" : 4.3}
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_entity1", "value" : 3.4}
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_entity1", "value" : 1.4}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_entity2", "value" : 9.3}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_entity2", "value" : 4.3}
 
     or
 
     time, tag, value
-    2016-03-01 01:01:01, signal1_thing1, 3.4
-    2016-03-01 01:01:01, signal2_thing1, 1.4
-    2016-03-01 01:01:02, signal1_thing2, 9.3
-    2016-03-01 01:01:02, signal2_thing2, 4.3
+    2016-03-01 01:01:01, signal1_entity1, 3.4
+    2016-03-01 01:01:01, signal2_entity1, 1.4
+    2016-03-01 01:01:02, signal1_entity2, 9.3
+    2016-03-01 01:01:02, signal2_entity2, 4.3
 ```
 
 Usage :    
@@ -229,14 +231,14 @@ createdDatastream = falkonry.create_datastream(datastream)
 Data :
 
 ```python
-    {"time":1467729675422, "thing": "Thing1", "signal1":41.11, "signal2":82.34, "signal3":74.63, "signal4":4.8}
-    {"time":1467729668919, "thing": "Thing2", "signal1":78.11, "signal2":2.33, "signal3":4.6, "signal4":9.8}
+    {"time":1467729675422, "entity": "entity1", "signal1":41.11, "signal2":82.34, "signal3":74.63, "signal4":4.8}
+    {"time":1467729668919, "entity": "entity2", "signal1":78.11, "signal2":2.33, "signal3":4.6, "signal4":9.8}
 
     or
 
-    time, thing, signal1, signal2, signal3, signal4
-    1467729675422, thing1, 41.11, 62.34, 77.63, 4.8
-    1467729675445, thing1, 43.91, 82.64, 73.63, 3.8
+    time, entity, signal1, signal2, signal3, signal4
+    1467729675422, entity1, 41.11, 62.34, 77.63, 4.8
+    1467729675445, entity1, 43.91, 82.64, 73.63, 3.8
 ```
 
 Usage :
@@ -277,7 +279,7 @@ time.set_identifier("time")                                 # set time identifie
 time.set_format("millis")                                   # set time format of the datastream
 field.set_time(time)            
 field.set_signal(signal)                                    # set signal in field
-field.set_entityIdentifier("thing")                         # set entity identifier as "thing"
+field.set_entityIdentifier("entity")                         # set entity identifier as "entity"
 datasource.set_type("STANDALONE")                           # set datastource type in datastream
 datastream.set_datasource(datasource)
 datastream.set_field(field)
@@ -470,7 +472,7 @@ datastreamId = 'id of the datastream'
 entityMetaResponse = fclient.get_entity_meta(datastreamId)
 ```
 
-#### Add narrow input data (json format) to multi thing Datastream
+#### Add narrow input data (json format) to multi entity Datastream
     
 Data :
 
@@ -515,7 +517,7 @@ options = {'streaming': False,
 inputResponse = falkonry.add_input_data(datastreamId, 'json', options, data)
 ```
 
-#### Add narrow input data (csv format) single thing to Datastream
+#### Add narrow input data (csv format) single entity to Datastream
     
 Data :
 
@@ -551,7 +553,7 @@ options = {'streaming': False,
 inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, data)
 ```
 
-#### Add wide input data (json format) to single thing Datastream
+#### Add wide input data (json format) to single entity Datastream
     
 Data :
 
@@ -588,7 +590,7 @@ options = {'streaming': False,
 inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, stream)
 ```
 
-#### Add wide input data (csv format) to multi thing Datastream
+#### Add wide input data (csv format) to multi entity Datastream
 
 Data :
 
@@ -614,7 +616,7 @@ falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 
 #add data to Datastream
-stream   = io.open('./dataMultiThing.csv')
+stream   = io.open('./dataMultientity.csv')
 
 # set hasMoreData to True if data is sent in batches. When the last batch is getting sent then set  'hasMoreData' to False. For single batch upload it shpuld always be set to False
 
@@ -631,10 +633,10 @@ inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, stream)
 Data :
 
 ```
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_thing1", "value" : 3.4}
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_thing1", "value" : 1.4}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_thing2", "value" : 9.3}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_thing2", "value" : 4.3}
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_entity1", "value" : 3.4}
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_entity1", "value" : 1.4}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_entity2", "value" : 9.3}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_entity2", "value" : 4.3}
 ```
 
 Usage :    
@@ -649,10 +651,10 @@ falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 
 #add data to Datastream
-String data = "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal1_thing1\", \"value\" : 3.4}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal2_thing1\", \"value\" : 1.4}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal1_thing1\", \"value\" : 9.3}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal2_thing2\", \"value\" : 4.3}";
+String data = "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal1_entity1\", \"value\" : 3.4}" + "\n"
+        + "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal2_entity1\", \"value\" : 1.4}" + "\n"
+        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal1_entity1\", \"value\" : 9.3}" + "\n"
+        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal2_entity2\", \"value\" : 4.3}";
         
 options = {'streaming': True}   
 inputResponse = falkonry.add_input_data(datastreamId, 'json', options, data)
@@ -664,8 +666,8 @@ Data :
 
 ```
     time, tag, value
-    2016-03-01 01:01:01, signal1_thing1, 3.4
-    2016-03-01 01:01:01, signal2_thing1, 1.4
+    2016-03-01 01:01:01, signal1_entity1, 3.4
+    2016-03-01 01:01:01, signal2_entity1, 1.4
 ```
 
 Usage :    
@@ -681,8 +683,8 @@ datastreamId = 'id of the datastream'
 
 #add data to Datastream
 String data = "time, tag, value " + "\n"
-        + "2016-03-01 01:01:01, signal1_thing1, 3.4" + "\n"
-        + "2016-03-01 01:01:01, signal2_thing1, 1.4";
+        + "2016-03-01 01:01:01, signal1_entity1, 3.4" + "\n"
+        + "2016-03-01 01:01:01, signal2_entity1, 1.4";
         
 options = {'streaming': True}   
 inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, data)
@@ -693,10 +695,10 @@ inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, data)
 Data :
 
 ```
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_thing1", "value" : 3.4}
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_thing1", "value" : 1.4}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_thing2", "value" : 9.3}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_thing2", "value" : 4.3}
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_entity1", "value" : 3.4}
+    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_entity1", "value" : 1.4}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_entity2", "value" : 9.3}
+    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_entity2", "value" : 4.3}
 ```
 
 Usage :    
@@ -723,8 +725,8 @@ Data :
 
 ```
     time, tag, value
-    2016-03-01 01:01:01, signal1_thing1, 3.4
-    2016-03-01 01:01:01, signal2_thing1, 1.4
+    2016-03-01 01:01:01, signal1_entity1, 3.4
+    2016-03-01 01:01:01, signal2_entity1, 1.4
 ```
 
 Usage :  
@@ -1057,7 +1059,8 @@ inputResponse = falkonry.add_facts(assessmentId, 'json', options, data)
 
 ```
 
-#### Add facts data (csv format) to Assessment of a multi entity datastream
+
+#### Add facts data (json format) with addition tag to Assessment of multi entity datastrea
     
 ```python
 from falkonryclient import client as Falkonry
@@ -1066,9 +1069,7 @@ from falkonryclient import schemas as Schemas
 #instantiate Falkonry
 falkonry      = Falkonry('http://localhost:8080', 'auth-token')
 assessmentId = 'id of the assessment'
-data          = 'time,car,end,Health' + "\n"
-                 + '2011-03-26T12:00:00.000Z,HI3821,2012-06-01T00:00:00.000Z,Normal' + "\n"
-                 + '2014-02-10T23:00:00.000Z,HI3821,2014-03-20T12:00:00.000Z,Spalling';
+data          = '{"time" : "2011-03-26T12:00:00.000Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00.000Z", "Health" : "Normal"}'
 
 options = {
         'startTimeIdentifier': "time",
@@ -1076,14 +1077,37 @@ options = {
         'timeFormat': "iso_8601",
         'timeZone': time.get_zone(),
         'entityIdentifier': "car",
+        'valueIdentifier': "Health",
+        'additionalTag': "testTag"
+    }
+inputResponse = falkonry.add_facts(assessmentId, 'json', options, data)
+```
+
+#### Add facts data (csv format) to Assessment of single entity datastream
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry      = Falkonry('http://localhost:8080', 'auth-token')
+assessmentId = 'id of the assessment'
+data          = 'time,end,Health' + "\n"
+                 + '2011-03-26T12:00:00.000Z,2012-06-01T00:00:00.000Z,Normal' + "\n"
+                 + '2014-02-10T23:00:00.000Z,2014-03-20T12:00:00.000Z,Spalling';
+
+options = {
+        'startTimeIdentifier': "time",
+        'endTimeIdentifier': "end",
+        'timeFormat': "iso_8601",
+        'timeZone': time.get_zone(),
         'valueIdentifier': "Health"
     }
 
 inputResponse = falkonry.add_facts(assessmentId, 'csv', options, data)
 ```
 
-#### Add facts data (csv format) with tags to Assessment of a multi entity datastream
-
+#### Add facts data (csv format) with tags Assessment of multi entity datastream
 ```python
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
@@ -1091,9 +1115,9 @@ from falkonryclient import schemas as Schemas
 #instantiate Falkonry
 falkonry      = Falkonry('http://localhost:8080', 'auth-token')
 assessmentId = 'id of the assessment'
-data          = 'time,car,end,Health,Tags' + "\n"
-                 + '2011-03-26T12:00:00.000Z,HI3821,2012-06-01T00:00:00.000Z,Normal,testTag' + "\n"
-                 + '2014-02-10T23:00:00.000Z,HI3821,2014-03-20T12:00:00.000Z,Spalling,testTag1';
+data          = 'time,car,end,Health,Tag' + "\n"
+                 + '2011-03-26T12:00:00.000Z,HI3821,2012-06-01T00:00:00.000Z,Normal,testTag1' + "\n"
+                 + '2014-02-10T23:00:00.000Z,HI3821,2014-03-20T12:00:00.000Z,Spalling,testTag2';
 
 options = {
         'startTimeIdentifier': "time",
@@ -1102,43 +1126,19 @@ options = {
         'timeZone': time.get_zone(),
         'entityIdentifier': "car",
         'valueIdentifier': "Health",
-        'tagIdentifier': 'Tags'
+        'tagIdentifier': 'Tag'
     }
 
 inputResponse = falkonry.add_facts(assessmentId, 'csv', options, data)
 ```
 
-#### Add facts data (csv format) with additional Tags to Assessment of a multi entity datastream
-
-```python
-from falkonryclient import client as Falkonry
-from falkonryclient import schemas as Schemas
-
-#instantiate Falkonry
-falkonry      = Falkonry('http://localhost:8080', 'auth-token')
-assessmentId = 'id of the assessment'
-data          = 'time,car,end,Health' + "\n"
-                 + '2011-03-26T12:00:00.000Z,HI3821,2012-06-01T00:00:00.000Z,Normal' + "\n"
-                 + '2014-02-10T23:00:00.000Z,HI3821,2014-03-20T12:00:00.000Z,Spalling';
-
-options = {
-        'startTimeIdentifier': "time",
-        'endTimeIdentifier': "end",
-        'timeFormat': "iso_8601",
-        'timeZone': time.get_zone(),
-        'entityIdentifier': "car",
-        'valueIdentifier': "Health",
-        'additionalTags': 'testTag'
-    }
-
-input
-
-```
-
 #### Add facts data (json format) from a stream to Assessment of a multi entity datastream
-Sample Facts json file
+
+Sample file:
+```
     {"time" : "2011-03-26T12:00:00.000Z", "car" : "HI3821", "end" : "2012-06-01T00:00:00.000Z", "Health" : "Normal"}
     {"time" : "2014-02-10T23:00:00.000Z", "car" : "HI3821", "end" : "2014-03-20T12:00:00.000Z", "Health" : "Spalling"}
+```
 
 ```python
 import os, sys
@@ -1163,10 +1163,13 @@ response = falkonry.add_facts_stream(assessmentId, 'json', options, stream)
 ```
 
 #### Add facts data (csv format) from a stream to Assessment of a multi entity datastream
-Sample CSV Files
-time,car,end,Health
-2011-03-26T12:00:00.000Z,HI3821,2012-06-01T00:00:00.000Z,Normal
-2014-02-10T23:00:00.000Z,HI3821,2014-03-20T12:00:00.000Z,Spalling
+
+Sample File
+```
+    time,car,end,Health
+    2011-03-26T12:00:00.000Z,HI3821,2012-06-01T00:00:00.000Z,Normal
+    2014-02-10T23:00:00.000Z,HI3821,2014-03-20T12:00:00.000Z,Spalling
+```
 
 ```python
 import os, sys

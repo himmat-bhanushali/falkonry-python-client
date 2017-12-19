@@ -5,7 +5,7 @@ import json
 
 
 host  = 'https://localhost:8080'  # host url
-token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
+token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                       # auth token
 
 
 # Add facts for single entity datastream
@@ -37,6 +37,8 @@ class TestAddFacts(unittest.TestCase):
         try:
             datastreamResponse = fclient.create_datastream(datastream)
             data = '{"time" :"2016-03-01 01:01:01", "current" : 12.4, "vibration" : 3.4, "state" : "On"}'
+            options = {'streaming': False,
+                       'hasMoreData': False}
             response = fclient.add_input_data(datastreamResponse.get_id(), 'json', {}, data)
 
             asmtRequest = Schemas.AssessmentRequest()
