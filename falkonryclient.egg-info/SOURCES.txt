@@ -26,3 +26,4 @@ falkonryclient/service/__init__.py
 falkonryclient/service/entity.py
 falkonryclient/service/falkonry.py
 falkonryclient/service/http.py
+test/test.py
