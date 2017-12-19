@@ -63,3 +63,10 @@ class Field:
         field['time'] = jsonpickle.unpickler.decode((self.get_time()).to_json())
         field['signal'] = jsonpickle.unpickler.decode((self.get_signal()).to_json())
         return json.dumps(field)
+
+    def set_batchIdentifier(self, batchIdentifier):
+        self.raw['batchIdentifier'] = batchIdentifier
+        return self
+
+    def get_batchIdentifier(self):
+        return self.raw['batchIdentifier'] if 'batchIdentifier' in self.raw else None
