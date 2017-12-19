@@ -261,7 +261,7 @@ class TestDatastream(unittest.TestCase):
         time.set_format("iso_8601")                                 # set time format of the datastream
         field.set_time(time)
         field.set_signal(signal)                                    # set signal in field
-        field.set_entityIdentifier("thing")
+        field.set_entityIdentifier("entity")
         datasource.set_type("STANDALONE")                           # set datastource type in datastream
         datastream.set_datasource(datasource)
         datastream.set_field(field)
@@ -276,7 +276,7 @@ class TestDatastream(unittest.TestCase):
 
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
-            self.assertEqual(fieldResponse.get_entityIdentifier(),"thing",'Invalid entity identifier object after creation')
+            self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
             self.assertEqual(fieldResponse.get_entityName(),None,'Invalid entity name object after creation')
 
             timeResponse = fieldResponse.get_time()

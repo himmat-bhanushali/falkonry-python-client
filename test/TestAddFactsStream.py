@@ -7,7 +7,7 @@ token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                       # auth token
 
 
 
-#Add facts for single thing datastream
+#Add facts for single entity datastream
 class TestAddFacts(unittest.TestCase):
 
     def setUp(self):

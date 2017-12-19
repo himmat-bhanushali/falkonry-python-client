@@ -11,7 +11,7 @@ class TestAddDataStream(unittest.TestCase):
     def setUp(self):
         pass
 
-    # Add historical wide input data (json format) to single thing Datastream (Used for model revision)
+    # Add historical wide input data (json format) to single entity Datastream (Used for model revision)
     def test_add_historical_json_data_stream(self):
         fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
@@ -56,7 +56,7 @@ class TestAddDataStream(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
-    # Add historical input data (csv format) from a stream to single thing Datastream (Used for model revision)
+    # Add historical input data (csv format) from a stream to single entity Datastream (Used for model revision)
     def test_add_historical_csv_data_stream(self):
         fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
@@ -101,7 +101,7 @@ class TestAddDataStream(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
-    # Add historical input data (csv format) from a stream to Multi thing Datastream (Used for model revision)
+    # Add historical input data (csv format) from a stream to Multi entity Datastream (Used for model revision)
     def test_add_historical_csv_data_stream_multi(self):
         fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
@@ -124,7 +124,7 @@ class TestAddDataStream(unittest.TestCase):
         try:
             datastreamResponse = fclient.create_datastream(datastream)
             try:
-                data = io.open('./dataMultiThing.csv')
+                data = io.open('./dataMultientity.csv')
 
                 options = {'streaming': False,
                            'hasMoreData': False,

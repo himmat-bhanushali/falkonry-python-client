@@ -10,7 +10,7 @@ class TestAddData(unittest.TestCase):
     def setUp(self):
         pass
 
-    # Add narrow input data (json format) to multi thing Datastream
+    # Add narrow input data (json format) to multi entity Datastream
     def test_add_data_json_mutli(self):
         fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
@@ -61,7 +61,7 @@ class TestAddData(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
-    # Add narrow input data (csv format) to single thing to Datastream
+    # Add narrow input data (csv format) to single entity to Datastream
     def test_add_data_csv_single(self):
         fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
@@ -107,7 +107,7 @@ class TestAddData(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
-    # Add wide input data (json format) to single thing Datastream
+    # Add wide input data (json format) to single entity Datastream
     def test_add_data_json_single(self):
         fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
@@ -151,7 +151,7 @@ class TestAddData(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
-    # Add wide input data (csv format) to multi thing Datastream
+    # Add wide input data (csv format) to multi entity Datastream
     def test_add_data_csv_multi(self):
         fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
@@ -196,6 +196,138 @@ class TestAddData(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
+    # Cannot add data due to missing time Identifer
+    def test_add_data_csv_multi_miss_time_identifier(self):
+        fclient = FClient(host=host, token=token, options=None)
+        datastream = Schemas.Datastream()
+        datastream.set_name('Motor Health' + str(random.random()))
+
+        datasource = Schemas.Datasource()
+        field = Schemas.Field()
+        time = Schemas.Time()
+        signal = Schemas.Signal()
+        time.set_zone("GMT")
+        time.set_identifier("time")
+        time.set_format("YYYY-MM-DD HH:mm:ss")
+        field.set_signal(signal)
+        datasource.set_type("STANDALONE")
+        field.set_time(time)
+        field.set_entityIdentifier('car')
+        datastream.set_datasource(datasource)
+        datastream.set_field(field)
+
+        try:
+            datastreamResponse = fclient.create_datastream(datastream)
+            try:
+                data = "time,current,vibrarion,state,car " + "\n" + "2016-03-01 01:01:01,12.4,3.4,on,car1" + "\n" + "2016-03-01 01:01:01,31.2,1.4.off,car1" + "\n" + "2016-03-01 01:01:01,24,3.2,on,car2" + "\n" + "2016-03-01 01:01:01,31,3.4.off,car2"
+                options = {'streaming': False,
+                           'hasMoreData': False,
+                           'timeFormat': time.get_format(),
+                           'timeZone': time.get_zone(),
+                           # 'timeIdentifier': time.get_identifier(),
+                           'entityIdentifier': 'car'}
+                response = fclient.add_input_data(datastreamResponse.get_id(), 'csv', options, data)
+
+                # tear down
+                try:
+                    fclient.delete_datastream(datastreamResponse.get_id())
+                except Exception as e:
+                    pass
+            except Exception as e:
+                print(e.message)
+                self.assertNotEqual(e.message, "Missing time identifier", 'Missing time identifer error not caught')
+        except Exception as e:
+            print(e.message)
+            self.assertEqual(0, 1, 'Cannot create datastream')
+
+    # Cannot add data due to missing time zone
+    def test_add_data_csv_multi_miss_time_zone(self):
+        fclient = FClient(host=host, token=token, options=None)
+        datastream = Schemas.Datastream()
+        datastream.set_name('Motor Health' + str(random.random()))
+
+        datasource = Schemas.Datasource()
+        field = Schemas.Field()
+        time = Schemas.Time()
+        signal = Schemas.Signal()
+        time.set_zone("GMT")
+        time.set_identifier("time")
+        time.set_format("YYYY-MM-DD HH:mm:ss")
+        field.set_signal(signal)
+        datasource.set_type("STANDALONE")
+        field.set_time(time)
+        field.set_entityIdentifier('car')
+        datastream.set_datasource(datasource)
+        datastream.set_field(field)
+
+        try:
+            datastreamResponse = fclient.create_datastream(datastream)
+            try:
+                data = "time,current,vibrarion,state,car " + "\n" + "2016-03-01 01:01:01,12.4,3.4,on,car1" + "\n" + "2016-03-01 01:01:01,31.2,1.4.off,car1" + "\n" + "2016-03-01 01:01:01,24,3.2,on,car2" + "\n" + "2016-03-01 01:01:01,31,3.4.off,car2"
+                options = {'streaming': False,
+                           'hasMoreData': False,
+                           'timeFormat': time.get_format(),
+                           # 'timeZone': time.get_zone(),
+                           'timeIdentifier': time.get_identifier(),
+                           'entityIdentifier': 'car'}
+                response = fclient.add_input_data(datastreamResponse.get_id(), 'csv', options, data)
+
+                # tear down
+                try:
+                    fclient.delete_datastream(datastreamResponse.get_id())
+                except Exception as e:
+                    pass
+            except Exception as e:
+                print(e.message)
+                self.assertNotEqual(e.message, "Missing time zone", 'Missing time zone error not caught')
+        except Exception as e:
+            print(e.message)
+            self.assertEqual(0, 1, 'Cannot create datastream')
+
+    # Cannot add data due to missing time format
+    def test_add_data_csv_multi_miss_time_format(self):
+        fclient = FClient(host=host, token=token, options=None)
+        datastream = Schemas.Datastream()
+        datastream.set_name('Motor Health' + str(random.random()))
+
+        datasource = Schemas.Datasource()
+        field = Schemas.Field()
+        time = Schemas.Time()
+        signal = Schemas.Signal()
+        time.set_zone("GMT")
+        time.set_identifier("time")
+        time.set_format("YYYY-MM-DD HH:mm:ss")
+        field.set_signal(signal)
+        datasource.set_type("STANDALONE")
+        field.set_time(time)
+        field.set_entityIdentifier('car')
+        datastream.set_datasource(datasource)
+        datastream.set_field(field)
+
+        try:
+            datastreamResponse = fclient.create_datastream(datastream)
+            try:
+                data = "time,current,vibrarion,state,car " + "\n" + "2016-03-01 01:01:01,12.4,3.4,on,car1" + "\n" + "2016-03-01 01:01:01,31.2,1.4.off,car1" + "\n" + "2016-03-01 01:01:01,24,3.2,on,car2" + "\n" + "2016-03-01 01:01:01,31,3.4.off,car2"
+                options = {'streaming': False,
+                           'hasMoreData': False,
+                           # 'timeFormat': time.get_format(),
+                           'timeZone': time.get_zone(),
+                           'timeIdentifier': time.get_identifier(),
+                           'entityIdentifier': 'car'}
+                response = fclient.add_input_data(datastreamResponse.get_id(), 'csv', options, data)
+
+                # tear down
+                try:
+                    fclient.delete_datastream(datastreamResponse.get_id())
+                except Exception as e:
+                    pass
+            except Exception as e:
+                print(e.message)
+                self.assertNotEqual(e.message, "Missing time format", 'Missing time format error not caught')
+        except Exception as e:
+            print(e.message)
+            self.assertEqual(0, 1, 'Cannot create datastream')
+
 
     # Add live input data (json format) to Datastream (Used for live monitoring)
     @unittest.skip("streaming can only be done once ")
@@ -204,7 +336,7 @@ class TestAddData(unittest.TestCase):
         fclient = FClient(host=host, token=token,options=None)
         datastreamId = 'datstream-id' #id if the datasream which is live
         try:
-            data = "time, tag, value " + "\n"+ "2016-03-01 01:01:01, signal1_thing1, 3.4" + "\n"+ "2016-03-01 01:01:01, signal2_thing1, 1.4"
+            data = "time, tag, value " + "\n"+ "2016-03-01 01:01:01, signal1_entity1, 3.4" + "\n"+ "2016-03-01 01:01:01, signal2_entity1, 1.4"
             options = {'streaming': True, 'hasMoreData':False}
             response = fclient.add_input_data(datastreamId, 'json', options, data)
             self.assertNotEqual(response, 'Data Submitted Successfully', 'Cannot add historical input data to datastream')
