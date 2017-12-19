@@ -2,7 +2,7 @@ import unittest
 import random
 
 host  = 'https://localhost:8080'  # host url
-token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
+token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                       # auth token
 
 
 class TestAddData(unittest.TestCase):
@@ -61,7 +61,7 @@ class TestAddData(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
-    # Add narrow input data (csv format) single thing to Datastream
+    # Add narrow input data (csv format) to single thing to Datastream
     def test_add_data_csv_single(self):
         fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
@@ -92,8 +92,6 @@ class TestAddData(unittest.TestCase):
                            'timeFormat': time.get_format(),
                            'timeZone': time.get_zone(),
                            'timeIdentifier': time.get_identifier()}
-                           # 'signalIdentifier': 'signal',
-                           # 'valueIdentifier': 'value'}
                 response = fclient.add_input_data(datastreamResponse.get_id(), 'csv', options, data)
                 self.assertNotEqual(response['__$id'], None, 'Cannot add input data to datastream')
 

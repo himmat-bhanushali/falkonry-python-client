@@ -71,3 +71,6 @@ if __name__ == '__main__':
     else:
         from ..falkonryclient import schemas as Schemas
     unittest.main()
+else:
+    from falkonryclient import schemas as Schemas
+    from falkonryclient import client as FClient

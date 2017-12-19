@@ -2,7 +2,7 @@ import unittest
 import json
 
 host  = 'https://localhost:8080'  # host url
-token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                        # auth token
+token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                        # auth token
 assessment = 'jrvk3e8mnc0nyc'                     # assessment id
 
 
@@ -69,3 +69,6 @@ if __name__ == '__main__':
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
     unittest.main()
+else:
+    from falkonryclient import schemas as Schemas
+    from falkonryclient import client as FClient
