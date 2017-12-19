@@ -35,12 +35,10 @@ $ pip install falkonryclient
     * Add live input data (csv format) to Datastream (Used for live monitoring) 
     * Add live input data (json format) from a stream to Datastream (Used for live monitoring) 
     * Add live input data (csv format) from a stream to Datastream (Used for live monitoring)
-
     * Add narrow input data (csv format) with batch identifier to multi thing Datastream
     * Add narrow input data (json format) with batch identifier to single thing Datastream
     * Add wide input data (csv format) with batch identifier to multi thing Datastream
     * Add wide input data (json format) with batch identifier to single thing Datastream
-    
     * Create Assessment
     * Retrieve Assessments
     * Retrieve Assessment by Id
