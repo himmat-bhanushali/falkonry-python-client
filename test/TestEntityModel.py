@@ -42,15 +42,9 @@ class TestSchema(unittest.TestCase):
 
     def test_signal_model(self):
         signal = Schemas.Signal()
-        signal.set_isSignalPrefix(True)
         signal.set_valueIdentifier("value")
-        signal.set_delimiter("_")
-        signal.set_tagIdentifier("tag")
 
-        self.assertEqual(signal.get_isSignalPrefix(), True, 'Invalid signal prefix')
         self.assertEqual(signal.get_valueIdentifier(), 'value', 'Invalid value identifier')
-        self.assertEqual(signal.get_delimiter(), '_', 'Invalid signal delimiter')
-        self.assertEqual(signal.get_tagIdentifier(), 'tag', 'Invalid tag identifier')
 
     def test_input_model(self):
         input = Schemas.Input()
@@ -77,3 +71,6 @@ if __name__ == '__main__':
     else:
         from ..falkonryclient import schemas as Schemas
     unittest.main()
+else:
+    from falkonryclient import schemas as Schemas
+    from falkonryclient import client as FClient

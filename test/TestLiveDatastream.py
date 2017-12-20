@@ -2,7 +2,7 @@ import unittest
 import random
 
 host  = 'https://localhost:8080'  # host url
-token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
+token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                       # auth token
 
 
 class TestLiveDatastream(unittest.TestCase):
@@ -47,7 +47,7 @@ class TestLiveDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
             #  Got TO Falkonry UI and run a model revision
-            listAssessment = fclient.on_datastream(response.get_id())
+            listAssessment = fclient.on_datastream("7v9nrnpl6clkwk")
 
             # tear down
             try:
@@ -94,8 +94,21 @@ class TestLiveDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_identifier(), time.get_identifier(), 'Invalid time identifier object after creation')
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
+            data = '{"time" : "2016-03-01 01:01:01", "signal" : "current", "value" : 12.4, "car" : "unit1"}'+'{"time" : "2016-03-01 02:01:01", "signal" : "current", "value" : 13.4, "car" : "unit1"}'
+            options = {'streaming': False,
+                       'hasMoreData': False,
+                       'timeFormat': "YYYY-MM-DD HH:mm:ss",
+                       'timeZone': time.get_zone(),
+                       'timeIdentifier': time.get_identifier(),
+                       'signalIdentifier': 'signal',
+                       'valueIdentifier': 'value',
+                       'entityIdentifier': 'car'}
+            response = fclient.add_input_data(response.get_id(), 'json', options, data)
+            self.assertNotEqual(response['__$id'], None, 'Cannot add input data to datastream')
+
+
             #  Got TO Falkonry UI and run a model revision
-            listAssessment = fclient.off_datastream(response.get_id())
+            listAssessment = fclient.off_datastream("7v9nrnpl6clkwk")
 
             # tear down
             try:
@@ -123,3 +136,6 @@ if __name__ == '__main__':
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
     unittest.main()
+else:
+    from falkonryclient import schemas as Schemas
+    from falkonryclient import client as FClient

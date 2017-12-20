@@ -112,18 +112,8 @@ class FalkonryService:
         :param data: string
         """
 
-        if 'streaming' in options and options['streaming'] is True:
-            streaming = 'true'
-        else:
-            streaming = 'false'
+        url = self.get_add_input_data_url(datastream, options)
 
-        if 'hasMoreData' in options and options['hasMoreData'] is True:
-            hasMoreData = 'true'
-        else:
-            hasMoreData = 'false'
-
-
-        url = '/Datastream/' + str(datastream) + '?streaming=' + streaming + '&hasMoreData=' + hasMoreData
         form_data = {
             'files': {
                 'data': (
@@ -163,18 +153,7 @@ class FalkonryService:
         :param data: Stream
         """
 
-        if 'streaming' in options and options['streaming'] is True:
-            streaming = 'true'
-        else:
-            streaming = 'false'
-
-        if 'hasMoreData' in options and options['hasMoreData'] is True:
-            hasMoreData = 'true'
-        else:
-            hasMoreData = 'false'
-
-
-        url = '/Datastream/' + str(datastream) + '?streaming=' + streaming + '&hasMoreData=' + hasMoreData
+        url = self.get_add_input_data_url(datastream, options)
         form_data = {
             'files': {
                 'data': (
@@ -187,6 +166,40 @@ class FalkonryService:
         }
         response = self.http.upstream(url, form_data)
         return response
+
+    def get_add_input_data_url(self,datastream, options):
+
+        url = '/Datastream/' + str(datastream) + '?'
+
+        if 'streaming' in options and options['streaming'] is True:
+            url += 'streaming=true'
+        else:
+            url += 'streaming=false'
+
+        if 'hasMoreData' in options and options['hasMoreData'] is True:
+            url += '&hasMoreData=true'
+        else:
+            url += '&hasMoreData=false'
+
+        if 'timeFormat' in options:
+            url += '&timeFormat=' + str(options['timeFormat'])
+
+        if 'timeZone' in options:
+            url += '&timeZone=' + str(options['timeZone'])
+
+        if 'timeIdentifier' in options:
+            url += '&timeIdentifier=' + str(options['timeIdentifier'])
+
+        if 'signalIdentifier' in options:
+            url += '&signalIdentifier=' + str(options['signalIdentifier'])
+
+        if 'valueIdentifier' in options:
+            url += '&valueIdentifier=' + str(options['valueIdentifier'])
+
+        if 'entityIdentifier' in options:
+            url += '&entityIdentifier=' + str(options['entityIdentifier'])
+
+        return  url
 
     def add_facts_stream(self, assessment, data_type, options, data):
         """

@@ -2,7 +2,7 @@ import unittest
 import random
 
 host  = 'https://localhost:8080'  # host url
-token = '2mxtm6vaor8m4klbmh4zhn80khsji74y'                       # auth token
+token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                       # auth token
 
 
 
@@ -70,10 +70,8 @@ class TestDatastream(unittest.TestCase):
         time.set_identifier("time")                                 # set time identifier of the datastream
         time.set_format("iso_8601")                                 # set time format of the datastream
         field.set_time(time)
-        signal.set_delimiter(None)                                  # set delimiter to None
-        signal.set_tagIdentifier("tag")                             # set tag identifier
-        signal.set_valueIdentifier("value")                         # set value identifier
-        signal.set_isSignalPrefix(False)                            # as this is single entity, set signal prefix flag to false
+        signal.set_valueIdentifier("value")
+        signal.set_signalIdentifier("signal")
         field.set_signal(signal)                                    # set signal in field
         datasource.set_type("STANDALONE")                           # set datastource type in datastream
         datastream.set_datasource(datasource)
@@ -90,10 +88,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
             self.assertEqual(fieldResponse.get_entityName(),response.get_name(),'Invalid entity name object after creation')
             signalResponse = fieldResponse.get_signal()
-            self.assertEqual(signalResponse.get_delimiter(),signal.get_delimiter(), 'Invalid delimiter after object creation')
-            self.assertEqual(signalResponse.get_tagIdentifier(),signal.get_tagIdentifier(), 'Invalid tag identifier after object creation')
             self.assertEqual(signalResponse.get_valueIdentifier(),signal.get_valueIdentifier(), 'Invalid value identifier after object creation')
-            self.assertEqual(signalResponse.get_isSignalPrefix(),signal.get_isSignalPrefix(), 'Invalid is signal prefix after object creation')
             timeResponse = fieldResponse.get_time()
             self.assertEqual(isinstance(timeResponse, Schemas.Time), True, 'Invalid time object after creation')
             self.assertEqual(timeResponse.get_zone(), time.get_zone(), 'Invalid zone object after creation')
@@ -123,10 +118,9 @@ class TestDatastream(unittest.TestCase):
         time.set_identifier("time")                                 # set time identifier of the datastream
         time.set_format("iso_8601")                                 # set time format of the datastream
         field.set_time(time)
-        signal.set_delimiter("_")                                  # set delimiter to None
-        signal.set_tagIdentifier("tag")                             # set tag identifier
-        signal.set_valueIdentifier("value")                         # set value identifier
-        signal.set_isSignalPrefix(False)                            # as this is single entity, set signal prefix flag to false
+        signal.set_signalIdentifier("signal")                       # set signal identifier
+        signal.set_valueIdentifier("value")
+        field.set_entityIdentifier("entity")# set value identifier
         field.set_signal(signal)                                    # set signal in field
         datasource.set_type("STANDALONE")                           # set datastource type in datastream
         datastream.set_datasource(datasource)
@@ -140,13 +134,10 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
-            self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
             self.assertEqual(fieldResponse.get_entityName(),None,'Invalid entity name object after creation')
             signalResponse = fieldResponse.get_signal()
-            self.assertEqual(signalResponse.get_delimiter(),signal.get_delimiter(), 'Invalid delimiter after object creation')
-            self.assertEqual(signalResponse.get_tagIdentifier(),signal.get_tagIdentifier(), 'Invalid tag identifier after object creation')
             self.assertEqual(signalResponse.get_valueIdentifier(),signal.get_valueIdentifier(), 'Invalid value identifier after object creation')
-            self.assertEqual(signalResponse.get_isSignalPrefix(),signal.get_isSignalPrefix(), 'Invalid is signal prefix after object creation')
+            self.assertEqual(signalResponse.get_signalIdentifier(), signal.get_signalIdentifier(), 'Invalid signal identifier after object creation')
             timeResponse = fieldResponse.get_time()
             self.assertEqual(isinstance(timeResponse, Schemas.Time), True, 'Invalid time object after creation')
             self.assertEqual(timeResponse.get_zone(), time.get_zone(), 'Invalid zone object after creation')
@@ -273,7 +264,7 @@ class TestDatastream(unittest.TestCase):
         time.set_format("iso_8601")                                 # set time format of the datastream
         field.set_time(time)
         field.set_signal(signal)                                    # set signal in field
-        field.set_entityIdentifier("thing")
+        field.set_entityIdentifier("entity")
         datasource.set_type("STANDALONE")                           # set datastource type in datastream
         datastream.set_datasource(datasource)
         datastream.set_field(field)
@@ -288,7 +279,7 @@ class TestDatastream(unittest.TestCase):
 
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
-            self.assertEqual(fieldResponse.get_entityIdentifier(),"thing",'Invalid entity identifier object after creation')
+            self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
             self.assertEqual(fieldResponse.get_entityName(),None,'Invalid entity name object after creation')
 
             timeResponse = fieldResponse.get_time()
@@ -371,10 +362,10 @@ class TestDatastream(unittest.TestCase):
 
     # Retrieve Datastream by Id
     def test_get_datastream_by_id(self):
-        fclient = FClient(host=host, token=token,options=None)
+
+        fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
-
         datasource = Schemas.Datasource()
         field = Schemas.Field()
         time = Schemas.Time()
@@ -383,6 +374,8 @@ class TestDatastream(unittest.TestCase):
         time.set_zone("GMT")
         time.set_identifier("time")
         time.set_format("iso_8601")
+        signal.set_signalIdentifier("signal")
+        signal.set_valueIdentifier("value")
         field.set_signal(signal)
         datasource.set_type("STANDALONE")
         field.set_time(time)
@@ -421,10 +414,10 @@ class TestDatastream(unittest.TestCase):
 
     # Delete Datastream
     def test_delete_datastream_by_id(self):
-        fclient = FClient(host=host, token=token,options=None)
+
+        fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
-
         datasource = Schemas.Datasource()
         field = Schemas.Field()
         time = Schemas.Time()
@@ -438,6 +431,7 @@ class TestDatastream(unittest.TestCase):
         field.set_time(time)
         datastream.set_datasource(datasource)
         datastream.set_field(field)
+
 
         try:
             response = fclient.create_datastream(datastream)
@@ -466,28 +460,28 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream microseconds precision
-    def test_create_datastream_narrow_style_multiple_entity(self):
-        fclient = FClient(host=host, token=token,options=None)
+    def test_create_datastream_micro_second_precision(self):
+        fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
+        datastream.set_name('Motor Health' + str(random.random()))
+        datastream.set_time_precision('micro')  # set 'micro' for microseconds precision
         datasource = Schemas.Datasource()
         field = Schemas.Field()
         time = Schemas.Time()
         signal = Schemas.Signal()
 
-        datastream.set_name('Motor Health' + str(random.random()))  # set name of the Datastream
-        datastream.set_time_precision('micro')                      # set 'micro' for microseconds precision
-        time.set_zone("GMT")                                        # set timezone of the datastream
-        time.set_identifier("time")                                 # set time identifier of the datastream
-        time.set_format("iso_8601")                                 # set time format of the datastream
+        time.set_zone("GMT")
+        time.set_identifier("time")
+        time.set_format("iso_8601")
+        signal.set_signalIdentifier("signal")
+        signal.set_valueIdentifier("value")
+        field.set_entityIdentifier("entity")
+        field.set_signal(signal)
+        datasource.set_type("STANDALONE")
         field.set_time(time)
-        signal.set_delimiter("_")                                   # set delimiter to None
-        signal.set_tagIdentifier("tag")                             # set tag identifier
-        signal.set_valueIdentifier("value")                         # set value identifier
-        signal.set_isSignalPrefix(False)                            # as this is single entity, set signal prefix flag to false
-        field.set_signal(signal)                                    # set signal in field
-        datasource.set_type("STANDALONE")                           # set datastource type in datastream
         datastream.set_datasource(datasource)
         datastream.set_field(field)
+
 
         try:
             # create Datastream
@@ -500,10 +494,8 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
             self.assertEqual(fieldResponse.get_entityName(),None,'Invalid entity name object after creation')
             signalResponse = fieldResponse.get_signal()
-            self.assertEqual(signalResponse.get_delimiter(),signal.get_delimiter(), 'Invalid delimiter after object creation')
-            self.assertEqual(signalResponse.get_tagIdentifier(),signal.get_tagIdentifier(), 'Invalid tag identifier after object creation')
+            self.assertEqual(signalResponse.get_signalIdentifier(), "signal", 'Invalid signal identifier object after creation')
             self.assertEqual(signalResponse.get_valueIdentifier(),signal.get_valueIdentifier(), 'Invalid value identifier after object creation')
-            self.assertEqual(signalResponse.get_isSignalPrefix(),signal.get_isSignalPrefix(), 'Invalid is signal prefix after object creation')
             timeResponse = fieldResponse.get_time()
             self.assertEqual(isinstance(timeResponse, Schemas.Time), True, 'Invalid time object after creation')
             self.assertEqual(timeResponse.get_zone(), time.get_zone(), 'Invalid zone object after creation')
@@ -537,3 +529,6 @@ if __name__ == '__main__':
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
     unittest.main()
+else:
+    from falkonryclient import schemas as Schemas
+    from falkonryclient import client as FClient
