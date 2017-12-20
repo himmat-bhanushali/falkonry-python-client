@@ -119,7 +119,8 @@ class TestDatastream(unittest.TestCase):
         time.set_format("iso_8601")                                 # set time format of the datastream
         field.set_time(time)
         signal.set_signalIdentifier("signal")                       # set signal identifier
-        signal.set_valueIdentifier("value")                         # set value identifier
+        signal.set_valueIdentifier("value")
+        field.set_entityIdentifier("entity")# set value identifier
         field.set_signal(signal)                                    # set signal in field
         datasource.set_type("STANDALONE")                           # set datastource type in datastream
         datastream.set_datasource(datasource)
@@ -133,10 +134,10 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
-            self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
             self.assertEqual(fieldResponse.get_entityName(),None,'Invalid entity name object after creation')
             signalResponse = fieldResponse.get_signal()
             self.assertEqual(signalResponse.get_valueIdentifier(),signal.get_valueIdentifier(), 'Invalid value identifier after object creation')
+            self.assertEqual(signalResponse.get_signalIdentifier(), signal.get_signalIdentifier(), 'Invalid signal identifier after object creation')
             timeResponse = fieldResponse.get_time()
             self.assertEqual(isinstance(timeResponse, Schemas.Time), True, 'Invalid time object after creation')
             self.assertEqual(timeResponse.get_zone(), time.get_zone(), 'Invalid zone object after creation')
