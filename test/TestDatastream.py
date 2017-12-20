@@ -68,7 +68,8 @@ class TestDatastream(unittest.TestCase):
         time.set_identifier("time")                                 # set time identifier of the datastream
         time.set_format("iso_8601")                                 # set time format of the datastream
         field.set_time(time)
-        # signal.set_valueIdentifier("value")                         # set value identifier
+        signal.set_valueIdentifier("value")
+        signal.set_signalIdentifier("signal")
         field.set_signal(signal)                                    # set signal in field
         datasource.set_type("STANDALONE")                           # set datastource type in datastream
         datastream.set_datasource(datasource)
@@ -377,26 +378,6 @@ class TestDatastream(unittest.TestCase):
         datastream.set_datasource(datasource)
         datastream.set_field(field)
 
-
-
-        # fclient = FClient(host=host, token=token,options=None)
-        # datastream = Schemas.Datastream()
-        # datastream.set_name('Motor Health' + str(random.random()))
-        #
-        # datasource = Schemas.Datasource()
-        # field = Schemas.Field()
-        # time = Schemas.Time()
-        # signal = Schemas.Signal()
-        #
-        # time.set_zone("GMT")
-        # time.set_identifier("time")
-        # time.set_format("iso_8601")
-        # field.set_signal(signal)
-        # datasource.set_type("STANDALONE")
-        # field.set_time(time)
-        # datastream.set_datasource(datasource)
-        # datastream.set_field(field)
-
         try:
             response = fclient.create_datastream(datastream)
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
@@ -509,6 +490,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
             self.assertEqual(fieldResponse.get_entityName(),None,'Invalid entity name object after creation')
             signalResponse = fieldResponse.get_signal()
+            self.assertEqual(signalResponse.get_signalIdentifier(), "signal", 'Invalid signal identifier object after creation')
             self.assertEqual(signalResponse.get_valueIdentifier(),signal.get_valueIdentifier(), 'Invalid value identifier after object creation')
             timeResponse = fieldResponse.get_time()
             self.assertEqual(isinstance(timeResponse, Schemas.Time), True, 'Invalid time object after creation')

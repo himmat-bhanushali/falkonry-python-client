@@ -114,18 +114,6 @@ class FalkonryService:
 
         url = self.get_add_input_data_url(datastream, options)
 
-        # if 'streaming' in options and options['streaming'] is True:
-        #     streaming = 'true'
-        # else:
-        #     streaming = 'false'
-        #
-        # if 'hasMoreData' in options and options['hasMoreData'] is True:
-        #     hasMoreData = 'true'
-        # else:
-        #     hasMoreData = 'false'
-        #
-        #
-        # url = '/Datastream/' + str(datastream) + '?streaming=' + streaming + '&hasMoreData=' + hasMoreData
         form_data = {
             'files': {
                 'data': (

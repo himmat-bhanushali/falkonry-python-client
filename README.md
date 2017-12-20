@@ -27,10 +27,10 @@ $ pip install falkonryclient
     * Delete Datastream
     * Add EntityMeta to a Datastream
     * Get EntityMeta of a Datastream
-    * Add narrow input data (json format) to multi entity Datastream
-    * Add narrow input data (csv format) single entity to Datastream
-    * Add wide input data (json format) to single entity Datastream
-    * Add wide input data (csv format) to multi entity Datastream
+    * Add historical narrow input data (json format) to multi entity Datastream (Used for model revision)
+    * Add historical narrow input data (csv format) single entity to Datastream (Used for model revision)
+    * Add historical wide input data (json format) to single entity Datastream (Used for model revision)
+    * Add historical wide input data (csv format) to multi entity Datastream (Used for model revision)
     * Add live input data (json format) to Datastream (Used for live monitoring) 
     * Add live input data (csv format) to Datastream (Used for live monitoring) 
     * Add live input data (json format) from a stream to Datastream (Used for live monitoring) 
@@ -99,10 +99,8 @@ time.set_zone("GMT")                                        # set timezone of th
 time.set_identifier("time")                                 # set time identifier of the datastream
 time.set_format("iso_8601")                                 # set time format of the datastream
 field.set_time(time)            
-signal.set_delimiter(None)                                  # set delimiter to None 
-signal.set_tagIdentifier("tag")                             # set tag identifier
 signal.set_valueIdentifier("value")                         # set value identifier
-signal.set_isSignalPrefix(False)                            # as this is single entity, set signal prefix flag to false
+signal.set_signalIdentifier("signal")                       # set signal identifier
 field.set_signal(signal)                                    # set signal in field
 datasource.set_type("STANDALONE")                           # set datastource type in datastream
 datastream.set_datasource(datasource)
@@ -112,26 +110,26 @@ datastream.set_field(field)
 createdDatastream = fclient.create_datastream(datastream)
 ```
 
-#### Create Datastream for narrow/historian style data from multiple entitys
+#### Create Datastream for narrow/historian style data from multiple entities
     
 Data :
 
 ```
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_entity1", "value" : 3.4}
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_entity1", "value" : 1.4}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_entity2", "value" : 9.3}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_entity2", "value" : 4.3}
+    {"time" :"2016-03-01 01:01:01", "signal" : "signal1", "entity" : "entity1", "value" : 3.4}
+    {"time" :"2016-03-01 01:01:02", "signal" : "signal2", "entity" : "entity2", "value" : 1.4}
+    {"time" :"2016-03-01 01:01:03", "signal" : "signal3", "entity" : "entity3", "value" : 9.3}
+    {"time" :"2016-03-01 01:01:04", "signal" : "signal2", "entity" : "entity2", "value" : 4.3}
 
     or
 
-    time, tag, value
-    2016-03-01 01:01:01, signal1_entity1, 3.4
-    2016-03-01 01:01:01, signal2_entity1, 1.4
-    2016-03-01 01:01:02, signal1_entity2, 9.3
-    2016-03-01 01:01:02, signal2_entity2, 4.3
+    time,signal,entity,value
+    2016-03-01 01:01:01,signal1,entity1,3.4
+    2016-03-01 01:01:01,signal2,entity2,1.4
+    2016-03-01 01:01:01,signal3,entity3,9.3
+    2016-03-01 01:01:01,signal4,entity4,4.3
 ```
 
-Usage :    
+Usage :
 
 ```python
 from falkonryclient import client as Falkonry
@@ -149,11 +147,8 @@ datastream.set_name('Motor Health' + str(random.random()))  # set name of the Da
 time.set_zone("GMT")                                        # set timezone of the datastream
 time.set_identifier("time")                                 # set time identifier of the datastream
 time.set_format("YYYY-MM-DD HH:mm:ss")                      # set time format of the datastream
-field.set_time(time)            
-signal.set_delimiter("_")                                   # set delimiter
-signal.set_tagIdentifier("tag")                             # set tag identifier
+field.set_time(time)
 signal.set_valueIdentifier("value")                         # set value identifier
-signal.set_isSignalPrefix(True)                             # set signal prefix flag
 field.set_signal(signal)                                    # set signal in field
 datasource.set_type("STANDALONE")                           # set datastource type in datastream
 datastream.set_datasource(datasource)
@@ -293,14 +288,14 @@ createdDatastream = falkonry.create_datastream(datastream)
 Data :
 
 ```
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal1", "value" : 3.4}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal2", "value" : 9.3}
+    {"time" :"2016-03-01 01:01:01", "signal" : "signal1", "value" : 3.4}
+    {"time" :"2016-03-01 01:01:02", "signal" : "signal2", "value" : 9.3}
 
     or
 
-    time, tag, value
-    2016-03-01 01:01:01, signal1, 3.4
-    2016-03-01 01:01:02, signal2, 9.3
+    time,signal,value
+    2016-03-01 01:01:01,signal1,3.4
+    2016-03-01 01:01:02,signal2,9.3
 ```
 
 Usage :
@@ -323,10 +318,8 @@ time.set_zone("GMT")                                        # set timezone of th
 time.set_identifier("time")                                 # set time identifier of the datastream
 time.set_format("YYYY-MM-DD HH:mm:ss")                      # set time format of the datastream
 field.set_time(time)            
-signal.set_delimiter(None)                                  # set delimiter to None 
-signal.set_tagIdentifier("tag")                             # set tag identifier
 signal.set_valueIdentifier("value")                         # set value identifier
-signal.set_isSignalPrefix(False)                            # as this is single entity, set signal prefix flag to false
+signal.set_signalIdentifier("signal")                       # set signal identifier
 field.set_signal(signal)                                    # set signal in field
 datasource.set_type("STANDALONE")                           # set datastource type in datastream
 datastream.set_datasource(datasource)
@@ -484,7 +477,7 @@ datastreamId = 'id of the datastream'
 entityMetaResponse = fclient.get_entity_meta(datastreamId)
 ```
 
-#### Add narrow input data (json format) to multi entity Datastream
+#### Add historical narrow input data (json format) to multi entity Datastream (Used for model revision)
     
 Data :
 
@@ -529,7 +522,7 @@ options = {'streaming': False,
 inputResponse = falkonry.add_input_data(datastreamId, 'json', options, data)
 ```
 
-#### Add narrow input data (csv format) single entity to Datastream
+#### Add historical narrow input data (csv format) single entity to Datastream (Used for model revision)
     
 Data :
 
@@ -565,7 +558,7 @@ options = {'streaming': False,
 inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, data)
 ```
 
-#### Add wide input data (json format) to single entity Datastream
+#### Add historical wide input data (json format) to single entity Datastream (Used for model revision)
     
 Data :
 
@@ -590,7 +583,7 @@ falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 
 #add data to Datastream
-stream   = io.open('./data.csv')
+stream   = io.open('./data.json')
         
 # set hasMoreData to True if data is sent in batches. When the last batch is getting sent then set  'hasMoreData' to False. For single batch upload it shpuld always be set to False
 
@@ -599,10 +592,10 @@ options = {'streaming': False,
            'timeFormat': "YYYY-MM-DD HH:mm:ss",
            'timeZone': "GMT",
            'timeIdentifier': "time"}
-inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, stream)
+inputResponse = falkonry.add_input_data(datastreamId, 'json', options, stream)
 ```
 
-#### Add wide input data (csv format) to multi entity Datastream
+#### Add historical wide input data (csv format) to multi entity Datastream (used for model revision)
 
 Data :
 
@@ -645,10 +638,10 @@ inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, stream)
 Data :
 
 ```
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_entity1", "value" : 3.4}
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_entity1", "value" : 1.4}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_entity2", "value" : 9.3}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_entity2", "value" : 4.3}
+    {"time" :"2016-03-01 01:01:01", "signal" : "signal1", "entity" : "entity1", "value" : 3.4}
+    {"time" :"2016-03-01 01:01:02", "signal" : "signal2", "entity" : "entity2", "value" : 1.4}
+    {"time" :"2016-03-01 01:01:03", "signal" : "signal3", "entity" : "entity3", "value" : 9.3}
+    {"time" :"2016-03-01 01:01:04", "signal" : "signal2", "entity" : "entity2", "value" : 4.3}
 ```
 
 Usage :    
@@ -663,12 +656,19 @@ falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 
 #add data to Datastream
-String data = "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal1_entity1\", \"value\" : 3.4}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:01\", \"tag\" : \"signal2_entity1\", \"value\" : 1.4}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal1_entity1\", \"value\" : 9.3}" + "\n"
-        + "{\"time\" : \"2016-03-01 01:01:02\", \"tag\" : \"signal2_entity2\", \"value\" : 4.3}";
+String data = "{\"time\" : \"2016-03-01 01:01:01\", \"signal\" : \"signal1\", \"entity\" : \"entity1\", \"value\" : 3.4}" + "\n"
+        + "{\"time\" : \"2016-03-01 01:01:01\", \"signal\" : \"signal2\", \"entity\" : \"entity2\", \"value\" : 1.4}" + "\n"
+        + "{\"time\" : \"2016-03-01 01:01:02\", \"signal\" : \"signal3\", \"entity\" : \"entity3\", \"value\" : 9.3}" + "\n"
+        + "{\"time\" : \"2016-03-01 01:01:02\", \"signal\" : \"signal4\", \"entity\" : \"entity4\", \"value\" : 4.3}";
         
-options = {'streaming': True}   
+options = {'streaming': True,
+           'hasMoreData': True,
+           'timeFormat': "YYYY-MM-DD HH:mm:ss",
+           'timeZone': "GMT",
+           'timeIdentifier': "time",
+           'signalIdentifier': 'signal',
+           'entityIdentifier': 'entity',
+           'valueIdentifier': 'value'}
 inputResponse = falkonry.add_input_data(datastreamId, 'json', options, data)
 ```
 
@@ -677,9 +677,12 @@ inputResponse = falkonry.add_input_data(datastreamId, 'json', options, data)
 Data :
 
 ```
-    time, tag, value
-    2016-03-01 01:01:01, signal1_entity1, 3.4
-    2016-03-01 01:01:01, signal2_entity1, 1.4
+    time,signal,entity,value
+    2016-03-01 01:01:01,signal1,entity1,3.4
+    2016-03-01 01:01:01,signal2,entity2,1.4
+    2016-03-01 01:01:01,signal3,entity3,9.3
+    2016-03-01 01:01:01,signal4,entity4,4.3
+
 ```
 
 Usage :    
@@ -694,11 +697,12 @@ falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 
 #add data to Datastream
-String data = "time, tag, value " + "\n"
-        + "2016-03-01 01:01:01, signal1_entity1, 3.4" + "\n"
-        + "2016-03-01 01:01:01, signal2_entity1, 1.4";
+String data = "time,signal,entity,value" + "\n"
+        + "2016-03-01 01:01:01,signal1,entity1,3.4" + "\n"
+        + "2016-03-01 01:01:01,signal2,entity1,1.4";
         
-options = {'streaming': True}   
+options = {'streaming': True,
+           'hasMoreData': False}
 inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, data)
 ```
 
@@ -707,10 +711,10 @@ inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, data)
 Data :
 
 ```
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal1_entity1", "value" : 3.4}
-    {"time" :"2016-03-01 01:01:01", "tag" : "signal2_entity1", "value" : 1.4}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal1_entity2", "value" : 9.3}
-    {"time" :"2016-03-01 01:01:02", "tag" : "signal2_entity2", "value" : 4.3}
+    {"time" :"2016-03-01 01:01:01", "signal" : "signal1", "entity" : "entity1", "value" : 3.4}
+    {"time" :"2016-03-01 01:01:02", "signal" : "signal2", "entity" : "entity2", "value" : 1.4}
+    {"time" :"2016-03-01 01:01:03", "signal" : "signal3", "entity" : "entity3", "value" : 9.3}
+    {"time" :"2016-03-01 01:01:04", "signal" : "signal2", "entity" : "entity2", "value" : 4.3}
 ```
 
 Usage :    
@@ -727,7 +731,14 @@ datastreamId = 'id of the datastream'
 #add data to Datastream
 stream   = io.open('./data.json')
         
-options = {'streaming': True, 'hasMoreData':False}   
+options = {'streaming': True,
+           'hasMoreData': False,
+           'timeFormat': "YYYY-MM-DD HH:mm:ss",
+           'timeZone': "GMT",
+           'timeIdentifier': "time",
+           'signalIdentifier': 'signal',
+           'entityIdentifier': 'entity',
+           'valueIdentifier': 'value'}
 inputResponse = falkonry.add_input_data(datastreamId, 'json', options, stream)
 ```
 
@@ -736,9 +747,11 @@ inputResponse = falkonry.add_input_data(datastreamId, 'json', options, stream)
 Data :
 
 ```
-    time, tag, value
-    2016-03-01 01:01:01, signal1_entity1, 3.4
-    2016-03-01 01:01:01, signal2_entity1, 1.4
+    time,signal,entity,value
+    2016-03-01 01:01:01,signal1,entity1,3.4
+    2016-03-01 01:01:01,signal2,entity2,1.4
+    2016-03-01 01:01:01,signal3,entity3,9.3
+    2016-03-01 01:01:01,signal4,entity4,4.3
 ```
 
 Usage :  

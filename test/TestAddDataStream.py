@@ -124,7 +124,7 @@ class TestAddDataStream(unittest.TestCase):
         try:
             datastreamResponse = fclient.create_datastream(datastream)
             try:
-                data = io.open('./dataMultientity.csv')
+                data = io.open('./test/dataMultiEntity.csv')
 
                 options = {'streaming': False,
                            'hasMoreData': False,
