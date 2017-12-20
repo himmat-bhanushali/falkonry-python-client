@@ -458,7 +458,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream microseconds precision
-    def test_create_datastream_narrow_style_multiple_entity(self):
+    def test_create_datastream_micro_second_precision(self):
         fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
