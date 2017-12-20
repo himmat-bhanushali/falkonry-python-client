@@ -118,6 +118,7 @@ class TestDatastream(unittest.TestCase):
         time.set_identifier("time")                                 # set time identifier of the datastream
         time.set_format("iso_8601")                                 # set time format of the datastream
         field.set_time(time)
+        signal.set_signalIdentifier("signal")                       # set signal identifier
         signal.set_valueIdentifier("value")                         # set value identifier
         field.set_signal(signal)                                    # set signal in field
         datasource.set_type("STANDALONE")                           # set datastource type in datastream
