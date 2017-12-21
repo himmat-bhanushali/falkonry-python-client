@@ -50,6 +50,7 @@ $ pip install falkonryclient
     * Add facts data (csv format) with tags Assessment of single entity datastream
     * Add facts data (json format) from a stream to Assessment of multi entity datastream
     * Add facts data (csv format) from a stream to  Assessment of multi entity datastream
+    * Add wide input data (json format) with batch identifier to single thing Datastream
     * Get Historian Output from Assessment
     * Get Streaming Output
     * Get Facts Data
@@ -1217,6 +1218,38 @@ options = {
 
 response = falkonry.add_facts_stream(assessmentId, 'csv', options, stream)
 
+```
+
+#### Add wide input data (json format) with batch identifier to single thing Datastream
+
+Sample File
+```
+    {"time": 1,"batchId": "batch_1","signal1": 9.95,"signal2": 19.95,"signal3": 39.95}
+    {"time": 2,"batchId": "batch_1","signal1": 4.45,"signal2": 14.45,"signal3": 34.45}
+    {"time": 3,"batchId": "batch_2","signal1": 1.45,"signal2": 10.45,"signal3": 30.45}
+    {"time": 4,"batchId": "batch_2","signal1": 8.45,"signal2": 18.45,"signal3": 38.45}
+    {"time": 5,"batchId": "batch_2","signal1": 2.45,"signal2": 12.45,"signal3": 32.45}
+```
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry      = Falkonry('http://localhost:8080', 'auth-token')
+
+assessmentId = 'id of the assessment'
+data          = '{"time": 1,"batchId": "batch_1","signal1": 9.95,"signal2": 19.95,"signal3": 39.95}\n{"time": 2,"batchId": "batch_1","signal1": 4.45,"signal2": 14.45,"signal3": 34.45}\n{"time": 3,"batchId": "batch_2","signal1": 1.45,"signal2": 10.45,"signal3": 30.45}\n{"time": 4,"batchId": "batch_2","signal1": 8.45,"signal2": 18.45,"signal3": 38.45}\n{"time": 5,"batchId": "batch_2","signal1": 2.45,"signal2": 12.45,"signal3": 32.45}'
+
+options = {
+    'streaming': False,
+    'hasMoreData': False,
+    'timeFormat': time.get_format(),
+    'timeZone': time.get_zone(),
+    'timeIdentifier': time.get_identifier(),
+    'batchIdentifier': 'batchId'
+}
+inputResponse = falkonry.add_facts(assessmentId, 'json', options, data)
 ```
 
 #### Get Historian Output from Assessment (Generate output for given time range)

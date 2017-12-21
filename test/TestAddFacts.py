@@ -256,6 +256,71 @@ class TestAddFacts(unittest.TestCase):
                 print(e.message)
                 self.assertEqual(0, 1, "Cannot create datastream")
 
+    # Add facts data (csv format) with batch identifier to Assessment
+    def test_add_csv_fact_with_batch(self):
+
+        # creating datastream
+        datastream = Schemas.Datastream()
+        datastream.set_name('Motor Health' + str(random.random()))
+
+        datasource = Schemas.Datasource()
+        field = Schemas.Field()
+        time = Schemas.Time()
+        signal = Schemas.Signal()
+        time.set_zone("GMT")
+        time.set_identifier("time")
+        time.set_format("millis")
+        field.set_signal(signal)
+        datasource.set_type("STANDALONE")
+        field.set_time(time)
+        field.set_batchIdentifier('batches')
+        datastream.set_datasource(datasource)
+        datastream.set_field(field)
+
+        try:
+            datastreamResponse = self.fclient.create_datastream(datastream)
+            self.created_datastreams.append(datastreamResponse.get_id())
+            try:
+
+                # creating assessment
+                asmtRequest = Schemas.AssessmentRequest()
+                asmtRequest.set_name('Assessment Name ' + str(random.random()))
+                asmtRequest.set_datastream(datastreamResponse.get_id())
+                asmtRequest.set_rate('PT0S')
+
+                try:
+                    resp_assessment = self.fclient.create_assessment(asmtRequest)
+
+                    # adding fact to the assessment
+                    data = "batchId,value\n" \
+                           "batch_1,normal\n" \
+                           "batch_2,abnormal"
+
+                    options = {
+                        'valueIdentifier': "value",
+                        'batchIdentifier': 'batchId'
+                    }
+
+                    response = self.fclient.add_facts(resp_assessment.get_id(), 'csv', options, data)
+
+                    # checking if data got ingested
+                    check_data_ingestion(self, response)
+
+                except Exception as e:
+                    print(e.message)
+                    try:
+                        fclient.delete_datastream(datastreamResponse.get_id())
+                    except Exception as e:
+                        pass
+                    self.assertEqual(0, 1, 'Cannot create assessment')
+
+            except Exception as e:
+                print(e.message)
+                self.assertEqual(0, 1, 'Cannot add input data to datastream')
+        except Exception as e:
+            print(e.message)
+            self.assertEqual(0, 1, 'Cannot create datastream')
+
     def tearDown(self):  # teardown
         for ds in self.created_datastreams:
             try:
