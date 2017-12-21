@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 for file in test/*
-do
-  if [[ $file == *".py"* ]]; then
-    exec python "$file"
-  fi
-done
+  do
+    if [[ $file == *".py"* ]]; then
+      exec python "$file"
+    fi
+  done
