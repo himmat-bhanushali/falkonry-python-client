@@ -2,3 +2,4 @@
 *.iml
 .idea
 *.pyc
+.DS_Store
