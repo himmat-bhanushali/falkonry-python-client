@@ -1,9 +1,9 @@
 import unittest
 from pprint import pprint
 
-host  = 'https://localhost:8080'  # host url
-token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                        # auth token
-assessment = '743cveg32hkwl2'                     # assessment id
+host  = 'https://localhost:8080'            # host url
+token = '6lt48c29d62nb4hmm2nhjwrcjwjcy76h'  # auth token
+assessment = 'pw4m44c98wmp4h'               # assessment id
 
 
 class TestAssessmentGetFacts(unittest.TestCase):
@@ -28,8 +28,19 @@ class TestAssessmentGetFacts(unittest.TestCase):
             response = fclient.get_facts(assessment, options)
             pprint(response.text)
             self.assertEqual(len(response.text)==0,False, 'Invalid facts response')
+            print(e.message)
+        except Exception as e:
+
+    def test_get_assessment_facts_with_batch(self):
+        fclient = FClient(host=host, token=token, options=None)
+        try:
+            response = fclient.get_facts(assessment, {})
+            pprint(response.text)
+            self.assertEqual('batch' in response.text, True, 'Invalid batch response')
+            self.assertEqual(len(response.text)==0,False, 'Invalid facts response')
         except Exception as e:
             print(e.message)
+
 
 if __name__ == '__main__':
     if __package__ is None:

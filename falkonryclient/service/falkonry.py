@@ -288,6 +288,14 @@ class FalkonryService:
             else:
                 url += "&"
             url += "additionalTag=" + str(options['additionalTag'])
+
+        if 'batchIdentifier' in options:
+            if firstReqParam:
+                firstReqParam = False
+            else:
+                url += "&"
+            url += "batchIdentifier=" + str(options['batchIdentifier'])
+
         return url
 
     def get_output(self, assessment, options):
