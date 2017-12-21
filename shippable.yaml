@@ -3,6 +3,9 @@ language: python
 python:
   - 2.7
 
+env:
+  - secure: ekKfHi/sYDRJIWL96/RXHIuaMBZQKLrELYryIEla6tM0OjQYSY07NVWQXcyeV5QrxKNhlQUFsyGUzAIpyWoaRbcXTVsjVMg094O/hqIkBCJuhjaWRMSODuJa0az8j7ZxeKDe+471KvGBhfqHoR1wEXzUIQvYDRLq7HHl0lvoUrPoZW57/Ir9Fz34P+FDlNa4dLP3a5mvqLElo1f+C8ToVqWfyIgy3oqY1Jf879n4RovROitHxr9jJzAEaW4/xFaRXaY7hXGIigxf8kqR2fjLGh+9RJj6CsrQ0P1z+uDArqbaCD6OjRGMkpwIVI7pOpwzUDzvrJzjpcBxke+pUNXggw==
+
 build:
   ci:
     - pip -V
