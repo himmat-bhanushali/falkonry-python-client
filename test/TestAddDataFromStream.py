@@ -1,19 +1,38 @@
 import io
+import os
 import unittest
 import random
+import time as timepkg
 
-host  = 'https://localhost:8080'  # host url
-token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                       # auth token
+host  = os.environ['FALKONRY_HOST_URL']  # host url
+token = os.environ['FALKONRY_TOKEN']     # auth token
+
+
+def check_data_ingestion(self, tracker):
+    tracker_obj = None
+    for i in range(0, 12):
+        tracker_obj = self.fclient.get_status(tracker['__$id'])
+        if tracker_obj['status'] == 'FAILED' or tracker_obj['status'] == 'ERROR':
+            self.assertEqual(0, 1, 'Cannot add input data to datastream')
+        if tracker_obj['status'] == 'COMPLETED' or tracker_obj['status'] == 'SUCCESS':
+            break
+        timepkg.sleep(5)
+
+    if tracker_obj['status'] == 'FAILED' or tracker_obj['status'] == 'PENDING':
+        self.assertEqual(0, 1, 'Cannot add input data to datastream')
 
 
 class TestAddDataStream(unittest.TestCase):
 
     def setUp(self):
+        self.fclient = FClient(host=host, token=token, options=None)
+        self.created_datastreams = []
         pass
 
     # Add historical wide input data (json format) to single entity Datastream (Used for model revision)
     def test_add_historical_json_data_stream(self):
-        fclient = FClient(host=host, token=token,options=None)
+
+        # creating datastream
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -31,24 +50,23 @@ class TestAddDataStream(unittest.TestCase):
         datastream.set_datasource(datasource)
         datastream.set_field(field)
         try:
-            datastreamResponse = fclient.create_datastream(datastream)
+            datastreamResponse = self.fclient.create_datastream(datastream)
+            self.created_datastreams.append(datastreamResponse.get_id())
             try:
-                data = io.open('./data.json')
+                data = io.open('./resources/data.json')
                 options = {'streaming': False,
                            'hasMoreData':False,
                            'timeFormat': time.get_format(),
                            'timeZone': time.get_zone(),
-                           'timeIdentifier': time.get_identifier(),
-                           }
-                response = fclient.add_input_stream(datastreamResponse.get_id(), 'json', options, data)
+                           'timeIdentifier': time.get_identifier()}
 
+                # adding data to the datastream
+                response = self.fclient.add_input_stream(datastreamResponse.get_id(), 'json', options, data)
                 self.assertNotEqual(response['__$id'], None, 'Cannot add input data to datastream')
 
-                # tear down
-                try:
-                    fclient.delete_datastream(datastreamResponse.get_id())
-                except Exception as e:
-                    pass
+                # checking if data got ingested
+                check_data_ingestion(self, response)
+
             except Exception as e:
                 print(e.message)
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
@@ -58,7 +76,8 @@ class TestAddDataStream(unittest.TestCase):
 
     # Add historical input data (csv format) from a stream to single entity Datastream (Used for model revision)
     def test_add_historical_csv_data_stream(self):
-        fclient = FClient(host=host, token=token,options=None)
+
+        # creating datastream
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -76,24 +95,24 @@ class TestAddDataStream(unittest.TestCase):
         datastream.set_datasource(datasource)
         datastream.set_field(field)
         try:
-            datastreamResponse = fclient.create_datastream(datastream)
+            datastreamResponse = self.fclient.create_datastream(datastream)
+            self.created_datastreams.append(datastreamResponse.get_id())
             try:
-                data = io.open('./data.csv')
+                data = io.open('./resources/data.csv')
 
                 options = {'streaming': False,
-                           'hasMoreData':False,
+                           'hasMoreData': False,
                            'timeFormat': time.get_format(),
                            'timeZone': time.get_zone(),
                            'timeIdentifier': time.get_identifier()}
-                response = fclient.add_input_stream(datastreamResponse.get_id(), 'csv', options, data)
 
+                # adding data to datstream
+                response = self.fclient.add_input_stream(datastreamResponse.get_id(), 'csv', options, data)
                 self.assertNotEqual(response['__$id'], None, 'Cannot add input data to datastream')
 
-                # tear down
-                try:
-                    fclient.delete_datastream(datastreamResponse.get_id())
-                except Exception as e:
-                    pass
+                # checking if data got ingested
+                check_data_ingestion(self, response)
+
             except Exception as e:
                 print(e.message)
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
@@ -103,7 +122,8 @@ class TestAddDataStream(unittest.TestCase):
 
     # Add historical input data (csv format) from a stream to Multi entity Datastream (Used for model revision)
     def test_add_historical_csv_data_stream_multi(self):
-        fclient = FClient(host=host, token=token, options=None)
+
+        # creating datastream
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -122,9 +142,10 @@ class TestAddDataStream(unittest.TestCase):
         datastream.set_datasource(datasource)
         datastream.set_field(field)
         try:
-            datastreamResponse = fclient.create_datastream(datastream)
+            datastreamResponse = self.fclient.create_datastream(datastream)
+            self.created_datastreams.append(datastreamResponse.get_id())
             try:
-                data = io.open('./test/dataMultiEntity.csv')
+                data = io.open('./resources/dataMultiEntity.csv')
 
                 options = {'streaming': False,
                            'hasMoreData': False,
@@ -135,15 +156,12 @@ class TestAddDataStream(unittest.TestCase):
                            'valueIdentifier': 'value',
                            'signalIdentifier': 'signal'
                            }
-                response = fclient.add_input_stream(datastreamResponse.get_id(), 'csv', options, data)
-
+                response = self.fclient.add_input_stream(datastreamResponse.get_id(), 'csv', options, data)
                 self.assertNotEqual(response['__$id'], None, 'Cannot add input data to datastream')
 
-                # tear down
-                try:
-                    fclient.delete_datastream(datastreamResponse.get_id())
-                except Exception as e:
-                    pass
+                # checking if data got ingested
+                check_data_ingestion(self, response)
+
             except Exception as e:
                 print(e.message)
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
@@ -155,15 +173,15 @@ class TestAddDataStream(unittest.TestCase):
     @unittest.skip("streaming can only be done once ")
     # Streaming data can only be sent to datastream if datastream is live. So make sure that datastream is live first
     def test_add_streaming_csv_data_stream(self):
-        fclient = FClient(host=host, token=token,options=None)
-        datastreamId = 'datstream-id' #id if the datastream which is live
+
+        datastreamId = 'datstream-id'  # id of the datastream which is live
         try:
-            data = io.open('./data.csv')
+            data = io.open('./resources/data.csv')
             options = {'streaming': True, 'hasMoreData':False}
-            response = fclient.add_input_data(datastreamId, 'csv', options, data)
+            response = self.fclient.add_input_data(datastreamId, 'csv', options, data)
             self.assertNotEqual(response, 'Data Submitted Successfully', 'Cannot add historical input data to datastream')
         except Exception as e:
-            ## if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
+            # if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
             print(e.message)
             self.assertEqual(0, 1, 'Cannot add input data to datastream')
 
@@ -171,17 +189,25 @@ class TestAddDataStream(unittest.TestCase):
     @unittest.skip("streaming can only be done once ")
     # Streaming data can only be sent to datastream if datastream is live. So make sure that datastream is live first
     def test_add_streaming_json_data_stream(self):
-        fclient = FClient(host=host, token=token,options=None)
-        datastreamId = 'datstream-id' #id if the datastream which is live
+
+        datastreamId = 'datstream-id'  # id of the datastream which is live
         try:
-            data = io.open('./data.json')
+            data = io.open('./resources/data.json')
             options = {'streaming': True, 'hasMoreData':False}
-            response = fclient.add_input_data(datastreamId, 'json', options, data)
+            response = self.fclient.add_input_data(datastreamId, 'json', options, data)
             self.assertNotEqual(response, 'Data Submitted Successfully', 'Cannot add historical input data to datastream')
         except Exception as e:
-            ## if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
+            # if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
             print(e.message)
             self.assertEqual(0, 1, 'Cannot add input data to datastream')
+
+    def tearDown(self):  # teardown
+        for ds in self.created_datastreams:
+            try:
+                self.fclient.delete_datastream(ds)
+            except Exception as e:
+                print(e.message)
+    pass
 
 if __name__ == '__main__':
     if __package__ is None:

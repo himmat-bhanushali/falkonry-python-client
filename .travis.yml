@@ -1,9 +1,0 @@
-language: python
-python:
-  - 2.7
-sudo: false
-
-install:
-  - travis_retry pip install -r requirements.txt
-
-script: python test/TestEntityModel.py

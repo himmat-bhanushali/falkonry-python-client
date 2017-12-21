@@ -1,123 +1,45 @@
+import os
 import unittest
-import random
+import time as timepkg
 
-host  = 'https://localhost:8080'  # host url
-token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                       # auth token
+host          = os.environ['FALKONRY_HOST_URL']  # host url
+token         = os.environ['FALKONRY_TOKEN']     # auth token
+datastream_id = 'ptk9b7cmylgbyj'                 # datastream id
 
 
 class TestLiveDatastream(unittest.TestCase):
 
     def setUp(self):
+        self.fclient = FClient(host=host, token=token, options=None)
+        self.created_datastreams = []
         pass
 
     # Datastream On (Start live monitoring of datastream)
-    def test_turn_datstream_on(self):
-        fclient = FClient(host=host, token=token,options=None)
-        datastream = Schemas.Datastream()
-        datastream.set_name('Motor Health' + str(random.random()))
-
-        datasource = Schemas.Datasource()
-        field = Schemas.Field()
-        time = Schemas.Time()
-        signal = Schemas.Signal()
-
-        time.set_zone("GMT")
-        time.set_identifier("time")
-        time.set_format("iso_8601")
-        field.set_signal(signal)
-        datasource.set_type("STANDALONE")
-        field.set_time(time)
-        datastream.set_datasource(datasource)
-        datastream.set_field(field)
+    def test_turn_datstream_on_off(self):
 
         try:
-            response = fclient.create_datastream(datastream)
-            self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
-            self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
-            fieldResponse = response.get_field()
-            self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
-            self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
-            self.assertEqual(fieldResponse.get_entityName(),response.get_name(),'Invalid entity name object after creation')
+            # assuming model is already built
+            listAssessment = self.fclient.on_datastream(datastream_id)
+            self.assertEqual(len(listAssessment) > 0, True, 'Cannot turn on live monitoring for datastream')
+            self.assertEqual(str(listAssessment[0]['datastream']), datastream_id, 'Live mornitoring turned on for incorrect datastream')
+            # self.assertEqual(str(listAssessment[0]['live']), 'ON', 'Cannot turn on live mornitoring')
 
-            timeResponse = fieldResponse.get_time()
-            self.assertEqual(isinstance(timeResponse, Schemas.Time), True, 'Invalid time object after creation')
-            self.assertEqual(timeResponse.get_zone(), time.get_zone(), 'Invalid zone object after creation')
-            self.assertEqual(timeResponse.get_identifier(), time.get_identifier(), 'Invalid time identifier object after creation')
-            self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
+            timepkg.sleep(10)
 
-            #  Got TO Falkonry UI and run a model revision
-            listAssessment = fclient.on_datastream("7v9nrnpl6clkwk")
-
-            # tear down
+            # turning off live monitoring
             try:
-                fclient.delete_datastream(response.get_id())
+                listAssessment = self.fclient.off_datastream(datastream_id)
+                self.assertEqual(len(listAssessment) > 0, True, 'Cannot turn off live monitoring for datastream')
+                self.assertEqual(str(listAssessment[0]['datastream']), datastream_id, 'Live mornitoring turned off for incorrect datastream')
+                # self.assertEqual(str(listAssessment[0]['live']), 'OFF', 'Cannot turn off live mornitoring')
+
             except Exception as e:
-                pass
+                print(e.message)
+                self.assertEqual(0, 1, 'Cannot turn datastream off')
+
         except Exception as e:
             print(e.message)
-            self.assertEqual(0, 1, 'Cannot create datastream')
-
-    # Datastream Off (Stop live monitoring of datastream)
-    def test_turn_datstream_off(self):
-        fclient = FClient(host=host, token=token,options=None)
-        datastream = Schemas.Datastream()
-        datastream.set_name('Motor Health' + str(random.random()))
-
-        datasource = Schemas.Datasource()
-        field = Schemas.Field()
-        time = Schemas.Time()
-        signal = Schemas.Signal()
-
-        time.set_zone("GMT")
-        time.set_identifier("time")
-        time.set_format("iso_8601")
-        field.set_signal(signal)
-        datasource.set_type("STANDALONE")
-        field.set_time(time)
-        datastream.set_datasource(datasource)
-        datastream.set_field(field)
-
-        try:
-            response = fclient.create_datastream(datastream)
-            self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
-            self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
-            fieldResponse = response.get_field()
-            self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
-            self.assertEqual(fieldResponse.get_entityIdentifier(),"entity",'Invalid entity identifier object after creation')
-            self.assertEqual(fieldResponse.get_entityName(),response.get_name(),'Invalid entity name object after creation')
-
-            timeResponse = fieldResponse.get_time()
-
-            self.assertEqual(timeResponse.get_zone(), time.get_zone(), 'Invalid zone object after creation')
-            self.assertEqual(timeResponse.get_identifier(), time.get_identifier(), 'Invalid time identifier object after creation')
-            self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
-
-            data = '{"time" : "2016-03-01 01:01:01", "signal" : "current", "value" : 12.4, "car" : "unit1"}'+'{"time" : "2016-03-01 02:01:01", "signal" : "current", "value" : 13.4, "car" : "unit1"}'
-            options = {'streaming': False,
-                       'hasMoreData': False,
-                       'timeFormat': "YYYY-MM-DD HH:mm:ss",
-                       'timeZone': time.get_zone(),
-                       'timeIdentifier': time.get_identifier(),
-                       'signalIdentifier': 'signal',
-                       'valueIdentifier': 'value',
-                       'entityIdentifier': 'car'}
-            response = fclient.add_input_data(response.get_id(), 'json', options, data)
-            self.assertNotEqual(response['__$id'], None, 'Cannot add input data to datastream')
-
-
-            #  Got TO Falkonry UI and run a model revision
-            listAssessment = fclient.off_datastream("7v9nrnpl6clkwk")
-
-            # tear down
-            try:
-                fclient.delete_datastream(response.get_id())
-            except Exception as e:
-                pass
-        except Exception as e:
-            print(e.message)
-            self.assertEqual(0, 1, 'Cannot create datastream')
+            self.assertEqual(0, 1, 'Cannot turn datastream on')
 
 if __name__ == '__main__':
     if __package__ is None:

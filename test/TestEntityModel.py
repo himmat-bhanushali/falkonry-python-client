@@ -23,11 +23,12 @@ class TestSchema(unittest.TestCase):
         field.set_time(time)
         datastream.set_datasource(datasource)
         datastream.set_field(field)
-        self.assertEqual(datastream.get_name(), 'Motor Health', 'Invalid name')
-        datasourceChk = datastream.get_datasource();
-        self.assertEqual(datasource.get_type(), 'STANDALONE', 'Invalid datasource type')
+
         fieldChk = datastream.get_field()
         timeChk = fieldChk.get_time()
+
+        self.assertEqual(datastream.get_name(), 'Motor Health', 'Invalid name')
+        self.assertEqual(datasource.get_type(), 'STANDALONE', 'Invalid datasource type')
         self.assertEqual(timeChk.get_zone(), 'GMT', 'Invalid time zone')
         self.assertEqual(timeChk.get_identifier(), 'time', 'Invalid time identifier')
         self.assertEqual(timeChk.get_format(), 'iso_8601', 'Invalid time format')
@@ -73,4 +74,3 @@ if __name__ == '__main__':
     unittest.main()
 else:
     from falkonryclient import schemas as Schemas
-    from falkonryclient import client as FClient

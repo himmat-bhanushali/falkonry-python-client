@@ -394,3 +394,13 @@ class FalkonryService:
         response = self.http.downstream(url, response_format)
         return response
 
+    def get_status(self, tracker_id):
+        """
+        Get status of a task
+        :param tracker_id: string
+        """
+
+        url = '/app/track/' + tracker_id
+        response = self.http.get(url)
+        return response
+

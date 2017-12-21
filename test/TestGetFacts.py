@@ -1,33 +1,35 @@
+import os
 import unittest
 from pprint import pprint
 
-host  = 'https://localhost:8080'  # host url
-token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                        # auth token
-assessment = '743cveg32hkwl2'                     # assessment id
+host       = os.environ['FALKONRY_HOST_URL']  # host url
+token      = os.environ['FALKONRY_TOKEN']     # auth token
+assessment = 'y7dcwmp72v68tr'            # assessment id
 
 
 class TestAssessmentGetFacts(unittest.TestCase):
 
     def setUp(self):
+        self.fclient = FClient(host=host, token=token, options=None)
         pass
 
     def test_get_assessment_facts(self):
-        fclient = FClient(host=host, token=token, options=None)
+
         try:
-            response = fclient.get_facts(assessment, {})
+            response = self.fclient.get_facts(assessment, {})
             pprint(response.text)
-            self.assertEqual(len(response.text)==0,False, 'Invalid facts response')
+            self.assertEqual(len(response.text) == 0, False, 'Invalid facts response')
         except Exception as e:
             print(e.message)
 
     def test_get_assessment_facts_with_model(self):
-        fclient = FClient(host=host, token=token, options=None)
+
         try:
 
-            options = {'startTime':'2007-01-01T01:00:00.000Z','endTime':'2017-06-13T01:00:00.000Z','model':'3'}
-            response = fclient.get_facts(assessment, options)
+            options = {'startTime': '2011-01-01T00:00:00.000Z', 'endTime': '2014-12-31T00:00:00.000Z', 'model': '2'}
+            response = self.fclient.get_facts(assessment, options)
             pprint(response.text)
-            self.assertEqual(len(response.text)==0,False, 'Invalid facts response')
+            self.assertEqual(len(response.text) == 0, False, 'Invalid facts response')
         except Exception as e:
             print(e.message)
 

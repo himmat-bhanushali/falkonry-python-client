@@ -1,19 +1,20 @@
+import os
 import unittest
 import random
 
-host  = 'https://localhost:8080'  # host url
-token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                       # auth token
-
+host  = os.environ['FALKONRY_HOST_URL']  # host url
+token = os.environ['FALKONRY_TOKEN']     # auth token
 
 
 class TestDatastream(unittest.TestCase):
 
     def setUp(self):
+        self.created_datastreams = []
+        self.fclient = FClient(host=host, token=token, options=None)
         pass
 
     # Create datastream without any signals
     def test_create_standalone_datastream(self):
-        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -32,7 +33,8 @@ class TestDatastream(unittest.TestCase):
         datastream.set_field(field)
 
         try:
-            response = fclient.create_datastream(datastream)
+            response = self.fclient.create_datastream(datastream)
+            self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
             self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
@@ -47,18 +49,12 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_identifier(), time.get_identifier(), 'Invalid time identifier object after creation')
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
-            # tear down
-            try:
-                fclient.delete_datastream(response.get_id())
-            except Exception as e:
-                pass
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for narrow/historian style data from a single entity
     def test_create_datastream_narrow_style_single_entity(self):
-        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datasource = Schemas.Datasource()
         field = Schemas.Field()
@@ -79,7 +75,8 @@ class TestDatastream(unittest.TestCase):
 
         try:
             # create Datastream
-            response = fclient.create_datastream(datastream)
+            response = self.fclient.create_datastream(datastream)
+            self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
             self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
@@ -95,18 +92,12 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_identifier(), time.get_identifier(), 'Invalid time identifier object after creation')
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
-            # tear down
-            try:
-                fclient.delete_datastream(response.get_id())
-            except Exception as e:
-                pass
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for narrow/historian style data from a multiple entities
     def test_create_datastream_narrow_style_multiple_entity(self):
-        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datasource = Schemas.Datasource()
         field = Schemas.Field()
@@ -119,8 +110,8 @@ class TestDatastream(unittest.TestCase):
         time.set_format("iso_8601")                                 # set time format of the datastream
         field.set_time(time)
         signal.set_signalIdentifier("signal")                       # set signal identifier
-        signal.set_valueIdentifier("value")
-        field.set_entityIdentifier("entity")# set value identifier
+        signal.set_valueIdentifier("value")                         # set value identifier
+        field.set_entityIdentifier("entity")                        # set entity identifier
         field.set_signal(signal)                                    # set signal in field
         datasource.set_type("STANDALONE")                           # set datastource type in datastream
         datastream.set_datasource(datasource)
@@ -128,7 +119,8 @@ class TestDatastream(unittest.TestCase):
 
         try:
             # create Datastream
-            response = fclient.create_datastream(datastream)
+            response = self.fclient.create_datastream(datastream)
+            self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
             self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
@@ -144,18 +136,12 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_identifier(), time.get_identifier(), 'Invalid time identifier object after creation')
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
-            # tear down
-            try:
-                fclient.delete_datastream(response.get_id())
-            except Exception as e:
-                pass
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for wide style data from a single entity
     def test_create_datastream_wide_style_single_entity(self):
-        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datasource = Schemas.Datasource()
         field = Schemas.Field()
@@ -193,7 +179,8 @@ class TestDatastream(unittest.TestCase):
 
         try:
             # create Datastream
-            response = fclient.create_datastream(datastream)
+            response = self.fclient.create_datastream(datastream)
+            self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
             self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
@@ -222,18 +209,12 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(inputResp3.get_name(), input3.get_name(),'Invalid input after object creation')
             self.assertEqual(inputResp3.get_value_type(), input3.get_value_type(),'Invalid input value type after object creation')
 
-            # tear down
-            try:
-                fclient.delete_datastream(response.get_id())
-            except Exception as e:
-                pass
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for wide style data from a multiple entities
     def test_create_datastream_wide_style_multiple_entity(self):
-        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datasource = Schemas.Datasource()
         field = Schemas.Field()
@@ -272,7 +253,8 @@ class TestDatastream(unittest.TestCase):
 
         try:
             # create Datastream
-            response = fclient.create_datastream(datastream)
+            response = self.fclient.create_datastream(datastream)
+            self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
             self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
@@ -301,18 +283,12 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(inputResp3.get_name(), input3.get_name(),'Invalid input after object creation')
             self.assertEqual(inputResp3.get_value_type(), input3.get_value_type(),'Invalid input value type after object creation')
 
-            # tear down
-            try:
-                fclient.delete_datastream(response.get_id())
-            except Exception as e:
-                pass
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Retrieve Datastreams
     def test_get_datastream_list(self):
-        fclient = FClient(host=host, token=token,options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
 
@@ -331,7 +307,8 @@ class TestDatastream(unittest.TestCase):
         datastream.set_field(field)
 
         try:
-            response = fclient.create_datastream(datastream)
+            response = self.fclient.create_datastream(datastream)
+            self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
             self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
@@ -347,15 +324,10 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
             # get datastream list
-            datastreamList = fclient.get_datastreams()
-            self.assertEqual(isinstance(datastreamList,list), True, 'Invalid time object after creation')
-            self.assertEqual(len(datastreamList)>1, True, 'Invalid time object after creation')
+            datastreamList = self.fclient.get_datastreams()
+            self.assertEqual(isinstance(datastreamList, list), True, 'Invalid datastreamlist in response')
+            self.assertEqual(len(datastreamList) > 0, True, 'No datastreams in get response')
 
-            # tear down
-            try:
-                fclient.delete_datastream(response.get_id())
-            except Exception as e:
-                pass
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
@@ -363,7 +335,6 @@ class TestDatastream(unittest.TestCase):
     # Retrieve Datastream by Id
     def test_get_datastream_by_id(self):
 
-        fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
         datasource = Schemas.Datasource()
@@ -383,7 +354,8 @@ class TestDatastream(unittest.TestCase):
         datastream.set_field(field)
 
         try:
-            response = fclient.create_datastream(datastream)
+            response = self.fclient.create_datastream(datastream)
+            self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
             self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
@@ -399,15 +371,10 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
             # get datastream list
-            datastreamResp = fclient.get_datastream(response.get_id())
+            datastreamResp = self.fclient.get_datastream(response.get_id())
             self.assertEqual(isinstance(datastreamResp,Schemas.Datastream), True, 'Invalid time object after creation')
             self.assertEqual(response.get_id(), datastreamResp.get_id(), 'Invalid id of datastream after creation')
 
-            # tear down
-            try:
-                fclient.delete_datastream(response.get_id())
-            except Exception as e:
-                pass
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
@@ -415,7 +382,6 @@ class TestDatastream(unittest.TestCase):
     # Delete Datastream
     def test_delete_datastream_by_id(self):
 
-        fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
         datasource = Schemas.Datasource()
@@ -432,9 +398,8 @@ class TestDatastream(unittest.TestCase):
         datastream.set_datasource(datasource)
         datastream.set_field(field)
 
-
         try:
-            response = fclient.create_datastream(datastream)
+            response = self.fclient.create_datastream(datastream)
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
             self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
@@ -451,7 +416,7 @@ class TestDatastream(unittest.TestCase):
 
             # delete datastream
             try:
-                fclient.delete_datastream(response.get_id())
+                self.fclient.delete_datastream(response.get_id())
             except Exception as e:
                 print(e.message)
                 self.assertEqual(0, 1, 'Cannot delete datastream')
@@ -461,7 +426,6 @@ class TestDatastream(unittest.TestCase):
 
     # Create Datastream microseconds precision
     def test_create_datastream_micro_second_precision(self):
-        fclient = FClient(host=host, token=token, options=None)
         datastream = Schemas.Datastream()
         datastream.set_name('Motor Health' + str(random.random()))
         datastream.set_time_precision('micro')  # set 'micro' for microseconds precision
@@ -485,7 +449,8 @@ class TestDatastream(unittest.TestCase):
 
         try:
             # create Datastream
-            response = fclient.create_datastream(datastream)
+            response = self.fclient.create_datastream(datastream)
+            self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
             self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
@@ -503,14 +468,17 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
             self.assertEqual(response.get_time_precision(), datastream.get_time_precision(), 'Invalid time precision after creation')
 
-            # tear down
-            try:
-                fclient.delete_datastream(response.get_id())
-            except Exception as e:
-                pass
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
+
+    def tearDown(self):  # teardown
+        for ds in self.created_datastreams:
+            try:
+                self.fclient.delete_datastream(ds)
+            except Exception as e:
+                print(e.message)
+        pass
 
 if __name__ == '__main__':
     if __package__ is None:

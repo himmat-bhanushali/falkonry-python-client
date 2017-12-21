@@ -1,9 +1,10 @@
+import os
 import unittest
 import json
 
-host  = 'https://localhost:8080'  # host url
-token = 'npp766l2hghmhrc7ygrbldjnkb9rn7mg'                        # auth token
-assessment = 'jrvk3e8mnc0nyc'                     # assessment id
+host       = os.environ['FALKONRY_HOST_URL']  # host url
+token      = os.environ['FALKONRY_TOKEN']     # auth token
+assessment = 'jrvk3e8mnc0nyc'                 # assessment id
 
 
 class TestAssessmentGetOutput(unittest.TestCase):
@@ -36,17 +37,18 @@ class TestAssessmentGetOutput(unittest.TestCase):
 
             if response.status_code is 202:
                 trackerResponse = Schemas.Tracker(tracker=json.loads(response.text))
-                #get id from the tracker
+
+                # get id from the tracker
                 trackerId = trackerResponse.get_id()
 
-                #use this tracker for checking the status of the process.
+                # use this tracker for checking the status of the process.
                 options = {"trackerId": trackerId, "responseFormat":"application/json"}
                 newResponse = fclient.get_historical_output(assessment, options)
 
-                #if status is 202 call the same request again
+                # if status is 202 call the same request again
 
             if response.status_code is 200:
-                #if status is 200, output data will be present in httpResponse.response field'''
+                # if status is 200, output data will be present in httpResponse.response field
                 pass
         except Exception as e:
             print(e.message)
