@@ -1,10 +1,13 @@
 # Release Log
 
+### 1.1.0
+* API changes for batched window datastream
+
 ### 1.0.5
-* Supports new narrow formatted data
+* Support for new narrow formatted data
 
 ### 1.0.4
-* Supports custom column identifiers for fact API
+* Support for custom column identifiers for fact API
 
 ### 1.0.3
 * Support for time precision upto microseconds

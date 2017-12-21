@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-python __init__.py
 python TestEntityModel.py
 python TestEntityMeta.py
 python TestDatastream.py
