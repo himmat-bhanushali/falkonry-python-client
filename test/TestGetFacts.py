@@ -1,5 +1,6 @@
 import os
 import unittest
+import xmlrunner
 from pprint import pprint
 
 host       = os.environ['FALKONRY_HOST_URL']  # host url
@@ -49,7 +50,9 @@ if __name__ == '__main__':
     else:
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
-    unittest.main()
+    unittest.main(
+        testRunner=xmlrunner.XMLTestRunner(output='out'),
+        failfast=False, buffer=False, catchbreak=False)
 else:
     from falkonryclient import schemas as Schemas
     from falkonryclient import client as FClient

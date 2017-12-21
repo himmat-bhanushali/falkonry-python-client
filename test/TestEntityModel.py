@@ -1,5 +1,5 @@
 import unittest
-
+import xmlrunner
 
 class TestSchema(unittest.TestCase):
 
@@ -71,6 +71,8 @@ if __name__ == '__main__':
         from falkonryclient import schemas as Schemas
     else:
         from ..falkonryclient import schemas as Schemas
-    unittest.main()
+    unittest.main(
+        testRunner=xmlrunner.XMLTestRunner(output='out'),
+        failfast=False, buffer=False, catchbreak=False)
 else:
     from falkonryclient import schemas as Schemas
