@@ -1,5 +1,8 @@
 # Release Log
 
+### 1.0.5
+* Supports new narrow formatted data
+
 ### 1.0.4
 * Supports custom column identifiers for fact API
 
