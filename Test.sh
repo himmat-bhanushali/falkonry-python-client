@@ -3,6 +3,6 @@
 for file in test/*
   do
     if [[ $file == *".py"* ]]; then
-      exec python "$file"
+      cmd python "$file"
     fi
   done
