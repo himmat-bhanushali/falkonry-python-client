@@ -14,7 +14,7 @@ build:
     - python -V
   post_ci:
     - pip install -r requirements.txt
-    - python test/*.py
+    - ./Test.sh
 
 integrations:
   notifications:
