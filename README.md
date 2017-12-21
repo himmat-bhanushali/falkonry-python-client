@@ -21,6 +21,7 @@ $ pip install falkonryclient
     * Create Datastream for wide style data from a single entity
     * Create Datastream for wide style data from a multiple entities
     * Create Datastream with microseconds precision
+    * Create Datastream for batch identifier
     * Retrieve Datastreams
     * Retrieve Datastream by Id
     * Delete Datastream
@@ -33,7 +34,11 @@ $ pip install falkonryclient
     * Add live input data (json format) to Datastream (Used for live monitoring) 
     * Add live input data (csv format) to Datastream (Used for live monitoring) 
     * Add live input data (json format) from a stream to Datastream (Used for live monitoring) 
-    * Add live input data (csv format) from a stream to Datastream (Used for live monitoring) 
+    * Add live input data (csv format) from a stream to Datastream (Used for live monitoring)
+    * Add narrow input data (csv format) with batch identifier to multi thing Datastream
+    * Add narrow input data (json format) with batch identifier to single thing Datastream
+    * Add wide input data (csv format) with batch identifier to multi thing Datastream
+    * Add wide input data (json format) with batch identifier to single thing Datastream
     * Create Assessment
     * Retrieve Assessments
     * Retrieve Assessment by Id
@@ -73,7 +78,6 @@ Data :
     time, tag, value
     2016-03-01T01:01:01Z, signal1, 3.4
     2016-03-01T01:01:02Z, signal2, 9.3
-
 ```
 
 Usage :
@@ -292,7 +296,6 @@ Data :
     time,signal,value
     2016-03-01 01:01:01,signal1,3.4
     2016-03-01 01:01:02,signal2,9.3
-
 ```
 
 Usage :
@@ -321,6 +324,69 @@ field.set_signal(signal)                                    # set signal in fiel
 datasource.set_type("STANDALONE")                           # set datastource type in datastream
 datastream.set_datasource(datasource)
 datastream.set_field(field)
+        
+#create Datastream
+createdDatastream = fclient.create_datastream(datastream)
+```
+
+#### Create Datastream for batch identifier
+
+Data :
+
+```
+    {"time" :"2016-03-01 01:01:01", "signal1" : 3.4, "signal2" : 5.1, "signal3": 7.4, "batch": "batch_1"}
+    {"time" :"2016-03-01 01:01:02", "signal1" : 13.4, "signal2" : 15.1, "signal3": 17.4, "batch": "batch_1"}
+
+    or
+
+    time, signal1, signal2, signal3, batch
+    2016-03-01 01:01:01, 3.4, 5.1, 7.4, batch_1
+    2016-03-01 01:01:02, 13.4, 15.1, 17.4, batch_1
+```
+
+Usage :
+    
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
+datastream = Schemas.Datastream()
+datasource = Schemas.Datasource()
+field = Schemas.Field()
+time = Schemas.Time()
+signal = Schemas.Signal()
+input1 = Schemas.Input()
+input2 = Schemas.Input()
+input3 = Schemas.Input()
+
+datastream.set_name('Motor Health' + str(random.random()))  # set name of the Datastream
+
+input1.set_name("Signal1")                                  # set name of input signal
+input1.set_value_type("Numeric")                            # set value type of input signal (Numeric for number, Categorical for string type)
+input1.set_event_type("Samples")                            # set event type of input signal
+input2.set_name("Signal2")                                  # set name of input signal
+input2.set_value_type("Numeric")                            # set value type of input signal (Numeric for number, Categorical for string type)
+input2.set_event_type("Samples")                            # set event type of input signal
+input3.set_name("Signal3")                                  # set name of input signal
+input3.set_value_type("Numeric")                            # set value type of input signal (Numeric for number, Categorical for string type)
+input3.set_event_type("Samples")                            # set event type of input signal
+inputs = []
+inputs.append(input1)
+inputs.append(input2)
+inputs.append(input3)
+
+time.set_zone("GMT")                                        # set timezone of the datastream
+time.set_identifier("time")                                 # set time identifier of the datastream
+time.set_format("iso_8601")                                 # set time format of the datastream
+field.set_time(time)
+field.set_signal(signal)                                    # set signal in field
+field.set_batchIdentifier("batch")                          # set batchIdentifier in field
+datasource.set_type("STANDALONE")                           # set datastource type in datastream
+datastream.set_datasource(datasource)
+datastream.set_field(field)
+datastream.set_inputs(inputs)
         
 #create Datastream
 createdDatastream = fclient.create_datastream(datastream)
@@ -688,7 +754,7 @@ Data :
     2016-03-01 01:01:01,signal4,entity4,4.3
 ```
 
-Usage :    
+Usage :  
 
 ```python
 from falkonryclient import client as Falkonry
@@ -704,6 +770,188 @@ stream   = io.open('./data.csv')
         
 options = {'streaming': True}   
 inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, stream)
+```
+
+#### Add narrow input data (csv format) with batch identifier to multi thing Datastream
+
+Data :
+
+```
+    time,batchId,unit,signal,value
+    1467729675010,batch_1,unit1,signal1,9.95
+    1467729675020,batch_1,unit1,signal1,4.45
+    1467729675030,batch_2,unit1,signal1,1.45
+    1467729675040,batch_2,unit1,signal1,8.45
+    1467729675050,batch_2,unit1,signal1,2.45
+    1467729675010,batch_1,unit1,signal2,19.95
+    1467729675020,batch_1,unit1,signal2,14.45
+    1467729675030,batch_2,unit1,signal2,10.45
+    1467729675040,batch_2,unit1,signal2,18.45
+    1467729675050,batch_2,unit1,signal2,12.45
+    1467729675010,batch_1,unit1,signal3,39.95
+    1467729675020,batch_1,unit1,signal3,34.45
+    1467729675030,batch_2,unit1,signal3,30.45
+    1467729675040,batch_2,unit1,signal3,38.45
+    1467729675050,batch_2,unit1,signal3,32.45
+```
+
+Usage :
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+String data = 'time,batchId,unit,signal,value\n'
+    +'1467729675010,batch_1,unit1,signal1,9.95\n'
+    +'1467729675020,batch_1,unit1,signal1,4.45\n'
+    +'1467729675030,batch_2,unit1,signal1,1.45\n'
+    +'1467729675040,batch_2,unit1,signal1,8.45\n'
+    +'1467729675050,batch_2,unit1,signal1,2.45\n'
+    +'1467729675010,batch_1,unit1,signal2,19.95\n'
+    +'1467729675020,batch_1,unit1,signal2,14.45\n'
+    +'1467729675030,batch_2,unit1,signal2,10.45\n'
+    +'1467729675040,batch_2,unit1,signal2,18.45\n'
+    +'1467729675050,batch_2,unit1,signal2,12.45\n'
+    +'1467729675010,batch_1,unit1,signal3,39.95\n'
+    +'1467729675020,batch_1,unit1,signal3,34.45\n'
+    +'1467729675030,batch_2,unit1,signal3,30.45\n'
+    +'1467729675040,batch_2,unit1,signal3,38.45\n'
+    +'1467729675050,batch_2,unit1,signal3,32.45\n'
+        
+options = {
+    'streaming': False,
+    'hasMoreData': False
+}
+inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, data)
+```
+
+#### Add narrow input data (json format) with batch identifier to single thing Datastream
+
+Data :
+
+```
+    {"time": 1467729675010,"batchId": "batch_1","signal": "signal1","value": 9.95}
+    {"time": 1467729675020,"batchId": "batch_1","signal": "signal1","value": 4.45}
+    {"time": 1467729675030,"batchId": "batch_2","signal": "signal1","value": 1.45}
+    {"time": 1467729675040,"batchId": "batch_2","signal": "signal1","value": 8.45}
+    {"time": 1467729675050,"batchId": "batch_2","signal": "signal1","value": 2.45}
+```
+
+Usage :
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+String data = '{"time": 1467729675010,"batchId": "batch_1","signal": "signal1","value": 9.95}\n'
+    +'{"time": 1467729675020,"batchId": "batch_1","signal": "signal1","value": 4.45}\n'
+    +'{"time": 1467729675030,"batchId": "batch_2","signal": "signal1","value": 1.45}\n'
+    +'{"time": 1467729675040,"batchId": "batch_2","signal": "signal1","value": 8.45}\n'
+    +'{"time": 1467729675050,"batchId": "batch_2","signal": "signal1","value": 2.45}'
+        
+options = {
+    'streaming': False,
+    'hasMoreData': False,
+    'timeFormat': time.get_format(),
+    'timeZone': time.get_zone(),
+    'timeIdentifier': time.get_identifier(),
+    'signalIdentifier': 'signal',
+    'valueIdentifier': 'value',
+    'batchIdentifier': 'batchId'
+}
+inputResponse = falkonry.add_input_data(datastreamId, 'json', options, data)
+```
+
+#### Add wide input data (csv format) with batch identifier to multi thing Datastream
+
+Data :
+
+```
+    time,batchId,unit,signal1,signal2,signal3
+    1467729675010,batch_1,unit1,9.95,19.95,39.95
+    1467729675020,batch_1,unit1,4.45,14.45,34.45
+    1467729675030,batch_2,unit1,1.45,10.45,30.45
+    1467729675040,batch_2,unit1,8.45,18.45,38.45
+    1467729675050,batch_2,unit1,2.45,12.45,32.45
+```
+
+Usage :
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+String data = 'time,batchId,unit,signal1,signal2,signal3\n'+
+    '1467729675010,batch_1,unit1,9.95,19.95,39.95\n'+
+    '1467729675020,batch_1,unit1,4.45,14.45,34.45\n'+
+    '1467729675030,batch_2,unit1,1.45,10.45,30.45\n'+
+    '1467729675040,batch_2,unit1,8.45,18.45,38.45\n'+
+    '1467729675050,batch_2,unit1,2.45,12.45,32.45'
+        
+options = {
+    'streaming': False,
+    'hasMoreData': False
+}
+inputResponse = falkonry.add_input_data(datastreamId, 'csv', options, data)
+```
+
+#### Add wide input data (json format) with batch identifier to single thing Datastream
+
+Data :
+
+```
+    {"time": 1467729675010,"batchId": "batch_1","signal1": 9.95,"signal2": 19.95,"signal3": 39.95}
+    {"time": 1467729675020,"batchId": "batch_1","signal1": 4.45,"signal2": 14.45,"signal3": 34.45}
+    {"time": 1467729675030,"batchId": "batch_2","signal1": 1.45,"signal2": 10.45,"signal3": 30.45}
+    {"time": 1467729675040,"batchId": "batch_2","signal1": 8.45,"signal2": 18.45,"signal3": 38.45}
+    {"time": 1467729675050,"batchId": "batch_2","signal1": 2.45,"signal2": 12.45,"signal3": 32.45}
+```
+
+Usage :
+
+```python
+from falkonryclient import client as Falkonry
+from falkonryclient import schemas as Schemas
+
+#instantiate Falkonry
+falkonry   = Falkonry('http://localhost:8080', 'auth-token')
+
+datastreamId = 'id of the datastream'
+
+#add data to Datastream
+String data = '{"time": 1467729675010,"batchId": "batch_1","signal1": 9.95,"signal2": 19.95,"signal3": 39.95}\n'
+    +'{"time": 1467729675020,"batchId": "batch_1","signal1": 4.45,"signal2": 14.45,"signal3": 34.45}\n'
+    +'{"time": 1467729675030,"batchId": "batch_2","signal1": 1.45,"signal2": 10.45,"signal3": 30.45}\n'
+    +'{"time": 1467729675040,"batchId": "batch_2","signal1": 8.45,"signal2": 18.45,"signal3": 38.45}\n'
+    +'{"time": 1467729675050,"batchId": "batch_2","signal1": 2.45,"signal2": 12.45,"signal3": 32.45}'
+        
+options = {
+    'streaming': False,
+    'hasMoreData': False,
+    'timeFormat': time.get_format(),
+    'timeZone': time.get_zone(),
+    'timeIdentifier': time.get_identifier(),
+    'batchIdentifier': 'batchId'
+}
+inputResponse = falkonry.add_input_data(datastreamId, 'json', options, data)
 ```
 
 #### Create Assessment

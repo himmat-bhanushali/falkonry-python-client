@@ -199,6 +199,9 @@ class FalkonryService:
         if 'entityIdentifier' in options:
             url += '&entityIdentifier=' + str(options['entityIdentifier'])
 
+        if 'batchIdentifier' in options:
+            url += '&batchIdentifier=' + str(options['batchIdentifier'])
+
         return  url
 
     def add_facts_stream(self, assessment, data_type, options, data):
