@@ -291,6 +291,26 @@ class TestAddFacts(unittest.TestCase):
                 try:
                     resp_assessment = self.fclient.create_assessment(asmtRequest)
 
+                    data = '{"time" : 123898422222, "batches" : "batch_1", "signal" : "current", "value" : 12.4}\n' \
+                            '{"time" : 123898422322, "batches" : "batch_2", "signal" : "current", "value" : 12.4}'
+                    options = {
+                       'streaming': False,
+                       'hasMoreData': False,
+                       'timeFormat': time.get_format(),
+                       'timeZone': time.get_zone(),
+                       'timeIdentifier': time.get_identifier(),
+                       'signalIdentifier': 'signal',
+                       'valueIdentifier': 'value',
+                       'batchIdentifier': 'batches'
+                    }
+
+                    # adding data to the created datastream
+                    response = self.fclient.add_input_data(datastreamResponse.get_id(), 'json', options, data)
+                    self.assertNotEqual(response['__$id'], None, 'Cannot add input data to datastream')
+
+                    # checking if data got ingested
+                    check_data_ingestion(self, response)
+
                     # adding fact to the assessment
                     data = "batchId,value\n" \
                            "batch_1,normal\n" \
@@ -302,6 +322,7 @@ class TestAddFacts(unittest.TestCase):
                     }
 
                     response = self.fclient.add_facts(resp_assessment.get_id(), 'csv', options, data)
+                    self.assertNotEqual(response['__$id'], None, 'Cannot add fact data to datastream')
 
                     # checking if data got ingested
                     check_data_ingestion(self, response)
@@ -316,7 +337,7 @@ class TestAddFacts(unittest.TestCase):
 
             except Exception as e:
                 print(e.message)
-                self.assertEqual(0, 1, 'Cannot add input data to datastream')
+                self.assertEqual(0, 1, 'Cannot add input or fact data to datastream')
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Cannot create datastream')
