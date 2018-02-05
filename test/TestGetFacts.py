@@ -5,8 +5,8 @@ from pprint import pprint
 
 host        = os.environ['FALKONRY_HOST_URL']  # host url
 token       = os.environ['FALKONRY_TOKEN']     # auth token
-assessment  = 'y7dcwmp72v68tr'                 # assessment id
-assessmentB = 'vpc4n96q7t994b'
+assessment  = 'r2h27kn82dvrvy'                 # assessment id
+assessmentB = 'r7l9tddmngbbl6'
 
 class TestAssessmentGetFacts(unittest.TestCase):
 
