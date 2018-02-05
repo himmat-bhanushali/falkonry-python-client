@@ -5,7 +5,7 @@ import time as timepkg
 
 host          = os.environ['FALKONRY_HOST_URL']  # host url
 token         = os.environ['FALKONRY_TOKEN']     # auth token
-datastream_id = 'ptk9b7cmylgbyj'                 # datastream id
+datastream_id = 'tkp9lrh8vhbknj'                 # datastream id
 
 
 class TestLiveDatastream(unittest.TestCase):
