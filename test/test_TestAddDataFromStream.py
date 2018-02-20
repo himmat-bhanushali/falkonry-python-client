@@ -69,10 +69,10 @@ class TestAddDataStream(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(e.message if hasattr(e,'message') else e)
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
-            print(e.message)
+            print(e.message if hasattr(e,'message') else e)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Add historical input data (csv format) from a stream to single entity Datastream (Used for model revision)
@@ -115,10 +115,10 @@ class TestAddDataStream(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(e.message if hasattr(e,'message') else e)
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
-            print(e.message)
+            print(e.message if hasattr(e,'message') else e)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Add historical input data (csv format) from a stream to Multi entity Datastream (Used for model revision)
@@ -164,10 +164,10 @@ class TestAddDataStream(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(e.message if hasattr(e,'message') else e)
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
-            print(e.message)
+            print(e.message if hasattr(e,'message') else e)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Add live input data (csv format) from a stream to Datastream (Used for live monitoring)
@@ -183,7 +183,7 @@ class TestAddDataStream(unittest.TestCase):
             self.assertNotEqual(response, 'Data Submitted Successfully', 'Cannot add historical input data to datastream')
         except Exception as e:
             # if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
-            print(e.message)
+            print(e.message if hasattr(e,'message') else e)
             self.assertEqual(0, 1, 'Cannot add input data to datastream')
 
     # Add live input data (json format) from a stream to Datastream (Used for live monitoring)
@@ -199,7 +199,7 @@ class TestAddDataStream(unittest.TestCase):
             self.assertNotEqual(response, 'Data Submitted Successfully', 'Cannot add historical input data to datastream')
         except Exception as e:
             # if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
-            print(e.message)
+            print(e.message if hasattr(e,'message') else e)
             self.assertEqual(0, 1, 'Cannot add input data to datastream')
 
     def tearDown(self):  # teardown
@@ -207,7 +207,7 @@ class TestAddDataStream(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(ds)
             except Exception as e:
-                print(e.message)
+                print(e.message if hasattr(e,'message') else e)
     pass
 
 if __name__ == '__main__':

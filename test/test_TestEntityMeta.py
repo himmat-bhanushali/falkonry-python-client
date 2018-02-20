@@ -38,7 +38,7 @@ class TestSchema(unittest.TestCase):
             datastreamResponse = self.fclient.create_datastream(datastream)
             self.created_datastreams.append(datastreamResponse.get_id())
             self.assertEqual(isinstance(datastreamResponse, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(datastreamResponse.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(datastreamResponse.get_id(), str), True, 'Invalid id of datastream after creation')
 
             # add EntityMeta
             data = [{"sourceId": "testId", "label": "testName", "path": "root/path"}]
@@ -48,13 +48,13 @@ class TestSchema(unittest.TestCase):
 
             entityMetaResp = entityMetaResponse.__getitem__(0)
             self.assertEqual(isinstance(entityMetaResp, Schemas.EntityMeta), True, 'Invalid entityMeta object after creation')
-            self.assertEqual(isinstance(entityMetaResp.get_id(), unicode), True, 'Invalid id of entityMeta after creation')
+            self.assertEqual(isinstance(entityMetaResp.get_id(), str), True, 'Invalid id of entityMeta after creation')
             self.assertEqual(entityMetaResp.get_label(), 'testName', 'Invalid label of entityMeta after creation')
             self.assertEqual(entityMetaResp.get_path(), 'root/path', 'Invalid path of entityMeta after creation')
             self.assertEqual(entityMetaResp.get_sourceId(), 'testId', 'Invalid sourceId of entityMeta after creation')
 
         except Exception as e:
-            print(e.message)
+            print(e.message if hasattr(e, 'message') else e)
             self.assertEqual(0, 1, 'Cannot add entityMeta to datastream')
 
     # Get EntityMeta of a Datastream
@@ -82,7 +82,7 @@ class TestSchema(unittest.TestCase):
             self.created_datastreams.append(datastreamResponse.get_id())
 
             self.assertEqual(isinstance(datastreamResponse, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(datastreamResponse.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(datastreamResponse.get_id(), str), True, 'Invalid id of datastream after creation')
             data= [{"sourceId": "testId","label": "testName","path": "root/path"}]
 
             # add EntityMeta
@@ -92,7 +92,7 @@ class TestSchema(unittest.TestCase):
 
             entityMetaResp = entityMetaResponse.__getitem__(0)
             self.assertEqual(isinstance(entityMetaResp, Schemas.EntityMeta), True, 'Invalid entityMeta object after creation')
-            self.assertEqual(isinstance(entityMetaResp.get_id(), unicode), True, 'Invalid id of entityMeta after creation')
+            self.assertEqual(isinstance(entityMetaResp.get_id(), str), True, 'Invalid id of entityMeta after creation')
             self.assertEqual(entityMetaResp.get_label(),'testName', 'Invalid label of entityMeta after creation')
             self.assertEqual(entityMetaResp.get_path(),'root/path', 'Invalid path of entityMeta after creation')
             self.assertEqual(entityMetaResp.get_sourceId(),'testId', 'Invalid sourceId of entityMeta after creation')
@@ -103,13 +103,13 @@ class TestSchema(unittest.TestCase):
             self.assertEqual(len(getEntityMetaResponse) > 0, True, 'Invalid length of entityMeta')
             getEntityMetaResp = getEntityMetaResponse.__getitem__(0)
             self.assertEqual(isinstance(getEntityMetaResp, Schemas.EntityMeta), True, 'Invalid entityMeta object after creation')
-            self.assertEqual(isinstance(getEntityMetaResp.get_id(), unicode), True, 'Invalid id of entityMeta after creation')
+            self.assertEqual(isinstance(getEntityMetaResp.get_id(), str), True, 'Invalid id of entityMeta after creation')
             self.assertEqual(getEntityMetaResp.get_label(), 'testName', 'Invalid label of entityMeta after creation')
             self.assertEqual(getEntityMetaResp.get_path(), 'root/path', 'Invalid path of entityMeta after creation')
             self.assertEqual(getEntityMetaResp.get_sourceId(), 'testId', 'Invalid sourceId of entityMeta after creation')
 
         except Exception as e:
-            print(e.message)
+            print(e.message if hasattr(e, 'message') else e)
             self.assertEqual(0, 1, 'Cannot add entityMeta to datastream')
 
     def tearDown(self):  # teardown
@@ -117,7 +117,7 @@ class TestSchema(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(ds)
             except Exception as e:
-                print(e.message)
+                print(e.message if hasattr(e, 'message') else e)
     pass
 
 if __name__ == '__main__':

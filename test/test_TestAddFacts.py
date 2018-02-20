@@ -83,10 +83,10 @@ class TestAddFacts(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(e.message if hasattr(e,'message') else e)
                 self.assertEqual(0, 1, 'Cannot create assessment')
         except Exception as e:
-            print(e.message)
+            print(e.message if hasattr(e,'message') else e)
             self.assertEqual(0, 1, "Cannot create datastream")
 
     # Add facts data (csv format) to Assessment
@@ -139,10 +139,10 @@ class TestAddFacts(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(e.message if hasattr(e,'message') else e)
                 self.assertEqual(0, 1, 'Cannot create assessment')
         except Exception as e:
-            print(e.message)
+            print(e.message if hasattr(e,'message') else e)
             self.assertEqual(0, 1, "Cannot create datastream")
 
     # Add facts data (csv format) with tags to Assessment
@@ -195,10 +195,10 @@ class TestAddFacts(unittest.TestCase):
                     check_data_ingestion(self, response)
 
                 except Exception as e:
-                    print(e.message)
+                    print(e.message if hasattr(e,'message') else e)
                     self.assertEqual(0, 1, 'Cannot create assessment')
             except Exception as e:
-                print(e.message)
+                print(e.message if hasattr(e,'message') else e)
                 self.assertEqual(0, 1, "Cannot create datastream")
 
     # Add facts data (csv format) with additional Tag to Assessment
@@ -250,10 +250,10 @@ class TestAddFacts(unittest.TestCase):
                     check_data_ingestion(self, response)
 
                 except Exception as e:
-                    print(e.message)
+                    print(e.message if hasattr(e,'message') else e)
                     self.assertEqual(0, 1, 'Cannot create assessment')
             except Exception as e:
-                print(e.message)
+                print(e.message if hasattr(e,'message') else e)
                 self.assertEqual(0, 1, "Cannot create datastream")
 
     # Add facts data (csv format) with batch identifier to Assessment
@@ -328,18 +328,18 @@ class TestAddFacts(unittest.TestCase):
                     check_data_ingestion(self, response)
 
                 except Exception as e:
-                    print(e.message)
+                    print(e.message if hasattr(e,'message') else e)
                     try:
-                        fclient.delete_datastream(datastreamResponse.get_id())
+                        self.fclient.delete_datastream(datastreamResponse.get_id())
                     except Exception as e:
                         pass
                     self.assertEqual(0, 1, 'Cannot create assessment')
 
             except Exception as e:
-                print(e.message)
+                print(e.message if hasattr(e,'message') else e)
                 self.assertEqual(0, 1, 'Cannot add input or fact data to datastream')
         except Exception as e:
-            print(e.message)
+            print(e.message if hasattr(e,'message') else e)
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     def tearDown(self):  # teardown
@@ -347,7 +347,7 @@ class TestAddFacts(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(ds)
             except Exception as e:
-                print(e.message)
+                print(e.message if hasattr(e,'message') else e)
     pass
 
 if __name__ == '__main__':
