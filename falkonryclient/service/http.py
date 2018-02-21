@@ -10,13 +10,13 @@ Client to access Condition Prediction APIs
 
 import json
 import requests
+import urllib3
 import jsonpickle
 
 """
 HttpService:
     Service to make API requests to Falkonry Service
 """
-
 
 class HttpService:
     def __init__(self, host, token, options):
@@ -25,8 +25,8 @@ class HttpService:
         :param host: host address of Falkonry service
         :param token: Authorization token
         """
-        from requests.packages.urllib3.exceptions import InsecureRequestWarning
-        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+        from urllib3.exceptions import InsecureRequestWarning
+        urllib3.disable_warnings(InsecureRequestWarning)
         self.host  = host if host is not None else "https://app.falkonry.ai"
         self.token = token if token is not None else ""
         if options is not None and options['header'] is not None:
