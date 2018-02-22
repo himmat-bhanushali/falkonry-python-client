@@ -62,5 +62,7 @@ def exceptionResponseHandler(exceptionObj):
         return e
 
 __all__ = [
-    'random_string'
+    'random_string',
+    'exceptionResponseHandler'
+
 ]

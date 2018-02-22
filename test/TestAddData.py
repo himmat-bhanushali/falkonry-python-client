@@ -307,7 +307,7 @@ class TestAddData(unittest.TestCase):
                 print("\nResponse :",exceptionResponseHandler(e))
                 self.assertEqual(exceptionResponseHandler(e), "Missing time zone.", 'Missing time zone error not caught')
         except Exception as e:
-            print(e.args)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Cannot add data due to missing time format
@@ -352,7 +352,7 @@ class TestAddData(unittest.TestCase):
                 print('\nResponse :',exceptionResponseHandler(e))
                 self.assertEqual(exceptionResponseHandler(e), "Missing time format.", 'Missing time format error not caught')
         except Exception as e:
-            print(e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Add live input data (json format) to Datastream (Used for live monitoring)
@@ -368,7 +368,7 @@ class TestAddData(unittest.TestCase):
             self.assertNotEqual(response, 'Data Submitted Successfully', 'Cannot add historical input data to datastream')
         except Exception as e:
             # if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
-            print(e.args)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot add input data to datastream')
 
     # Add live input data (csv format) to Datastream (Used for live monitoring)
@@ -384,7 +384,7 @@ class TestAddData(unittest.TestCase):
             self.assertNotEqual(response, 'Data Submitted Successfully', 'Cannot add historical input data to datastream')
         except Exception as e:
             # if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
-            print(e.args)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot add input data to datastream')
 
     # Add narrow input data (csv format) with batch identifier to multi thing Datastream
