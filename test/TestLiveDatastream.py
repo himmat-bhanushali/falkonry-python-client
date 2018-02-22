@@ -3,9 +3,9 @@ import unittest
 import xmlrunner
 import time as timepkg
 
-host          = os.environ['FALKONRY_HOST_URL']  # host url
-token         = os.environ['FALKONRY_TOKEN']     # auth token
-datastream_id = 'tkp9lrh8vhbknj'                 # datastream id
+host          = os.environ['FALKONRY_HOST_URL']               # host url
+token         = os.environ['FALKONRY_TOKEN']                  # auth token
+datastream_id = os.environ['FALKONRY_DATASTREAM_SLIDING_ID']  # datastream id
 
 
 class TestLiveDatastream(unittest.TestCase):
