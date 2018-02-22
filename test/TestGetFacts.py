@@ -2,6 +2,7 @@ import os
 import unittest
 import xmlrunner
 from pprint import pprint
+from falkonryclient.helper.utils import exceptionResponseHandler
 
 host        = os.environ['FALKONRY_HOST_URL']  # host url
 token       = os.environ['FALKONRY_TOKEN']     # auth token
@@ -24,7 +25,7 @@ class TestAssessmentGetFacts(unittest.TestCase):
             pprint(response.text)
             self.assertEqual(len(response.text) == 0, False, 'Invalid facts response')
         except Exception as e:
-            print(e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, "Cannot get facts from the assessment")
 
     def test_get_assessment_facts_with_model(self):
@@ -37,7 +38,7 @@ class TestAssessmentGetFacts(unittest.TestCase):
             pprint(response.text)
             self.assertEqual(len(response.text) == 0, False, 'Invalid facts response')
         except Exception as e:
-            print(e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, "Cannot get facts from the assessment for a specific model")
 
     def test_get_assessment_facts_with_batch(self):
@@ -48,7 +49,7 @@ class TestAssessmentGetFacts(unittest.TestCase):
             self.assertEqual('batch' in response.text, True, 'Invalid facts with batch response')
             self.assertEqual(len(response.text)==0,False, 'Invalid facts with batch response')
         except Exception as e:
-            print(e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, "Cannot get facts from the assessment for batch case")
 
 

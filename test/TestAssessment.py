@@ -2,6 +2,7 @@ import os
 import unittest
 import random
 import xmlrunner
+from falkonryclient.helper.utils import exceptionResponseHandler
 
 host  = os.environ['FALKONRY_HOST_URL']  # host url
 token = os.environ['FALKONRY_TOKEN']     # auth token
@@ -69,7 +70,7 @@ class TestCreateAssessment(unittest.TestCase):
             self.assertEqual(assessmentResponse.get_live(), 'OFF', 'Invalid rate of Assessment after creation')
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Retrieve Assessments
@@ -133,7 +134,7 @@ class TestCreateAssessment(unittest.TestCase):
             self.assertEqual(len(assessmentListResponse) > 0, True, 'Invalid length of assessment')
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Retrieve Assessment by Id
@@ -198,7 +199,7 @@ class TestCreateAssessment(unittest.TestCase):
             self.assertEqual(len(assessmentGetResp.get_aprioriConditionList()) == 0,True,'Invalid length of aprioriConditionList')
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Delete Assessment
@@ -259,11 +260,11 @@ class TestCreateAssessment(unittest.TestCase):
             try:
                 self.fclient.delete_assessment(assessmentResponse.get_id())
             except Exception as e:
-                print(e.message if hasattr(e, 'message') else e)
+                print(exceptionResponseHandler(e))
                 pass
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     def tearDown(self):  # teardown
@@ -271,7 +272,7 @@ class TestCreateAssessment(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(ds)
             except Exception as e:
-                print(e.message if hasattr(e, 'message') else e)
+                print(exceptionResponseHandler(e))
     pass
 
 if __name__ == '__main__':

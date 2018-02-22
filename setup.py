@@ -25,7 +25,7 @@ setup(
     tests_require=tests_require,
     setup_requires=setup_requires,
     extras_require={
-        'test': ['unittest', 'io', 'pytest'],
+        'test': ['unittest', 'io'],
         'all': install_requires + tests_require
     },
     dependency_links=dependency_links,

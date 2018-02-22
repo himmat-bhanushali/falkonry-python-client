@@ -3,7 +3,7 @@ import unittest
 import random
 import xmlrunner
 import time as timepkg
-
+from falkonryclient.helper.utils import exceptionResponseHandler
 host  = os.environ['FALKONRY_HOST_URL']  # host url
 token = os.environ['FALKONRY_TOKEN']     # auth token
 
@@ -83,10 +83,10 @@ class TestAddFacts(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message if hasattr(e,'message') else e)
+                print(exceptionResponseHandler(e))
                 self.assertEqual(0, 1, 'Cannot create assessment')
         except Exception as e:
-            print(e.message if hasattr(e,'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, "Cannot create datastream")
 
     # Add facts data (csv format) to Assessment
@@ -139,10 +139,10 @@ class TestAddFacts(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message if hasattr(e,'message') else e)
+                print(exceptionResponseHandler(e))
                 self.assertEqual(0, 1, 'Cannot create assessment')
         except Exception as e:
-            print(e.message if hasattr(e,'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, "Cannot create datastream")
 
     # Add facts data (csv format) with tags to Assessment
@@ -195,10 +195,10 @@ class TestAddFacts(unittest.TestCase):
                     check_data_ingestion(self, response)
 
                 except Exception as e:
-                    print(e.message if hasattr(e,'message') else e)
+                    print(exceptionResponseHandler(e))
                     self.assertEqual(0, 1, 'Cannot create assessment')
             except Exception as e:
-                print(e.message if hasattr(e,'message') else e)
+                print(exceptionResponseHandler(e))
                 self.assertEqual(0, 1, "Cannot create datastream")
 
     # Add facts data (csv format) with additional Tag to Assessment
@@ -250,10 +250,10 @@ class TestAddFacts(unittest.TestCase):
                     check_data_ingestion(self, response)
 
                 except Exception as e:
-                    print(e.message if hasattr(e,'message') else e)
+                    print(exceptionResponseHandler(e))
                     self.assertEqual(0, 1, 'Cannot create assessment')
             except Exception as e:
-                print(e.message if hasattr(e,'message') else e)
+                print(exceptionResponseHandler(e))
                 self.assertEqual(0, 1, "Cannot create datastream")
 
     # Add facts data (csv format) with batch identifier to Assessment
@@ -328,7 +328,7 @@ class TestAddFacts(unittest.TestCase):
                     check_data_ingestion(self, response)
 
                 except Exception as e:
-                    print(e.message if hasattr(e,'message') else e)
+                    print(exceptionResponseHandler(e))
                     try:
                         self.fclient.delete_datastream(datastreamResponse.get_id())
                     except Exception as e:
@@ -336,10 +336,10 @@ class TestAddFacts(unittest.TestCase):
                     self.assertEqual(0, 1, 'Cannot create assessment')
 
             except Exception as e:
-                print(e.message if hasattr(e,'message') else e)
+                print(exceptionResponseHandler(e))
                 self.assertEqual(0, 1, 'Cannot add input or fact data to datastream')
         except Exception as e:
-            print(e.message if hasattr(e,'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     def tearDown(self):  # teardown
@@ -347,7 +347,7 @@ class TestAddFacts(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(ds)
             except Exception as e:
-                print(e.message if hasattr(e,'message') else e)
+                print(exceptionResponseHandler(e))
     pass
 
 if __name__ == '__main__':

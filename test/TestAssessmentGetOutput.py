@@ -2,6 +2,7 @@ import os
 import unittest
 import json
 import xmlrunner
+from falkonryclient.helper.utils import exceptionResponseHandler
 
 host       = os.environ['FALKONRY_HOST_URL']  # host url
 token      = os.environ['FALKONRY_TOKEN']     # auth token
@@ -23,7 +24,7 @@ class TestAssessmentGetOutput(unittest.TestCase):
                 print(json.dumps(json.loads(event.data)))
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Error getting output of a Assessment')
 
     @unittest.skip("streaming can only be done once ")
@@ -52,7 +53,7 @@ class TestAssessmentGetOutput(unittest.TestCase):
                 # if status is 200, output data will be present in httpResponse.response field
                 pass
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Error getting output of a Assessment')
 
 if __name__ == '__main__':

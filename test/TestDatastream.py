@@ -2,6 +2,7 @@ import os
 import unittest
 import random
 import xmlrunner
+from falkonryclient.helper.utils import exceptionResponseHandler
 
 host  = os.environ['FALKONRY_HOST_URL']  # host url
 token = os.environ['FALKONRY_TOKEN']     # auth token
@@ -51,7 +52,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for narrow/historian style data from a single entity
@@ -94,7 +95,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for narrow/historian style data from a multiple entities
@@ -138,7 +139,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for wide style data from a single entity
@@ -211,7 +212,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(inputResp3.get_value_type(), input3.get_value_type(),'Invalid input value type after object creation')
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for wide style data from a multiple entities
@@ -285,7 +286,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(inputResp3.get_value_type(), input3.get_value_type(),'Invalid input value type after object creation')
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Retrieve Datastreams
@@ -330,7 +331,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(len(datastreamList) > 0, True, 'No datastreams in get response')
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Retrieve Datastream by Id
@@ -378,7 +379,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(response.get_id(), datastreamResp.get_id(), 'Invalid id of datastream after creation')
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Delete Datastream
@@ -420,10 +421,10 @@ class TestDatastream(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(response.get_id())
             except Exception as e:
-                print(e.message if hasattr(e, 'message') else e)
+                print(exceptionResponseHandler(e))
                 self.assertEqual(0, 1, 'Cannot delete datastream')
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream microseconds precision
@@ -472,7 +473,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(response.get_time_precision(), datastream.get_time_precision(), 'Invalid time precision after creation')
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for batch identifier
@@ -549,7 +550,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(inputResp3.get_value_type(), input3.get_value_type(),'Invalid input value type after object creation')
 
         except Exception as e:
-            print(e.message if hasattr(e, 'message') else e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     def tearDown(self):  # teardown
@@ -557,7 +558,7 @@ class TestDatastream(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(ds)
             except Exception as e:
-                print(e.message if hasattr(e, 'message') else e)
+                print(exceptionResponseHandler(e))
         pass
 
 if __name__ == '__main__':

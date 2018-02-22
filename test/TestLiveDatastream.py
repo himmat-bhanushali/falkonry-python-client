@@ -2,6 +2,7 @@ import os
 import unittest
 import xmlrunner
 import time as timepkg
+from falkonryclient.helper.utils import exceptionResponseHandler
 
 host          = os.environ['FALKONRY_HOST_URL']  # host url
 token         = os.environ['FALKONRY_TOKEN']     # auth token
@@ -37,11 +38,11 @@ class TestLiveDatastream(unittest.TestCase):
                 # self.assertEqual(str(listAssessment[0]['live']), 'OFF', 'Cannot turn off live mornitoring')
 
             except Exception as e:
-                print(e)
+                print(exceptionResponseHandler(e))
                 self.assertEqual(0, 1, 'Cannot turn datastream off')
 
         except Exception as e:
-            print(e)
+            print(exceptionResponseHandler(e))
             self.assertEqual(0, 1, 'Cannot turn datastream on')
 
 if __name__ == '__main__':
