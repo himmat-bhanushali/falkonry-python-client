@@ -4,9 +4,9 @@ import json
 import xmlrunner
 from falkonryclient.helper.utils import exceptionResponseHandler
 
-host       = os.environ['FALKONRY_HOST_URL']  # host url
-token      = os.environ['FALKONRY_TOKEN']     # auth token
-assessment = 'jrvk3e8mnc0nyc'                 # assessment id
+host       = os.environ['FALKONRY_HOST_URL']               # host url
+token      = os.environ['FALKONRY_TOKEN']                  # auth token
+assessment = os.environ['FALKONRY_ASSESSMENT_SLIDING_ID']  # assessment id
 
 
 class TestAssessmentGetOutput(unittest.TestCase):
