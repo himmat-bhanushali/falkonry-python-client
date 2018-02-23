@@ -3,7 +3,6 @@ import time as timepkg
 import unittest
 import random
 import xmlrunner
-
 host  = os.environ['FALKONRY_HOST_URL']  # host url
 token = os.environ['FALKONRY_TOKEN']     # auth token
 
@@ -75,10 +74,10 @@ class TestAddData(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Add narrow input data (csv format) to single entity to Datastream
@@ -122,10 +121,10 @@ class TestAddData(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Add wide input data (json format) to single entity Datastream
@@ -169,10 +168,10 @@ class TestAddData(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Add wide input data (csv format) to multi entity Datastream
@@ -214,10 +213,10 @@ class TestAddData(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Cannot add data due to missing time Identifer
@@ -258,10 +257,11 @@ class TestAddData(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
-                self.assertNotEqual(e.message, "Missing time identifier", 'Missing time identifer error not caught')
+                # Printing only for debugging purposes
+                print("\nResponse :", exception_handler(e))
+                self.assertEqual(exception_handler(e), "Missing time identifier.", 'Missing time identifer error not caught')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Cannot add data due to missing time zone
@@ -302,10 +302,11 @@ class TestAddData(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
-                self.assertNotEqual(e.message, "Missing time zone", 'Missing time zone error not caught')
+                # (b'{"message":"Missing time zone."}',)
+                print("\nResponse :",exception_handler(e))
+                self.assertEqual(exception_handler(e), "Missing time zone.", 'Missing time zone error not caught')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Cannot add data due to missing time format
@@ -346,10 +347,11 @@ class TestAddData(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
-                self.assertNotEqual(e.message, "Missing time format", 'Missing time format error not caught')
+                # Printing only for debugging purposes
+                print('\nResponse :',exception_handler(e))
+                self.assertEqual(exception_handler(e), "Missing time format.", 'Missing time format error not caught')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Add live input data (json format) to Datastream (Used for live monitoring)
@@ -365,7 +367,7 @@ class TestAddData(unittest.TestCase):
             self.assertNotEqual(response, 'Data Submitted Successfully', 'Cannot add historical input data to datastream')
         except Exception as e:
             # if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot add input data to datastream')
 
     # Add live input data (csv format) to Datastream (Used for live monitoring)
@@ -381,7 +383,7 @@ class TestAddData(unittest.TestCase):
             self.assertNotEqual(response, 'Data Submitted Successfully', 'Cannot add historical input data to datastream')
         except Exception as e:
             # if response is "{"message":"Datastream is not live, streaming data cannot be accepted."}" Please turn on datastream first then add streaming data
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot add input data to datastream')
 
     # Add narrow input data (csv format) with batch identifier to multi thing Datastream
@@ -442,10 +444,10 @@ class TestAddData(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Add narrow input data (json format) with batch identifier to single thing Datastream
@@ -500,10 +502,10 @@ class TestAddData(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Add wide input data (csv format) with batch identifier to multi thing Datastream
@@ -549,10 +551,10 @@ class TestAddData(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Add wide input data (json format) with batch identifier to single thing Datastream
@@ -602,10 +604,10 @@ class TestAddData(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot add input data to datastream')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     def tearDown(self):  # teardown
@@ -613,7 +615,7 @@ class TestAddData(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(ds)
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
     pass
 
 if __name__ == '__main__':
@@ -629,12 +631,17 @@ if __name__ == '__main__':
         )
         from falkonryclient import schemas as Schemas
         from falkonryclient import client as FClient
+        from falkonryclient.helper.utils import exception_handler
+
     else:
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
+        from ..falkonryclient.helper.utils import exception_handler
+
     unittest.main(
         testRunner=xmlrunner.XMLTestRunner(output='out'),
         failfast=False, buffer=False, catchbreak=False)
 else:
     from falkonryclient import schemas as Schemas
     from falkonryclient import client as FClient
+    from falkonryclient.helper.utils import exception_handler

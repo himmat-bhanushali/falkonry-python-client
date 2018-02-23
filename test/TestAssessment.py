@@ -40,7 +40,7 @@ class TestCreateAssessment(unittest.TestCase):
             self.created_datastreams.append(response.get_id())
 
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
@@ -62,14 +62,14 @@ class TestCreateAssessment(unittest.TestCase):
 
             assessmentResponse = self.fclient.create_assessment(asmtRequest)
             self.assertEqual(isinstance(assessmentResponse, Schemas.Assessment), True, 'Invalid Assessment object after creation')
-            self.assertEqual(isinstance(assessmentResponse.get_id(), unicode), True, 'Invalid id of Assessment after creation')
+            self.assertEqual(isinstance(assessmentResponse.get_id(), str), True, 'Invalid id of Assessment after creation')
             self.assertEqual(assessmentResponse.get_name(), asmtRequest.get_name(), 'Invalid name of Assessment after creation')
             self.assertEqual(assessmentResponse.get_datastream(), asmtRequest.get_datastream(), 'Invalid datastream in assessment after creation')
             self.assertEqual(assessmentResponse.get_rate(), asmtRequest.get_rate(), 'Invalid rate of Assessment after creation')
             self.assertEqual(assessmentResponse.get_live(), 'OFF', 'Invalid rate of Assessment after creation')
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Retrieve Assessments
@@ -98,7 +98,7 @@ class TestCreateAssessment(unittest.TestCase):
             self.created_datastreams.append(response.get_id())
 
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
@@ -120,7 +120,7 @@ class TestCreateAssessment(unittest.TestCase):
 
             assessmentResponse = self.fclient.create_assessment(asmtRequest)
             self.assertEqual(isinstance(assessmentResponse, Schemas.Assessment), True, 'Invalid Assessment object after creation')
-            self.assertEqual(isinstance(assessmentResponse.get_id(), unicode), True, 'Invalid id of Assessment after creation')
+            self.assertEqual(isinstance(assessmentResponse.get_id(), str), True, 'Invalid id of Assessment after creation')
             self.assertEqual(assessmentResponse.get_name(), asmtRequest.get_name(), 'Invalid name of Assessment after creation')
             self.assertEqual(assessmentResponse.get_datastream(), asmtRequest.get_datastream(), 'Invalid datastream in assessment after creation')
             self.assertEqual(assessmentResponse.get_rate(), asmtRequest.get_rate(), 'Invalid rate of Assessment after creation')
@@ -133,7 +133,7 @@ class TestCreateAssessment(unittest.TestCase):
             self.assertEqual(len(assessmentListResponse) > 0, True, 'Invalid length of assessment')
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Retrieve Assessment by Id
@@ -162,7 +162,7 @@ class TestCreateAssessment(unittest.TestCase):
             self.created_datastreams.append(response.get_id())
 
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
@@ -184,7 +184,7 @@ class TestCreateAssessment(unittest.TestCase):
 
             assessmentResponse = self.fclient.create_assessment(asmtRequest)
             self.assertEqual(isinstance(assessmentResponse, Schemas.Assessment), True, 'Invalid Assessment object after creation')
-            self.assertEqual(isinstance(assessmentResponse.get_id(), unicode), True, 'Invalid id of Assessment after creation')
+            self.assertEqual(isinstance(assessmentResponse.get_id(), str), True, 'Invalid id of Assessment after creation')
             self.assertEqual(assessmentResponse.get_name(), asmtRequest.get_name(), 'Invalid name of Assessment after creation')
             self.assertEqual(assessmentResponse.get_datastream(), asmtRequest.get_datastream(), 'Invalid datastream in assessment after creation')
             self.assertEqual(assessmentResponse.get_rate(), asmtRequest.get_rate(), 'Invalid rate of Assessment after creation')
@@ -198,7 +198,7 @@ class TestCreateAssessment(unittest.TestCase):
             self.assertEqual(len(assessmentGetResp.get_aprioriConditionList()) == 0,True,'Invalid length of aprioriConditionList')
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Delete Assessment
@@ -227,7 +227,7 @@ class TestCreateAssessment(unittest.TestCase):
             self.created_datastreams.append(response.get_id())
 
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
@@ -249,7 +249,7 @@ class TestCreateAssessment(unittest.TestCase):
 
             assessmentResponse = self.fclient.create_assessment(asmtRequest)
             self.assertEqual(isinstance(assessmentResponse, Schemas.Assessment), True, 'Invalid Assessment object after creation')
-            self.assertEqual(isinstance(assessmentResponse.get_id(), unicode), True, 'Invalid id of Assessment after creation')
+            self.assertEqual(isinstance(assessmentResponse.get_id(), str), True, 'Invalid id of Assessment after creation')
             self.assertEqual(assessmentResponse.get_name(), asmtRequest.get_name(), 'Invalid name of Assessment after creation')
             self.assertEqual(assessmentResponse.get_datastream(), asmtRequest.get_datastream(), 'Invalid datastream in assessment after creation')
             self.assertEqual(assessmentResponse.get_rate(), asmtRequest.get_rate(), 'Invalid rate of Assessment after creation')
@@ -259,11 +259,11 @@ class TestCreateAssessment(unittest.TestCase):
             try:
                 self.fclient.delete_assessment(assessmentResponse.get_id())
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 pass
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     def tearDown(self):  # teardown
@@ -271,7 +271,7 @@ class TestCreateAssessment(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(ds)
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
     pass
 
 if __name__ == '__main__':
@@ -287,12 +287,17 @@ if __name__ == '__main__':
         )
         from falkonryclient import schemas as Schemas
         from falkonryclient import client as FClient
+        from falkonryclient.helper.utils import exception_handler
+
     else:
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
+        from ..falkonryclient.helper.utils import exception_handler
+
     unittest.main(
         testRunner=xmlrunner.XMLTestRunner(output='out'),
         failfast=False, buffer=False, catchbreak=False)
 else:
     from falkonryclient import schemas as Schemas
     from falkonryclient import client as FClient
+    from falkonryclient.helper.utils import exception_handler

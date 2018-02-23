@@ -69,10 +69,18 @@ if __name__ == '__main__':
             )
         )
         from falkonryclient import schemas as Schemas
+        from falkonryclient import client as FClient
+        from falkonryclient.helper.utils import exception_handler
+
     else:
         from ..falkonryclient import schemas as Schemas
+        from ..falkonryclient import client as FClient
+        from ..falkonryclient.helper.utils import exception_handler
+
     unittest.main(
         testRunner=xmlrunner.XMLTestRunner(output='out'),
         failfast=False, buffer=False, catchbreak=False)
 else:
     from falkonryclient import schemas as Schemas
+    from falkonryclient import client as FClient
+    from falkonryclient.helper.utils import exception_handler

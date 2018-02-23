@@ -21,18 +21,18 @@ class TestAssessmentGetFacts(unittest.TestCase):
             pprint(response.text)
             self.assertEqual(len(response.text) == 0, False, 'Invalid facts response')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, "Cannot get facts from the assessment")
 
     def test_get_assessment_facts_with_model(self):
 
         try:
-            options = {'startTime': '2011-01-01T00:00:00.000Z', 'endTime': '2014-12-31T00:00:00.000Z', 'model': '1'}
+            options = {'startTime': '2011-01-02T00:00:00.000Z', 'endTime': '2014-01-01T00:00:00.000Z', 'model': '1'}
             response = self.fclient.get_facts(assessment, options)
             pprint(response.text)
             self.assertEqual(len(response.text) == 0, False, 'Invalid facts response')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, "Cannot get facts from the assessment for a specific model")
 
     def test_get_assessment_facts_with_batch(self):
@@ -43,7 +43,7 @@ class TestAssessmentGetFacts(unittest.TestCase):
             self.assertEqual('batch' in response.text, True, 'Invalid facts with batch response')
             self.assertEqual(len(response.text)==0,False, 'Invalid facts with batch response')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, "Cannot get facts from the assessment for batch case")
 
 
@@ -60,12 +60,17 @@ if __name__ == '__main__':
         )
         from falkonryclient import schemas as Schemas
         from falkonryclient import client as FClient
+        from falkonryclient.helper.utils import exception_handler
+
     else:
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
+        from ..falkonryclient.helper.utils import exception_handler
+
     unittest.main(
         testRunner=xmlrunner.XMLTestRunner(output='out'),
         failfast=False, buffer=False, catchbreak=False)
 else:
     from falkonryclient import schemas as Schemas
     from falkonryclient import client as FClient
+    from falkonryclient.helper.utils import exception_handler

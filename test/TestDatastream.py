@@ -37,7 +37,7 @@ class TestDatastream(unittest.TestCase):
             response = self.fclient.create_datastream(datastream)
             self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
@@ -51,7 +51,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for narrow/historian style data from a single entity
@@ -79,7 +79,7 @@ class TestDatastream(unittest.TestCase):
             response = self.fclient.create_datastream(datastream)
             self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
@@ -94,7 +94,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for narrow/historian style data from a multiple entities
@@ -123,7 +123,7 @@ class TestDatastream(unittest.TestCase):
             response = self.fclient.create_datastream(datastream)
             self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
@@ -138,7 +138,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(timeResponse.get_format(), time.get_format(), 'Invalid time format object after creation')
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for wide style data from a single entity
@@ -183,7 +183,7 @@ class TestDatastream(unittest.TestCase):
             response = self.fclient.create_datastream(datastream)
             self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
 
             fieldResponse = response.get_field()
@@ -211,7 +211,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(inputResp3.get_value_type(), input3.get_value_type(),'Invalid input value type after object creation')
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for wide style data from a multiple entities
@@ -257,7 +257,7 @@ class TestDatastream(unittest.TestCase):
             response = self.fclient.create_datastream(datastream)
             self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
 
             fieldResponse = response.get_field()
@@ -285,7 +285,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(inputResp3.get_value_type(), input3.get_value_type(),'Invalid input value type after object creation')
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Retrieve Datastreams
@@ -311,7 +311,7 @@ class TestDatastream(unittest.TestCase):
             response = self.fclient.create_datastream(datastream)
             self.created_datastreams.append(response.get_id())
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
@@ -330,7 +330,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(len(datastreamList) > 0, True, 'No datastreams in get response')
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Retrieve Datastream by Id
@@ -359,7 +359,7 @@ class TestDatastream(unittest.TestCase):
             self.created_datastreams.append(response.get_id())
 
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
@@ -378,7 +378,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(response.get_id(), datastreamResp.get_id(), 'Invalid id of datastream after creation')
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Delete Datastream
@@ -403,7 +403,7 @@ class TestDatastream(unittest.TestCase):
         try:
             response = self.fclient.create_datastream(datastream)
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
@@ -420,10 +420,10 @@ class TestDatastream(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(response.get_id())
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot delete datastream')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream microseconds precision
@@ -455,7 +455,7 @@ class TestDatastream(unittest.TestCase):
             self.created_datastreams.append(response.get_id())
 
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
             fieldResponse = response.get_field()
             self.assertEqual(isinstance(fieldResponse, Schemas.Field), True, 'Invalid field in  Datastream object after creation')
@@ -472,7 +472,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(response.get_time_precision(), datastream.get_time_precision(), 'Invalid time precision after creation')
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     # Create Datastream for batch identifier
@@ -520,7 +520,7 @@ class TestDatastream(unittest.TestCase):
             self.created_datastreams.append(response.get_id())
 
             self.assertEqual(isinstance(response, Schemas.Datastream), True, 'Invalid Datastream object after creation')
-            self.assertEqual(isinstance(response.get_id(), unicode), True, 'Invalid id of datastream after creation')
+            self.assertEqual(isinstance(response.get_id(), str), True, 'Invalid id of datastream after creation')
             self.assertEqual(response.get_name(), datastream.get_name(), 'Invalid name of Datastream after creation')
 
             fieldResponse = response.get_field()
@@ -549,7 +549,7 @@ class TestDatastream(unittest.TestCase):
             self.assertEqual(inputResp3.get_value_type(), input3.get_value_type(),'Invalid input value type after object creation')
 
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
     def tearDown(self):  # teardown
@@ -557,7 +557,7 @@ class TestDatastream(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(ds)
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
         pass
 
 if __name__ == '__main__':
@@ -573,12 +573,17 @@ if __name__ == '__main__':
         )
         from falkonryclient import schemas as Schemas
         from falkonryclient import client as FClient
+        from falkonryclient.helper.utils import exception_handler
+
     else:
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
+        from ..falkonryclient.helper.utils import exception_handler
+
     unittest.main(
         testRunner=xmlrunner.XMLTestRunner(output='out'),
         failfast=False, buffer=False, catchbreak=False)
 else:
     from falkonryclient import schemas as Schemas
     from falkonryclient import client as FClient
+    from falkonryclient.helper.utils import exception_handler

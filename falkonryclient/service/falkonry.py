@@ -11,10 +11,10 @@ Client to access Condition Prediction APIs
 from falkonryclient.helper import schema as Schemas
 from falkonryclient.service.http import HttpService
 from falkonryclient.helper import utils as Utils
-from cStringIO import StringIO
+from io import StringIO
 import json
 import sseclient
-import urllib
+import urllib.parse
 
 """
 FalkonryService
@@ -139,10 +139,10 @@ class FalkonryService:
         url = self.get_fact_url(assessment,options)
         try:
             response = self.http.postData(url, data)
+            return response
         except Exception as e:
-            print e.message
-        return response
-
+            print(e.message if hasattr(e,'message') else e)
+            return e
 
     def add_input_stream(self, datastream, data_type, options, data):
         """
@@ -324,7 +324,7 @@ class FalkonryService:
             responseFormat = options['format']
             options['format'] = None
 
-        url = '/assessment/' + str(assessment) + '/output?' + urllib.urlencode(options)
+        url = '/assessment/' + str(assessment) + '/output?' + urllib.parse.urlencode(options)
         response = self.http.downstream(url, responseFormat)
         return response
 
@@ -385,7 +385,7 @@ class FalkonryService:
             response_format = options['format']
             options['format'] = None
 
-        url = '/assessment/' + str(assessment) + '/facts?' + urllib.urlencode(options)
+        url = '/assessment/' + str(assessment) + '/facts?' + urllib.parse.urlencode(options)
         response = self.http.downstream(url, response_format)
         return response
 

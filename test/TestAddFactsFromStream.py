@@ -80,10 +80,10 @@ class TestAddFacts(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot create assessment')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, "Cannot create datastream")
 
     # Add facts data (csv format) from a stream to  Assessment
@@ -135,10 +135,10 @@ class TestAddFacts(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot create assessment')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, "Cannot create datastream")
 
     # Add facts data (csv format) with tags from a stream to  Assessment
@@ -191,10 +191,10 @@ class TestAddFacts(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot create assessment')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, "Cannot create datastream")
 
     # Add facts data (csv format) with additional Tag from a stream to  Assessment
@@ -248,10 +248,10 @@ class TestAddFacts(unittest.TestCase):
                 check_data_ingestion(self, response)
 
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
                 self.assertEqual(0, 1, 'Cannot create assessment')
         except Exception as e:
-            print(e.message)
+            print(exception_handler(e))
             self.assertEqual(0, 1, "Cannot create datastream")
 
     def tearDown(self):  # teardown
@@ -259,7 +259,7 @@ class TestAddFacts(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(ds)
             except Exception as e:
-                print(e.message)
+                print(exception_handler(e))
     pass
 
 
@@ -276,12 +276,17 @@ if __name__ == '__main__':
         )
         from falkonryclient import schemas as Schemas
         from falkonryclient import client as FClient
+        from falkonryclient.helper.utils import exception_handler
+
     else:
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
+        from ..falkonryclient.helper.utils import exception_handler
+
     unittest.main(
         testRunner=xmlrunner.XMLTestRunner(output='out'),
         failfast=False, buffer=False, catchbreak=False)
 else:
     from falkonryclient import schemas as Schemas
     from falkonryclient import client as FClient
+    from falkonryclient.helper.utils import exception_handler
