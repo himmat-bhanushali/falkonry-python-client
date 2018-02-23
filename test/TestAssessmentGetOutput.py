@@ -26,11 +26,10 @@ class TestAssessmentGetOutput(unittest.TestCase):
             print(e.message)
             self.assertEqual(0, 1, 'Error getting output of a Assessment')
 
-    @unittest.skip("streaming can only be done once ")
     def test_get_assessment_historical_output(self):
         fclient = FClient(host=host, token=token,options=None)
         try:
-            options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2013-06-13T01:00:00.000Z','responseFormat':'application/json'}
+            options = {'startTime':'2011-01-02T01:00:00.000Z','endTime':'2013-06-13T01:00:00.000Z','responseFormat':'application/json'}
             response = fclient.get_historical_output(assessment, options)
             '''If data is not readily available then, a tracker id will be sent with 202 status code. While falkonry will genrate ouptut data
              Client should do timely pooling on the using same method, sending tracker id (__id) in the query params
@@ -49,8 +48,8 @@ class TestAssessmentGetOutput(unittest.TestCase):
                 # if status is 202 call the same request again
 
             if response.status_code is 200:
-                # if status is 200, output data will be present in httpResponse.response field
-                pass
+                # if status is 200, output data will be present in response.text field
+                self.assertEqual(len(response.text) > 0, True, 'Error getting historical output of a Assessment')
         except Exception as e:
             print(e.message)
             self.assertEqual(0, 1, 'Error getting output of a Assessment')
