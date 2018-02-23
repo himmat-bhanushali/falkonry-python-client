@@ -3,13 +3,10 @@ import unittest
 import xmlrunner
 from pprint import pprint
 
-host        = os.environ['FALKONRY_HOST_URL']  # host url
-token       = os.environ['FALKONRY_TOKEN']     # auth token
-assessment  = 'r2h27kn82dvrvy'                 # assessment id
-assessmentB = 'r7l9tddmngbbl6'
-###Uncomment and set according to your environment for development
-# assessment  = '4jp4yn9vblt8wl'                 # assessment id
-# assessmentB = 'tjhy6jk64kr8dt'
+host        = os.environ['FALKONRY_HOST_URL']               # host url
+token       = os.environ['FALKONRY_TOKEN']                  # auth token
+assessment  = os.environ['FALKONRY_ASSESSMENT_SLIDING_ID']  # host url
+assessmentB = os.environ['FALKONRY_ASSESSMENT_BATCH_ID']    # auth token
 
 class TestAssessmentGetFacts(unittest.TestCase):
 
