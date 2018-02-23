@@ -15,7 +15,7 @@ def random_string(size=6):
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(size))
 
 
-def exceptionResponseHandler(exceptionObj):
+def exception_handler(exceptionObj):
     """Function that takes exception Object(<Byte>,<str>) as a parameter and returns the error message<str>"""
     try:
         if isinstance(exceptionObj, Exception) and hasattr(exceptionObj, 'args'):
@@ -30,12 +30,12 @@ def exceptionResponseHandler(exceptionObj):
                             ob = json.loads(exceptionObj.args[0])
                             if type(ob) == type({}) and ob['message']:
                                 try:
-                                    return exceptionResponseHandler(ob['message'])
+                                    return exception_handler(ob['message'])
                                 except Exception as e:
                                     return ob['message']
                             elif type(ob) == type({}) and ob['msg']:
                                 try:
-                                    return exceptionResponseHandler(ob['message'])
+                                    return exception_handler(ob['message'])
                                 except Exception as e:
                                     return ob['msg']
                             return str(json.loads(exceptionObj.args[0]))
@@ -63,6 +63,6 @@ def exceptionResponseHandler(exceptionObj):
 
 __all__ = [
     'random_string',
-    'exceptionResponseHandler'
+    'exception_handler'
 
 ]

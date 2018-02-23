@@ -2,7 +2,6 @@ import os
 import unittest
 import random
 import xmlrunner
-from falkonryclient.helper.utils import exceptionResponseHandler
 
 host  = os.environ['FALKONRY_HOST_URL']  # host url
 token = os.environ['FALKONRY_TOKEN']     # auth token
@@ -55,7 +54,7 @@ class TestSchema(unittest.TestCase):
             self.assertEqual(entityMetaResp.get_sourceId(), 'testId', 'Invalid sourceId of entityMeta after creation')
 
         except Exception as e:
-            print(exceptionResponseHandler(e))
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot add entityMeta to datastream')
 
     # Get EntityMeta of a Datastream
@@ -110,7 +109,7 @@ class TestSchema(unittest.TestCase):
             self.assertEqual(getEntityMetaResp.get_sourceId(), 'testId', 'Invalid sourceId of entityMeta after creation')
 
         except Exception as e:
-            print(exceptionResponseHandler(e))
+            print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot add entityMeta to datastream')
 
     def tearDown(self):  # teardown
@@ -118,7 +117,7 @@ class TestSchema(unittest.TestCase):
             try:
                 self.fclient.delete_datastream(ds)
             except Exception as e:
-                print(exceptionResponseHandler(e))
+                print(exception_handler(e))
     pass
 
 if __name__ == '__main__':
@@ -134,12 +133,17 @@ if __name__ == '__main__':
         )
         from falkonryclient import schemas as Schemas
         from falkonryclient import client as FClient
+        from falkonryclient.helper.utils import exception_handler
+
     else:
         from ..falkonryclient import schemas as Schemas
         from ..falkonryclient import client as FClient
+        from ..falkonryclient.helper.utils import exception_handler
+
     unittest.main(
         testRunner=xmlrunner.XMLTestRunner(output='out'),
         failfast=False, buffer=False, catchbreak=False)
 else:
     from falkonryclient import schemas as Schemas
     from falkonryclient import client as FClient
+    from falkonryclient.helper.utils import exception_handler

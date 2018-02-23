@@ -8,7 +8,7 @@ install_requires = [
 ]
 dependency_links = []
 setup_requires = []
-tests_require = ['unittest', 'io', 'pytest']
+tests_require = ['unittest', 'io']
 
 setup(
     name='falkonryclient',

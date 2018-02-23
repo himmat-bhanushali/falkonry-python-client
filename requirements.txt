@@ -3,4 +3,3 @@ jsonpickle
 urllib3
 sseclient-py
 unittest-xml-reporting
-pytest
