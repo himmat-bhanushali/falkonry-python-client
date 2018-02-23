@@ -183,7 +183,7 @@ class TestAddFacts(unittest.TestCase):
                     'timeFormat': "iso_8601",
                     'timeZone': time.get_zone(),
                     'valueIdentifier': "Health",
-                    'tagIdentifier': "Tags"
+                    'keyIdentifier': "Tags"
                 }
                 response = self.fclient.add_facts_stream(resp_assessment.get_id(), 'csv', options, data)
 
@@ -239,7 +239,7 @@ class TestAddFacts(unittest.TestCase):
                     'timeFormat': "iso_8601",
                     'timeZone': time.get_zone(),
                     'valueIdentifier': "Health",
-                    'additionalTag': "testTag"
+                    'additionalKeyword': "testTag"
                 }
 
                 response = self.fclient.add_facts_stream(resp_assessment.get_id(), 'csv', options, data)

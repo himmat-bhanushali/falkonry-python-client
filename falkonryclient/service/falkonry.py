@@ -275,19 +275,19 @@ class FalkonryService:
                 url += "&"
             url += "valueIdentifier=" + str(options['valueIdentifier'])
 
-        if 'tagIdentifier' in options:
+        if 'keyIdentifier' in options:
             if firstReqParam:
                 firstReqParam = False
             else:
                 url += "&"
-            url += "tagIdentifier=" + str(options['tagIdentifier'])
+            url += "keyIdentifier=" + str(options['keyIdentifier'])
 
-        if 'additionalTag' in options:
+        if 'additionalKeyword' in options:
             if firstReqParam:
                 firstReqParam = False
             else:
                 url += "&"
-            url += "additionalTag=" + str(options['additionalTag'])
+            url += "additionalKeyword=" + str(options['additionalKeyword'])
 
         if 'batchIdentifier' in options:
             if firstReqParam:

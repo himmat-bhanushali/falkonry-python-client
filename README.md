@@ -1103,7 +1103,7 @@ options = {
         'timeZone': time.get_zone(),
         'entityIdentifier': "car",
         'valueIdentifier': "Health",
-        'additionalTag': "testTag"
+        'additionalKeyword': "testTag"
     }
 inputResponse = falkonry.add_facts(assessmentId, 'json', options, data)
 ```
@@ -1151,7 +1151,7 @@ options = {
         'timeZone': time.get_zone(),
         'entityIdentifier': "car",
         'valueIdentifier': "Health",
-        'tagIdentifier': 'Tag'
+        'keyIdentifier': 'Tag'
     }
 
 inputResponse = falkonry.add_facts(assessmentId, 'csv', options, data)
