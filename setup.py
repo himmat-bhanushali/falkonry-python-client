@@ -8,7 +8,7 @@ install_requires = [
 ]
 dependency_links = []
 setup_requires = []
-tests_require = ['unittest', 'io', 'unittest-xml-reporting']
+tests_require = ['unittest', 'io', 'unittest-xml-reporting', 'xmlrunner']
 
 setup(
     name='falkonryclient',
