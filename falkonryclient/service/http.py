@@ -51,7 +51,7 @@ class HttpService:
         )
         if response.status_code == 200:
             try:
-                return json.loads(response.content)
+                return json.loads(response._content.decode('utf-8'))
             except Exception as error:
                 return response.content
         elif response.status_code == 401:
@@ -86,7 +86,12 @@ class HttpService:
             verify=False
         )
         if response.status_code == 201:
-            return json.loads(response.content)
+            try:
+                return json.loads(response._content.decode('utf-8'))
+            except Exception as e:
+                return json.loads(response.content)
+            # return json.loads(response.content.decode('utf-8'))
+            # return json.loads(response.content)
         elif response.status_code == 409:
             return json.loads(response.content)  
         elif response.status_code == 401:
@@ -112,7 +117,10 @@ class HttpService:
             verify=False
         )
         if response.status_code == 202 or response.status_code == 200:
-            return json.loads(response.content)
+            try:
+                return json.loads(response._content.decode('utf-8'))
+            except Exception as e:
+                return json.loads(response.content)
         elif response.status_code == 401:
             raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
@@ -136,7 +144,10 @@ class HttpService:
             verify=False
         )
         if response.status_code == 200:
-            return json.loads(response.content)
+            try:
+                return json.loads(response._content.decode('utf-8'))
+            except Exception as e:
+                json.loads(response.content)
         elif response.status_code == 401:
             raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
@@ -173,7 +184,10 @@ class HttpService:
                 verify=False
             )
         if response.status_code == 201 or response.status_code == 202:
-            return json.loads(response.content)
+            try:
+                return json.loads(response._content.decode('utf-8'))
+            except Exception as e:
+                return json.loads(response.content)
         elif response.status_code == 401:
             raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:
@@ -215,7 +229,10 @@ class HttpService:
             verify=False
         )
         if response.status_code == 202 or response.status_code == 200:
-            return json.loads(response.content)
+            try:
+                return json.loads(response._content.decode('utf-8'))
+            except Exception as e:
+                return json.loads(response.content)
         elif response.status_code == 401:
             raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:

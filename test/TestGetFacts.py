@@ -18,8 +18,8 @@ class TestAssessmentGetFacts(unittest.TestCase):
 
         try:
             response = self.fclient.get_facts(assessment, {})
-            pprint(response.text)
-            self.assertEqual(len(response.text) == 0, False, 'Invalid facts response')
+            pprint(response.content)
+            self.assertEqual(len(response.content) == 0, False, 'Invalid facts response')
         except Exception as e:
             print(exception_handler(e))
             self.assertEqual(0, 1, "Cannot get facts from the assessment")
@@ -31,8 +31,8 @@ class TestAssessmentGetFacts(unittest.TestCase):
             ###Uncomment and set according to your environment for development
             # options = {'startTime': '2017-04-12T12:17:28.000Z', 'endTime': '2017-04-12T12:24:08.000Z', 'model': '1'}
             response = self.fclient.get_facts(assessment, options)
-            pprint(response.text)
-            self.assertEqual(len(response.text) == 0, False, 'Invalid facts response')
+            pprint(response.content)
+            self.assertEqual(len(response.content) == 0, False, 'Invalid facts response')
         except Exception as e:
             print(exception_handler(e))
             self.assertEqual(0, 1, "Cannot get facts from the assessment for a specific model")
@@ -41,9 +41,9 @@ class TestAssessmentGetFacts(unittest.TestCase):
 
         try:
             response = self.fclient.get_facts(assessmentB, {})
-            pprint(response.text)
-            self.assertEqual('batch' in response.text, True, 'Invalid facts with batch response')
-            self.assertEqual(len(response.text)==0,False, 'Invalid facts with batch response')
+            pprint(response.content)
+            self.assertEqual('batch' in str(response.content), True, 'Invalid facts with batch response')
+            self.assertEqual(len(response.content)==0,False, 'Invalid facts with batch response')
         except Exception as e:
             print(exception_handler(e))
             self.assertEqual(0, 1, "Cannot get facts from the assessment for batch case")

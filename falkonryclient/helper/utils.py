@@ -26,8 +26,12 @@ def exception_handler(exceptionObj):
                         if type(ob) == type({}) and ob['message']:
                             return ob['message']
                     else:
+
                         try:
-                            ob = json.loads(exceptionObj.args[0])
+                            if type(exceptionObj.args[0]) == type('') and exceptionObj.args[0][0] == 'b':
+                                ob = json.loads(exceptionObj.args[0][2:-1])
+                            else:
+                                ob = json.loads(exceptionObj.args[0])
                             if type(ob) == type({}) and ob['message']:
                                 try:
                                     return exception_handler(ob['message'])
