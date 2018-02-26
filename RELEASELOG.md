@@ -1,5 +1,8 @@
 # Release Log
 
+### 2.0.0
+* Supports python 3. Refer to release note - https://github.com/Falkonry/falkonry-python-client/releases/tag/2.0.0
+
 ### 1.1.0
 * API changes for batched window datastream
 

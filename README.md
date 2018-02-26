@@ -14,6 +14,9 @@ Falkonry Python Client to access [Falkonry Condition Prediction](falkonry.com) A
 $ pip install falkonryclient
 ```
 
+## Requirements
+* Python 3.6
+
 ## Features
 
     * Create Datastream for narrow/historian style data from a single entity

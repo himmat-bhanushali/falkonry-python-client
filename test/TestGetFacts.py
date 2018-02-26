@@ -27,9 +27,7 @@ class TestAssessmentGetFacts(unittest.TestCase):
     def test_get_assessment_facts_with_model(self):
 
         try:
-            options = {'startTime': '2011-01-01T00:00:00.000Z', 'endTime': '2014-12-31T00:00:00.000Z', 'model': '2'}
-            ###Uncomment and set according to your environment for development
-            # options = {'startTime': '2017-04-12T12:17:28.000Z', 'endTime': '2017-04-12T12:24:08.000Z', 'model': '1'}
+            options = {'startTime': '2011-01-02T00:00:00.000Z', 'endTime': '2014-01-01T00:00:00.000Z', 'model': '1'}
             response = self.fclient.get_facts(assessment, options)
             pprint(response.content)
             self.assertEqual(len(response.content) == 0, False, 'Invalid facts response')
