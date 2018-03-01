@@ -90,10 +90,11 @@ class HttpService:
                 return json.loads(response._content.decode('utf-8'))
             except Exception as e:
                 return json.loads(response.content)
-            # return json.loads(response.content.decode('utf-8'))
-            # return json.loads(response.content)
         elif response.status_code == 409:
-            return json.loads(response.content)  
+            try:
+                return json.loads(response._content.decode('utf-8'))
+            except Exception as e:
+                return json.loads(response.content)
         elif response.status_code == 401:
             raise Exception(json.dumps({'message':'Unauthorized Access'}))
         else:

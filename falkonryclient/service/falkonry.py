@@ -24,7 +24,7 @@ FalkonryService
 
 class FalkonryService:
 
-    def __init__(self, host, token, options):
+    def __init__(self, host, token, options=None):
         """
         constructor
         :param host: host address of Falkonry service
