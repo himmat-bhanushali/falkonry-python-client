@@ -1,5 +1,9 @@
 # Release Log
 
+### 2.1.0
+* Renamed tagIdentifier to keywordIdentifier
+* Renamed additionalTag to additionalKeyword
+
 ### 2.0.0
 * Supports python 3. Refer to release note - https://github.com/Falkonry/falkonry-python-client/releases/tag/2.0.0
 

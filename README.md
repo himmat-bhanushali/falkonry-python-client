@@ -48,9 +48,9 @@ $ pip install falkonryclient
     * Delete Assessment
     * Get Condition List Of Assessment
     * Add facts data (json format) to Assessment of single entity datastream
-    * Add facts data (json format) with addition tag to Assessment of multi entity datastream
+    * Add facts data (json format) with addition keyword to Assessment of multi entity datastream
     * Add facts data (csv format) to Assessment of single entity datastream
-    * Add facts data (csv format) with tags Assessment of single entity datastream
+    * Add facts data (csv format) with keywords to Assessment of single entity datastream
     * Add facts data (json format) from a stream to Assessment of multi entity datastream
     * Add facts data (csv format) from a stream to  Assessment of multi entity datastream
     * Get Historian Output from Assessment
@@ -73,12 +73,12 @@ $ pip install falkonryclient
 Data :
 
 ```
-    {"time" :"2016-03-01T01:01:01Z", "tag" : "signal1", "value" : 3.4}
-    {"time" :"2016-03-01T01:01:02Z", "tag" : "signal2", "value" : 9.3}
+    {"time" :"2016-03-01T01:01:01Z", "signal" : "signal1", "value" : 3.4}
+    {"time" :"2016-03-01T01:01:02Z", "signal" : "signal2", "value" : 9.3}
 
     or
 
-    time, tag, value
+    time, signal, value
     2016-03-01T01:01:01Z, signal1, 3.4
     2016-03-01T01:01:02Z, signal2, 9.3
 ```
@@ -1088,7 +1088,7 @@ inputResponse = falkonry.add_facts(assessmentId, 'json', options, data)
 ```
 
 
-#### Add facts data (json format) with addition tag to Assessment of multi entity datastrea
+#### Add facts data (json format) with addition keyword to Assessment of multi entity datastrea
     
 ```python
 from falkonryclient import client as Falkonry
@@ -1135,7 +1135,7 @@ options = {
 inputResponse = falkonry.add_facts(assessmentId, 'csv', options, data)
 ```
 
-#### Add facts data (csv format) with tags Assessment of multi entity datastream
+#### Add facts data (csv format) with keywords to Assessment of multi entity datastream
 ```python
 from falkonryclient import client as Falkonry
 from falkonryclient import schemas as Schemas
@@ -1333,9 +1333,24 @@ datastreamId = 'id of the datastream'
 response = falkonry.off_datastream(datastreamId)
 ```
 
+#### Datastream live monitoring status
+```python
+from falkonryclient import client as Falkonry
+
+falkonry  = Falkonry('http://localhost:8080', 'auth-token')
+datastreamId = 'id of the datastream'
+
+# Live monitoring status of datastream.
+ds = falkonry.get_datastream(datastreamId)
+
+# ON: live monitoring on
+# OFF: live monitoring off
+status = ds.get_live()
+```
+
 ## Docs
 
-   [Falkonry APIs](http://localhost:8080/api)
+   [Falkonry APIs](https://app.falkonry.ai/api)
      
 ## Tests
 
