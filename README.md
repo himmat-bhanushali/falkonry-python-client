@@ -110,7 +110,7 @@ datastream.set_datasource(datasource)
 datastream.set_field(field)
         
 #create Datastream
-createdDatastream = fclient.create_datastream(datastream)
+createdDatastream = falkonry.create_datastream(datastream)
 ```
 
 #### Create Datastream for narrow/historian style data from multiple entities
@@ -158,7 +158,7 @@ datastream.set_datasource(datasource)
 datastream.set_field(field)
         
 #create Datastream
-createdDatastream = fclient.create_datastream(datastream)
+createdDatastream = falkonry.create_datastream(datastream)
 ```
 
 #### Create Datastream for wide style data from a single entity
@@ -329,7 +329,7 @@ datastream.set_datasource(datasource)
 datastream.set_field(field)
         
 #create Datastream
-createdDatastream = fclient.create_datastream(datastream)
+createdDatastream = falkonry.create_datastream(datastream)
 ```
 
 #### Create Datastream for batch identifier
@@ -392,7 +392,7 @@ datastream.set_field(field)
 datastream.set_inputs(inputs)
         
 #create Datastream
-createdDatastream = fclient.create_datastream(datastream)
+createdDatastream = falkonry.create_datastream(datastream)
 ```
 
 #### Retrieve Datastreams
@@ -456,7 +456,7 @@ falkonry = Falkonry('http://localhost:8080', 'auth-token')
 data = [{"sourceId": "testId","label": "testName","path": "root/path"}]
 datastreamId = 'id of the datastream'
 
-entityMetaResponse = fclient.add_entity_meta(datastreamId, {}, data)
+entityMetaResponse = falkonry.add_entity_meta(datastreamId, {}, data)
 ```
 
 #### Get EntityMeta of a Datastream
@@ -477,7 +477,7 @@ from falkonryclient import schemas as Schemas
 falkonry = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 
-entityMetaResponse = fclient.get_entity_meta(datastreamId)
+entityMetaResponse = falkonry.get_entity_meta(datastreamId)
 ```
 
 #### Add historical narrow input data (json format) to multi entity Datastream (Used for model revision)
@@ -976,7 +976,7 @@ asmtRequest.set_datastream(response.get_id())    # Set datatsream id
 asmtRequest.set_rate('PT0S')                     # Set assessment rate
 
 # create new assessment
-assessmentResponse = fclient.create_assessment(asmtRequest)
+assessmentResponse = falkonry.create_assessment(asmtRequest)
 ```
 
 #### Retrieve Assessments
@@ -990,7 +990,7 @@ from falkonryclient import schemas as Schemas
 #instantiate Falkonry
 falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
-assessmentResponse = fclient.get_assessments()
+assessmentResponse = falkonry.get_assessments()
 ```
 
 #### Retrieve Assessment by Id
@@ -1005,7 +1005,7 @@ from falkonryclient import schemas as Schemas
 falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 assessmentId = 'id of the assessment'
-assessmentResponse = fclient.get_assessment(assessmentId)
+assessmentResponse = falkonry.get_assessment(assessmentId)
 ```
 
 #### Delete Assessment
@@ -1020,7 +1020,7 @@ from falkonryclient import schemas as Schemas
 falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 assessmentId = 'id of the assessment'
-assessmentResponse = fclient.delete_assessment(assessmentId)
+assessmentResponse = falkonry.delete_assessment(assessmentId)
 ```
 
 #### Get Condition List Of Assessment
@@ -1035,7 +1035,7 @@ from falkonryclient import schemas as Schemas
 falkonry   = Falkonry('http://localhost:8080', 'auth-token')
 
 assessmentId = 'id of the assessment'
-assessmentResponse = fclient.get_assessment(assessmentId)
+assessmentResponse = falkonry.get_assessment(assessmentId)
 
 // aprioriConditionList 
 conditionList = assessment.get_aprioriConditionList()
@@ -1234,7 +1234,7 @@ assessmentId = 'id of the assessment'
 
 options = {'startTime':'2011-01-01T01:00:00.000Z','endTime':'2011-06-01T01:00:00.000Z','format':'application/json'}
 
-response = fclient.get_historical_output(assessment, options)
+response = falkonry.get_historical_output(assessment, options)
 
 '''If data is not readily available then, a tracker id will be sent with 202 status code. While falkonry will generate output data
  Client should do timely pooling on the using same method, sending tracker id (__id) in the query params
@@ -1245,7 +1245,7 @@ if response.status_code is 202:
     #get id from the tracker
     trackerId = trackerResponse.get_id()
     #use this tracker for checking the status of the process.
-    options = {"tarckerId": trackerId, "format":"application/json"}
+    options = {"trackerId": trackerId, "format":"application/json"}
     newResponse = fclient.get_historical_output(assessment, options)
     '''if status is 202 call the same request again
     if status is 200, output data will be present in httpResponse.response field'''
@@ -1290,7 +1290,7 @@ from falkonryclient import schemas as Schemas
 falkonry  = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 options = {'format':"application/json"}
-response = fclient.get_datastream_data(datastream, options)
+response = falkonry.get_datastream_data(datastream, options)
 pprint(response.text)
 ```
 ```python
@@ -1301,7 +1301,7 @@ from falkonryclient import schemas as Schemas
 falkonry  = Falkonry('http://localhost:8080', 'auth-token')
 datastreamId = 'id of the datastream'
 options = {'format':"text/csv"}
-response = fclient.get_datastream_data(datastream, options)
+response = falkonry.get_datastream_data(datastream, options)
 pprint(response.text)
 ```
 
