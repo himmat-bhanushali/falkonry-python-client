@@ -1246,7 +1246,7 @@ if response.status_code is 202:
     trackerId = trackerResponse.get_id()
     #use this tracker for checking the status of the process.
     options = {"trackerId": trackerId, "format":"application/json"}
-    newResponse = fclient.get_historical_output(assessment, options)
+    newResponse = falkonry.get_historical_output(assessment, options)
     '''if status is 202 call the same request again
     if status is 200, output data will be present in httpResponse.response field'''
 ```
