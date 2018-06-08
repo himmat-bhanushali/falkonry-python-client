@@ -24,13 +24,13 @@ __all__ = [
   'schemas'
 ]
 __title__     = 'falkonryclient'
-__version__   = '2.1.0'
+__version__   = '2.1.1'
 __author__    = 'Falkonry Inc'
-__copyright__ = 'Copyright 2016 Falkonry Inc'
+__copyright__ = 'Copyright 2016-2018 Falkonry Inc'
 __license__   = """
 The MIT License (MIT)
 
-Copyright (c) 2016 Falkonry Inc
+Copyright (c) 2016-2018 Falkonry Inc
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

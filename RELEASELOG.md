@@ -1,5 +1,8 @@
 # Release Log
 
+### 2.1.1
+* Bug fix for keywordIdentifier not getting picked up during fact data upload.
+
 ### 2.1.0
 * Renamed tagIdentifier to keywordIdentifier
 * Renamed additionalTag to additionalKeyword
