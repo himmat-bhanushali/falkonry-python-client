@@ -184,7 +184,7 @@ class TestAddFacts(unittest.TestCase):
                         'timeFormat': "iso_8601",
                         'timeZone': time.get_zone(),
                         'valueIdentifier': "Health",
-                        'keyIdentifier': 'Tags'
+                        'keywordIdentifier': 'Tags'
                     }
 
                     # adding fact

@@ -275,12 +275,12 @@ class FalkonryService:
                 url += "&"
             url += "valueIdentifier=" + str(options['valueIdentifier'])
 
-        if 'keyIdentifier' in options:
+        if 'keywordIdentifier' in options:
             if firstReqParam:
                 firstReqParam = False
             else:
                 url += "&"
-            url += "keyIdentifier=" + str(options['keyIdentifier'])
+            url += "keywordIdentifier=" + str(options['keywordIdentifier'])
 
         if 'additionalKeyword' in options:
             if firstReqParam:
