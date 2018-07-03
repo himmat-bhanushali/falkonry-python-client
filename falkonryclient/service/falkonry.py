@@ -355,21 +355,27 @@ class FalkonryService:
             entityMetaList.append(Schemas.EntityMeta(entityMeta=entityMeta))
         return entityMetaList
 
-    def on_datastream(self, datastream):
+    def on_datastream(self, datastream, options):
         """
         To turn on datastream
         :param datastream: string
+        :param options: dict
         """
-        url = '/datastream/' + str(datastream) + '/on'
+        url = '/datastream/' + str(datastream) + '/on?'
+        if options and 'assessment' in options and options['assessment'] is not None:
+            url += "assessment=" + str(options['assessment'])
         response = self.http.post(url,"")
         return response
 
-    def off_datastream(self, datastream):
+    def off_datastream(self, datastream, options):
         """
         To turn off datastream
         :param datastream: string
+        :param options: dict
         """
-        url = '/datastream/' + str(datastream) + '/off'
+        url = '/datastream/' + str(datastream) + '/off?'
+        if options and 'assessment' in options and options['assessment'] is not None:
+            url += "assessment=" + str(options['assessment'])
         response = self.http.post(url,"")
         return response
 

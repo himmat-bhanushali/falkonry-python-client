@@ -6,6 +6,7 @@ import time as timepkg
 host          = os.environ['FALKONRY_HOST_URL']               # host url
 token         = os.environ['FALKONRY_TOKEN']                  # auth token
 datastream_id = os.environ['FALKONRY_DATASTREAM_SLIDING_ID']  # datastream id
+assessment_id = os.environ['FALKONRY_ASSESSMENT_SLIDING_ID']  # datastream id
 
 
 class TestLiveDatastream(unittest.TestCase):
@@ -41,6 +42,34 @@ class TestLiveDatastream(unittest.TestCase):
         except Exception as e:
             print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot turn datastream on')
+
+    # Assessment On (Start live monitoring of assessment)
+    def test_turn_assessment_on_off(self):
+
+        try:
+            # assuming model is already built
+            options = {"assessment": assessment_id}
+            listAssessment = self.fclient.on_datastream(datastream_id, options)
+            self.assertEqual(len(listAssessment) == 1, True, 'Cannot turn on live monitoring for assessment')
+            self.assertEqual(str(listAssessment[0]['id']), assessment_id, 'Live mornitoring turned on for incorrect assessment')
+            # self.assertEqual(str(listAssessment[0]['live']), 'ON', 'Cannot turn on live mornitoring')
+
+            timepkg.sleep(10)
+
+            # turning off live monitoring
+            try:
+                listAssessment = self.fclient.off_datastream(datastream_id, options)
+                self.assertEqual(len(listAssessment) == 1, True, 'Cannot turn off live monitoring for assessment')
+                self.assertEqual(str(listAssessment[0]['id']), assessment_id, 'Live mornitoring turned off for incorrect assessment')
+                # self.assertEqual(str(listAssessment[0]['live']), 'OFF', 'Cannot turn off live mornitoring')
+
+            except Exception as e:
+                print(exception_handler(e))
+                self.assertEqual(0, 1, 'Cannot turn assessment off')
+
+        except Exception as e:
+            print(exception_handler(e))
+            self.assertEqual(0, 1, 'Cannot turn assessment on')
 
 if __name__ == '__main__':
     if __package__ is None:
