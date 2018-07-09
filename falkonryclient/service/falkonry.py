@@ -373,6 +373,31 @@ class FalkonryService:
         response = self.http.post(url,"")
         return response
 
+    def on_assessment(self, assessment):
+        """
+        To turn on assessment
+        :param assessment: string
+        """
+
+        assessmentObj = self.get_assessment(assessment)
+
+        url = '/datastream/' + str(assessmentObj.get_datastream()) + '/on?assessment=' + str(assessment)
+        response = self.http.post(url,"")
+        return response[0]
+
+    def off_assessment(self, assessment):
+        """
+        To turn on assessment
+        :param assessment: string
+        """
+
+        assessmentObj = self.get_assessment(assessment)
+
+        url = '/datastream/' + str(assessmentObj.get_datastream()) + '/off?assessment=' + str(assessment)
+        response = self.http.post(url, "")
+        return response[0]
+
+
     def get_facts(self, assessment, options):
         """
         Get facts data for the assessment
