@@ -387,7 +387,7 @@ class FalkonryService:
 
     def off_assessment(self, assessment):
         """
-        To turn on assessment
+        To turn off assessment
         :param assessment: string
         """
 
