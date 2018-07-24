@@ -18,6 +18,7 @@ class TestLiveAssessment(unittest.TestCase):
         self.created_datastreams = []
         pass
 
+    # Should get exception when turning on the assessment without active model
     def test_on_assessment_exception(self):
 
         # creating datastream
@@ -62,26 +63,25 @@ class TestLiveAssessment(unittest.TestCase):
             print(exception_handler(e))
             self.assertEqual(0, 1, 'Cannot create datastream')
 
+    # Should get live monitoring status of assessment
     def test_live_monitoring_status(self):
         assessment = self.fclient.get_assessment(assessment_id);
         self.assertEqual(str(assessment.get_live()), 'OFF')
 
-    # Start and Stop live monitoring of assessment)
+    # Should turn on and off the assessment
     def test_turn_assessment_on_off(self):
 
         try:
             # assuming model is already built
             assessment = self.fclient.on_assessment(assessment_id)
-            self.assertEqual(str(assessment['id']), assessment_id, 'Live mornitoring turned on for incorrect assessment')
-            # self.assertEqual(str(assessment['live']), 'ON', 'Cannot turn on live mornitoring')
+            self.assertEqual(assessment.get_id(), assessment_id, 'Live monitoring turned on for incorrect assessment')
 
             timepkg.sleep(30)
 
             # turning off live monitoring
             try:
                 assessment = self.fclient.off_assessment(assessment_id)
-                self.assertEqual(str(assessment['id']), assessment_id, 'Live mornitoring turned off for incorrect assessment')
-                # self.assertEqual(str(assessment['live']), 'OFF', 'Cannot turn off live mornitoring')
+                self.assertEqual(assessment.get_id(), assessment_id, 'Live monitoring turned off for incorrect assessment')
 
             except Exception as e:
                 print(exception_handler(e))

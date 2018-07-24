@@ -383,7 +383,7 @@ class FalkonryService:
 
         url = '/datastream/' + str(assessmentObj.get_datastream()) + '/on?assessment=' + str(assessment)
         response = self.http.post(url,"")
-        return response[0]
+        return Schemas.Assessment(assessment=response[0])
 
     def off_assessment(self, assessment):
         """
@@ -395,7 +395,7 @@ class FalkonryService:
 
         url = '/datastream/' + str(assessmentObj.get_datastream()) + '/off?assessment=' + str(assessment)
         response = self.http.post(url, "")
-        return response[0]
+        return Schemas.Assessment(assessment=response[0])
 
 
     def get_facts(self, assessment, options):
