@@ -11,3 +11,4 @@ python TestAddFactsFromStream.py
 python TestGetFacts.py
 python TestLiveDatastream.py
 python TestAssessmentGetOutput.py
+python TestLiveAssessment.py
