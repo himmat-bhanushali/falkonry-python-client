@@ -82,6 +82,7 @@ class TestLiveAssessment(unittest.TestCase):
             try:
                 assessment = self.fclient.off_assessment(assessment_id)
                 self.assertEqual(assessment.get_id(), assessment_id, 'Live monitoring turned off for incorrect assessment')
+                timepkg.sleep(30)
 
             except Exception as e:
                 print(exception_handler(e))
