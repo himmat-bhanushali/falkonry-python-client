@@ -10,7 +10,7 @@ Falkonry Client
 
 Client to access Condition Prediction APIs
 
-:copyright: (c) 2016 by Falkonry Inc.
+:copyright: (c) 2016-2018 by Falkonry Inc.
 :license: MIT, see LICENSE for more details.
 
 """
