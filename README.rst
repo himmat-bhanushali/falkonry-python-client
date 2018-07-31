@@ -22,6 +22,6 @@ Changelog
 See the `releases <https://github.com/Falkonry/falkonry-python-client/releases>`__ page on
 GitHub.
 
-.. |logo| image:: https://service.falkonry.io/img/logo.png
+.. |logo| image:: https://jumpstart.falkonry.io/img/logo.png
 .. |Build Status| image:: https://img.shields.io/travis/Falkonry/falkonry-python-client.svg?style=flat-square
    :target: https://travis-ci.org/Falkonry/falkonry-python-client
